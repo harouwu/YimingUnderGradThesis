@@ -1,0 +1,246 @@
+% vim:ts=4:sw=4
+% Copyright (c) 2014 Casper Ti. Vector
+% Public domain.
+
+\specialchap{序言}
+% 中文测试文字。
+\pkuthssffaq
+
+\section{Introduction}
+\label{sec:intro}
+
+% \begin{itemize}
+% \item program editing tools
+% \item preprocessors
+%   \begin{itemize}
+%   \item used by mainstream languages, including OO language C++ and
+%     ObjectiveC
+%   \item casual uses
+%   \end{itemize}
+% \item program editing tools meet preprocessors
+% \item reality: program editing tools do not support preprocessors
+% \item existing work: C preprocessor in refactoring
+%   \begin{itemize}
+%   \item too complicated
+%   \item not general solution
+%   \end{itemize}
+% \item contributions
+% \item outline of the paper
+% \end{itemize}
+
+现在，许多程序分析工具都涉及代码修改功能。
+在这些工具中，有许多都是代码修复工具~\parencite{le2012genprog,le2012systematic,QiMLDW14,nguyen2013semfix}。
+通常来说，修复工具的输入是一段代码和一组测试，并不断修改代码直至代码能通过测试。
+另一些程序分析工具是API升级工具~\parencite{li2015swin,Padioleau06,Meng:2011}。
+当API升级时出现了不兼容情况时，这些工具可以自动更新相应的API调用让程序与API契合。
+我们把这类直接修改代码的工具称作\emph{程序编辑工具}。
+
+A lot of program analysis tools involve direct modification of
+source code. A notable category of such tools is program-repair tools
+~\parencite{le2012genprog,le2012systematic,QiMLDW14,nguyen2013semfix}. These tools take a program and a set of tests as
+input, and
+modify the program until all tests pass. Another
+category is API evolution tools~\parencite{li2015swin,Padioleau06,Meng:2011}.
+When an API is upgraded with incompatible changes, 
+these tools automatically change the API
+invocations to comply with the new API. 
+We call such tools that directly modify the source code 
+\emph{program-editing tools}.
+
+另一方面，许多程序语言的实现都带有预处理器~\parencite{ernst2002empirical,kohlbecker1986hygienic,lee2012marco}。
+最常见的预处理器是C预处理器（C++）。
+许多程序语言也接受C++，包括C，C++和Objective-C。
+同时，程序员也时常使用C++来写一些零散的小工具。这时就会使用到预处理器。
+例如Korpela~\parencite{Korpela2000}曾在文章中描述过用C++写一个HTML编辑工具：
+这个工具会把页面间相同的HTML代码转换成C的宏，而不是直接生成HTML页面。
+然后页面再利用这些宏最终生成HTML文件。
+
+On the other hand, many programming languages are provided with
+preprocessors~\parencite{ernst2002empirical,kohlbecker1986hygienic,lee2012marco}. The most
+widely used preprocessor is the C preprocessor (CPP). Many programming
+languages adopt CPP, notable C, C++, and
+Objective-C. Furthermore, CPP is often used by
+programmers in casual situations as a general purpose tool, 
+where the preprocessor is added as a
+building step for any language used. For example, Korpela~\parencite{Korpela2000} describes the
+use CPP as an HTML authoring tool:
+instead of writing HTML pages directly, the shared code pieces between HTML
+pages are first defined as C macros, and HTML pages using these
+macros are preprocessed into final HTML files.
+
+程序编辑工具通常不会去修改程序的预处理指令。
+但是，只有能够把修改反映射到预处理之前的代码的工具才算有用。
+只在预处理后的代码中修复错误会导致原有程序再次编译的时候错误依然存在，这样毫无意义。
+这个问题具有挑战性，因为工具必须同时能理解预处理命令和目标程序语言，同时保证修改在两边能保持一致。
+事实上，现有的程序编辑工具往往无法正确处理预处理指令、或是直接不处理预处理指令，例如现有的C语言工具：GenProg~\parencite{le2012genprog,le2012systematic}，RSRepair~\parencite{QiMLDW14}，和
+SemFix~\parencite{nguyen2013semfix}。
+这三个工具都只在预处理后的代码上工作。
+用户需要手动检查预处理后的代码变化，并自行修改源代码——而这又增加了新bug的可能。
+
+Program editing tools usually do not directly change preprocessor directives. However the tools must be able to map results back to the unpreprocessed source to be useful. There is no point of fixing a bug in the preprocessed code and only to have it overwritten when the unchanged source is compiled again. This is challenging, as the tools must be able to understand both the preprocessor directives and the target programming languages, and make sure whatever changes made on both levels are consistent with each other. As a matter of fact, existing program-editing tools often fail to produce correct results under the presence of preprocessor directives, or give up dealing with them entirely. We have
+investigated the implementations of three influential bug-fixing tools
+on the C programming language: GenProg~\parencite{le2012genprog,le2012systematic}, RSRepair~\parencite{QiMLDW14}, and
+SemFix~\parencite{nguyen2013semfix}. All the three implementations work only on
+preprocessed code. Users have to manually inspect the
+preprocessed code, and copy the changes to the original source code---risking of introducing new bugs in the process. 
+
+代码重构是一个密切相关的领域~\parencite{McCloskey:2005,Garrido2013}。
+在代码重构中，程序编辑工具有时需要直接修改预处理指令。
+比如：用户有时想重命名一个宏，或者需要提取一个宏作为重构的一部分。
+在这种情况下，工具开发者别无选择，只好修改预处理指令。
+典型情况中，工具开发者会定义一种新的C语法使得原有的C语法和预处理指令能兼容。
+但是，如果我们考虑更一般的程序编辑工具，这种方法就捉襟见肘了。
+首先，工具开发者需要在真正设计工具之前把精力花费在学习语言的细节上。
+其次，学习新语言的努力并不能在其他语言中复用。
+
+A closely related area is refactoring~\parencite{McCloskey:2005,Garrido2013}, where tools are expected to directly manipulate preprocessor directives. For example, one may well want to rename a macro or extract a macro as part of the refactoring. In this case, tool builders have no choice but to bite the bullet and confront the preprocessor directly. 
+    Typically a new C grammar is designed such that it
+incorporates both the original C grammar and the preprocessor
+directives. 
+%This design is originated from the need of 
+%refactoring tools to directly manipulate preprocessor directives,
+%e.g., renaming macros. 
+However, when applied to a more wider range of
+code editing tools, such almost brute force approaches exhibit obvious shortcomings.
+First, tool developers using such a grammar basically have to start from scratch: 
+they have to learn the new grammar and leave behind the existing tool
+chains on C. Second, the effort spend on the new grammars is specialized and
+cannot be reused for other languages, which basically rules out  casual uses of CPP. 
+
+本文中我们提出了一个轻量级的支持C++的程序编辑工具实现方法。
+该系统时一个双向的C++预处理器：原有的预处理过程可以背看作一个正向变换，在此基础上我们添加一个能够把预处理后代码上的修改反响映射回去的反向变换。
+于是，程序编辑工具现在可以关注于预处理后的代码，并把映射修改的交给我们的自动工具\footnote{这个过程并不是全自动的。因为我们的工具现在支持程序编辑的基本操作。尽管这些步骤可以用通用代码差分方法实现~\parencite{fluri2007change}，但是如果工具能直接提供基本编辑操作可以有最好的效果}。
+
+In this paper we propose a lightweight approach to support
+CPP in program-editing tools. Our system acts as a
+bidirectional CPP: the original preprocessing can be
+considered as a forward program transformation, and we add to it a corresponding 
+backward transformation that maps changes on the preprocessed
+code back into the unpreprocessed source. As a result, program-editing tools can now focus on preprocessed programs, and have results (almost) automatically reflected to the source\footnote{It is not entirely automatic because the tools need to support the extraction of the changes on the preprocessed programs. Although this step can be performed by generic code differencing~\parencite{fluri2007change}, extracting the changes directly from the tools gives the best
+result.}.
+
+
+
+%This idea is
+%based on the observation that, unlike refactoring tools that often
+%have to directly manipulate the preprocessor directives, many
+%program-editing tools are not directly related to preprocessor
+%directives and can be implemented more conveniently with only
+%preprocessed programs.
+
+在这里我们列举一些例子：
+（1）上文中所提到的三个学术届认可的错误修复系统现在可以处理预处理前的代码；
+（2）API升级软件现在可以在有预处理代码的情况下更好地实现；
+（3）所有并不需要关心预处理过程的程序编辑工具都能够被改善。
+
+We list a few examples here: (1) as mentioned 
+above the implementations of the three state-of-the-art
+bug-fixing approaches only deal with preprocessed code; (2) the API
+evolution tools mentioned previously can also be implemented more
+conveniently by only dealing with preprocessed code; (3) all
+program-editing tools on languages that do not formally rely on CPP
+naturally fall into this category because the programs may be put
+under casual uses of CPP.
+
+虽然现在存在着几种双向变换的技术~\parencite{MaHNHT07,Voigtlander09bff,voigtlander2010combining}，但是它们都是为数据的转换设计的。
+给定一个源数据集$s$，一个变换程序$p$，和一个目标数据集$t=p(s)$，这些方法试图将$t$上的变化描述成$s$的变化。
+然而，C的预处理器与数据的转换不同，因为C的源代码不仅包含了作为数据的代码，还包含了座位变换程序的预处理指令。
+这就要求反向变换的机制能处理更复杂的情况：当目标数据发生变化时，我们可能要变化源数据、转换程序、或者是二者都变化。
+
+%It is not easy to bidirectionalize CPP. 
+Although there exist several
+bidirectionalization
+techniques~\parencite{MaHNHT07,Voigtlander09bff,voigtlander2010combining},
+they are designed for data transformation: given a source data set
+$s$, a transformation program $p$, and a target data set $t=p(s)$,
+these approaches try to reflect the changes on $t$ to $s$. The C
+preprocessor differs from this data transformation scenario in the way that the
+unpreprocessed source program actually contains both the data set and
+the transformation program. This added complication amplifies the variance of the
+backward transformation: when the target data is changed, we may
+change either the source data set, the transformation program, or
+both.
+
+本系统的一个创新处是在能够处理上文提到的复杂双向变换情况的同时，尽量最小化对变换程序$p$的修改。
+首先，该设计中从不引入新的宏定义或修改现有的宏定义，有效地限制反向变化的影响。
+其次，该设计只会移除/修改宏调用而并不会创造新的宏调用。
+再有，该设计只会在必要的时候移除宏调用。这样，我们就能尽可能保证源代码和修改之前的相似度。
+
+A key design novelty in our approach that serves to control this variance is to allow, but at the same time minimize, changes to the transformation programs. First, our approach 
+never introduces new macro definitions or modifies existing macro definitions, effectively confining the impact of the reflected changes to a local scope.
+Second, our approach only removes existing macro invocations but never
+invent new ones. %, so as not to too cleverly invert new
+%program structure that the user does not want. % Second, our approach does change existing macro invocations in the
+% program, as it is inevitable in many cases. However, we never
+% introduce new macro invocations, and
+Furthermore, we will consider removing macro
+invocations only when necessary. In this way, we maintain the
+existing structure of the original program source as much as possible.
+
+实现这样的算法设计也是十分具有挑战的。
+
+
+Implementing this design is also challenging. Typical approaches to
+bidirectionalization~\parencite{MaHNHT07,Voigtlander09bff,MMHT10} decompose
+the transformation along the abstract syntax tree of the program, where
+each subtree corresponds to a small bidirectional transformation that
+collectively forms the final transformation. However, a CPP program
+cannot be easily parsed into a tree structure. For example, in the
+following piece of code, 
+\begin{lstlisting}
+#define inc(x) 1+x
+#define double(x) 2*x
+inc(double) 2
+inc(double) (x)
+\end{lstlisting}
+the first \code{inc(double)} independently
+expands to a new segment, but the second \code{inc(double)} is only
+part of an expansion, as the expanded \code{double} will form a new
+macro invocation with \code{(x)} to be recursively invoked. As a
+result, we cannot treat \code{inc(double)} as an independent unit and
+derive a backward transformation from it.
+To overcome this difficulty, we propose a new model for interpreting
+CPP programs. Instead of parsing a CPP program into an abstract syntax
+tree, we view the preprocessing as applying a set of rewriting rules
+to the code. This interpretation enables the bidirectionalization
+of a CPP program   as bidirectionalization of each rewriting rule.
+
+Furthermore, our approach is proved to be correct, in the
+sense of the following round-trip laws (1) if the preprocessed program is not changed, the
+unpreprocessed program will not be changed, and (2) preprocessing the
+unpreprocessed program with the reflected changes will produce exactly the
+same changed preprocessed program. These two properties are known as
+GETPUT and PUTGET~\parencite{Foster:2007} in the bidirectional transformation literature. 
+
+To sum up, our paper makes the following contributions:
+\begin{itemize}
+% \item We propose a lightweight approach to support handling of the C
+%   preprocessor in program-editing tools. Our approach bidirectionalizes
+%   CPP, reflecting the changes on the preprocessed code
+%   back to the unpreprocessed code.
+% \item We demonstrate that our approach satisfies the two basic properties
+%   of bidirectional transformation, GETPUT and PUTGET, in the context
+%   of CPP.
+\item We propose a lightweight approach to handling the C preprocessor
+  in program-editing tools based bidirectional transformations. We
+  analyze different design alternatives and propose five requirements
+  for defining the behavior of the backward transformation, including
+  GETPUT and PUTGET
+  (\secref{sec:problem}).
+\item We propose an algorithm that meets the five requirements. This
+  algorithms is based on an interpretation of CPP as a set of
+  rewriting rules, which structurally decomposes the
+  bidirectionalization of CPP
+  into the bidirectionalizatio of each rule %(\secref{sec:approach}).
+\item We evaluate our approach on the Linux kernel and compare
+  our approach with two baseline approaches: one reflecting 
+  changes by copying back the entire changed file and one reflecting
+   changes by copying back the changed lines. The evaluation results show
+  that our approach breaks much less macro invocations, and always produces correct results while the other two
+  do not %(\secref{sec:evaluation}).
+\end{itemize}
+
+% The rest of the paper is organized as follows. \todo{finish this}.
+
+Finally, we discuss related work in %\secref{sec:related} and conclude
+the paper in %\secref{sec:conclusion}.

@@ -1,0 +1,253 @@
+
+\section{Evaluation}
+\label{sec:evaluation}
+\subsection{Research Questions}
+In this section we focus on the following research questions.
+\begin{itemize}
+\item {\bf RQ1: Macro Preservation. } According to requirement 2, 
+  our approach aims to preserve existing macro invocations. How does
+  the strategy perform on actual programs? How does it compare to
+  other techniques?
+\item {\bf RQ2: Correctness. } Our approach is guaranteed to be
+  correct according to requirements 4 and 5. How important is this
+  correctness? How does our approach compare to other techniques that
+  do not ensure correctness?
+\item {\bf RQ3: Failures. }  Our approach may report a failure when it
+  cannot find a proper way to propagate the change. How often does
+  this happen? Are the failures false alarms (there exists a suitable
+  change but our approach cannot find it)?
+\end{itemize}
+
+To answer these questions, we conducted a controlled experiment to
+compare our approach with the two naive approaches described in
+\secref{sec:naive} on a set of generated changes on Linux kernel
+source code. In the rest of the section we describe the details of the
+experiment.
+
+\subsection{Setup}
+
+\subsubsection{Implementation}
+We have implemented our approach in Java by modifying
+JCPP\footnote{\url{http://www.anarres.org/projects/jcpp/}}, an open
+source C Preprocessor. We also implemented the two naive approaches in
+\secref{sec:naive} for comparison. Our implementation and experimental data
+can be found on our web
+site\footnote{\url{https://github.com/harouwu/BXCPP}}.
+
+\subsubsection{Benchmark}
+Our experiment was conducted on the Linux kernel version 3.19. We chose
+Linux source code because Linux kernel is one of the most widely used
+software projects implemented in C. It contains contributions from many
+developers, and has a lot of preprocessor directives and macro
+invocations.
+
+To conduct our experiment, we need a set of changes on the Linux
+kernel code. Since we concern about how different backward
+transformations affect preprocessing, we generated changes only in functions that
+contain macro invocations. To do this, we first randomly selected 180 macros
+definitions from the kernel code. Since there are far more object-like
+macros than function-like macros, we
+would select very few function-like macros if we use pure random selection. So we controlled the ratio
+between object-like and function-like macros to be 1.5 : 1. Based on
+the selected macros, we randomly selected a set of functions which contain
+invocations to the macros. Finally, we randomly selected 8000 lines from
+the functions. There are in total 133 macro invocations in the
+selected lines.
+
+Next we generated a set of changes on the selected lines. To simulate real
+world changes, we randomly generated two types of changes. The first
+type is token-level change, in which we randomly replace/delete/insert
+a token. The second type is statement-level change, in which we delete
+a statement or copy another statement to the current location. These
+two types of changes are summarized from popular bug-fixing
+approaches~\cite{le2012genprog,QiMLDW14,kim2013automatic}. The statement-level changes are directly used by GenProg~\cite{le2012genprog} and
+RSRepair\cite{QiMLDW14}. The token-level changes simulate small changes such as
+replacing the argument of a method or change an operators used in
+approaches such as PAR~\cite{kim2013automatic}.
+
+More concretely, we had a probability $p$ to perform an operation on
+each token, where the operation is one of insertion, replacement and
+deletion, which had equal probability. The replacement was performed
+by randomly mutating some characters in the token. The insertion was
+performed by randomly copying a token from somewhere else. Similarly,
+we had a probability $q$ to perform an operation on each statement,
+where the operation is copy or deletion. The copied statement was
+directly obtained from the previous statement. We recognized a
+statement by semicolon.
+
+Different tools may have different editing patterns:
+a migration tool typically changes many places in a program, whereas a
+bug-fixing tool may change a few places to fix a bug. To simulate these two different
+densities of changes, we used two different set of probabilities. For
+the high-density changes, we set $p=0.33$ and $q=0.1$. For
+the low-density changes, we set $p=0.1$ and $q=0.05$.
+
+We generated ten sets of changes, five with high-density and five with
+low-density. The number of the changes generated for each set is shown in Table~\ref{tbl:changes}.
+\begin{table}[htbp]
+\caption{Changes generated for the experiment}\label{tbl:changes}
+\centering
+% \begin{tabular}{|l|lllll|lllll|}
+%   \hline
+%   Density & \multicolumn{5}{c|}{Low} & \multicolumn{5}{c|}{High} \\
+%   \hline
+%   Set & 1 & 2& 3& 4 & 5 & 6 & 7 &8 &9 &10\\
+%   \hline
+%   Changes & 952 & 885 & 956 & 967 & 884 & 3133 & 3136 & 3088 & 3123 &
+%                                                                       3048 \\
+% \hline
+% \end{tabular}
+\begin{tabular}{|l|l|lllll|}
+  \hline
+  \multirow{2}{1cm}{Low Density} & Set & 1 & 2 & 3 & 4 & 5  \\
+  \cline{2-7}
+                                 & Changes & 952 & 885 & 956 & 967 & 884 \\
+  \hline
+  \multirow{2}{1cm}{High Density} & Set & 6 & 7 & 8 & 9 & 10 \\
+  \cline{2-7}
+                                 & Changes & 3133 & 3136 & 3088 & 3123 & 3048\\
+  \hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Independent variables}
+We considered the following independent variables. (1)
+\emph{Techniques}, we compared our approach with the two naive
+solutions, per-file and per-line. (2) \emph{Density of changes}, we
+evaluated both on the five high-density change sets and the five
+low-density change sets. % (3) \emph{Types of changes}, we distinguished token-level changes, statement-level changes, and
+% combinations of them.
+
+\subsubsection{Dependent variables}
+We considered two dependent variables. (1) \emph{Number of remaining
+  macro invocations}. We re-ran the preprocessor after the backward
+transformation, and counted how macro invocations are expanded during
+preprocessing. Since none of the techniques will actively introduce
+new macro invocations% \footnote{Strictly speaking, new macro
+  % invocations may be introduced passively by the user, e.g., a token
+  % is accidentally changed into an object-like macro. Since the
+  % probability is very small, we can safely ignore these cases.}
+, the
+number of expanded invocations is the number of remaining invocations.
+To avoid noise from included files, we count only the macro
+invocations in the current file.
+(2) \emph{Number of errors}. We re-ran the preprocessor, and compared
+the new preprocessed program with the previously changed program by
+Unix file-comparing tool $fc$. Every time $fc$ reported a difference,
+we counted it as an error. (3) \emph{Failures}. Our approach may fail
+to propagate the changes, and we record whether a failure is reported
+for each change set.
+
+\subsection{Threats to Validity}
+A threat to external validity is whether the results on generated
+changes can be generalized to real world changes. To alleviate this
+threat, we used different types of changes and different density of
+changes, in the hope of covering a good variety of real-world changes.
+
+A threat to internal validity is that our implementation of the three
+approaches may be wrong. To alleviate this threat, we investigated all
+errors we found in the experiments, to make sure it is a true defect
+of the respective approach but not a defect in our implementation.
+
+\subsection{Results}
+\begin{table}[htbp]
+  \caption{Experimental Results}\label{tbl:results}
+\centering
+\begin{tabular}{|l|l|lllll|}
+  \hline
+  Low Density & Set & 1 & 2 & 3 & 4 & 5\\
+  \hline
+  \multirow{3}{*}{Our Approach} &  Macros & 73 & 75 & 72 & 80 & 81 \\
+  \cline{2-7}
+              &Errors & 0 & 0 & 0 & 0 & 0  \\
+  \cline{2-7}
+              & Failures & n & n & n & n & n \\
+  \hline
+  \multirow{3}{*}{Per-Line} & Macros & 23 & 25 & 23 & 20 & 26 \\
+  \cline{2-7}
+              & Errors & 6 & 7 & 6 & 7 & 7  \\
+  \hline
+  \multirow{3}{*}{Per-File} & Macros & 0 & 0 & 0 & 0 & 0  \\
+  \cline{2-7}
+              & Errors & 0 & 0 & 0 & 0 & 0 \\
+  \hline
+  \hline
+  High Density & Set & 6 & 7 & 8& 9& 10\\
+  \hline
+  \multirow{3}{*}{Our Approach} &Macros & 47 & 51 & 53 & 48 & 44 \\
+  \cline{2-7}
+              &  Errors & 0 & 0 & 0 & 0 & 0  \\
+  \cline{2-7}
+              & Failures & n & n & n & n & n \\
+  \hline
+  \multirow{3}{*}{Per-Line} & Macros & 9 & 7 & 7 & 8 & 10  \\
+  \cline{2-7}
+              & Errors & 6 & 6 & 7 & 6 & 6 \\
+  \hline
+  \multirow{3}{*}{Per-File} & Macros & 0 & 0 & 0 & 0 & 0  \\
+  \cline{2-7}
+              & Errors & 0 & 0 & 0 & 0 & 0 \\
+  \hline\end{tabular}
+\\
+\parbox{\columnwidth}{\footnotesize Row ``Macros'' shows the number of
+    remaining macros. Row ``Errors'' shows the number of errors caused. Row ``Failures'' indicates whether a
+    failure is reported in the backward transformation.}
+\end{table}
+% \begin{table*}[htbp]
+% \caption{Macros remainings and errors of different algorithms and data set}
+% \centering
+% \begin{tabular}{l|cc|cc|cc}
+% \hline
+% Algorithm  &High Mutation & &Low Mutation & &Average &  \\
+%  &Remain &Error &Remain &Error &Remain &Error \\
+% \hline
+% CPP-TRANS &120 &0 &243.8 &0 &181.9 &0 \\
+% PER-FILE &0 &0 &0 &0 &0 &0  \\
+% PER-LINE &25.6 &5.8 &64.2 &2.4 &44.9 &4.1 \\
+% \hline
+% \end{tabular}
+% \end{table*}
+
+The result of our evaluation is shown in Table~\ref{tbl:results}. We
+discuss the results with respect to the research questions below.
+
+\subsubsection{RQ1} As we can see, our approach preserves macro invocations. Per-line preserves very few macro
+invocations, while per-file, as we expected, preserves no macro
+invocations. We further investigated why per-line preserves so few
+macro invocations. One main reason we found is that there are usually
+multiple macro invocations per line, and per-line will expand all of
+them if any tokens in this line is changed.
+\subsubsection{RQ2} Our approach and per-file lead to no errors while
+several errors are caused by per-line. This is because there are quite
+a few macro invocations that cross multiple lines. These macros 
+take expressions or statements as argument, which are usually too long
+to be included in one line.
+\subsubsection{RQ3} As discussed before, our approach may report a failure during the
+backward transformation. This is usually because the changes
+accidentally introduce a new macro invocation in the preprocessed code, where there is no way
+to satisfy PUTGET. 
+However, we do not
+observe any such cases in our experiment. The reason is that
+macros usually have special names and it is not easy to collide with a
+macro name by copying or mutation. Note the other two
+approaches never report a failure, so the corresponding fields in Table~\ref{tbl:results} are left blank. 
+
+Although probably being rare in practice, theoretically our approach
+may report false alarms: our approach reports a failure but
+a correct change on the source program exists. {For example, let consider the
+  following code piece,
+\begin{lstlisting}
+#define p (x)
+plus p
+\end{lstlisting}
+where $plus$ is the macro defined in code
+piece~\eqref{eqn:expansion}. After preprocessing, this code piece becomes
+$plus\ (x)$. If we change the last parenthesis into $)\ hello$, our
+approach reports a failure because first $p$ will be expanded and then
+the expanded content forms a new macro invocation with $plus$.
+However, there exists a feasible change: replacing $p$ with $hello\ p$.}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

@@ -1,0 +1,83 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{cancel}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{color}
+
+% the following tells mathastext to use typewriter
+\usepackage[T1]{fontenc}
+\usepackage{mathastext}
+\MTfamily{\ttdefault}\Mathastext 
+
+\usepackage{bussproofs}
+\usepackage[]{algorithm2e}
+\usepackage{soul}
+\usepackage{cancel}
+\usepackage{multirow}
+
+\input{macros}
+\newsavebox{\fmbox}
+\newenvironment{smpage}[1]
+{\begin{lrbox}{\fmbox}\begin{minipage}{#1}}
+{\end{minipage}\end{lrbox}\usebox{\fmbox}}
+
+
+%\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{decision}{Requirement}
+\newtheorem{law}{Requirement}
+\lstset{
+  basicstyle = \footnotesize\tt,
+  }
+
+
+
+\begin{document}
+
+\title{Bidirectinalizing the C Preprocessor}
+
+\author{
+   \IEEEauthorblockN{
+  Yingfei Xiong$^{1,2}$, Zhengkai Wu$^{1,2}$, Yiming Wu$^{1,2}$, Meng
+  Wang$^3$, Lu Zhang$^{1,2}$}\\
+\IEEEauthorblockA{$^1$Key Laboratory of High Confidence Software
+  Technologies (Peking University), MoE \\$^2$Institute of Software,
+  School of EECS, Peking
+  University, China\\ $^3$School of Computing, University of Kent, UK}
+  \IEEEauthorblockA{\{xiongyf, 1200012746, yiming.wu, zhanglucs\}@pku.edu.cn, m.w.wang@kent.ac.uk}
+}
+
+\maketitle
+\begin{abstract}
+  % Many programming tools work directly on source code. A typical example is a bug-fixing tool, which modifies source code to remove certain bugs in the code. With these tools, a program is first analyzed, and a change to the program is then recommended and applied to the code. We call these tools {\em program-editing tools}.
+
+  % On the other hand, a lot of programming languages rely on preprocessors. One of the most widely-used preprocessors is the C preprocessor---formally used in C, C++, and Objective-C, and also casually by developers in other languages. In these cases, any tool that changes the source code will have to handle the preprocessor directives, which is not an easy task. Given the complexity of preprocessors, many tools either fail to produce sound results, or give up completely and deal only with preprocessed code.
+
+  Many tools directly change programs, such as bug-fixing tools, program migration tools, etc. We call them \emph{program-editing tools}. On the other hand, many programing use the C preprocessor, such as C, C++, and Objective-C. Because of the complexity of preprocessors, many program-editing tools either fail to produce sound results under the presence of preprocessor directives, or give up completely and deal only with preprocessed code.
+  
+  In this paper we propose a lightweight approach that enables program-editing tools to work with the C preprocessor for (almost) free. The idea is that program-editing tools now simply target the preprocessed code, and our system, acting as a bidirectional C preprocessor, automatically propagates the changes on the preprocessed code back to the unpreprocessed code. The resulting source code is guaranteed to be correct and is kept similar to the original source as much as possible. We have evaluated our approach on Linux kernel with a set of generated changes. The evaluation results show the feasibility and effectiveness of our approach.
+\end{abstract}
+
+\input{intro}
+\input{background}
+\input{approach}
+%\input{discuss}
+% \input{evaluation}
+\input{evaluation2}
+\input{related}
+\input{conclusion}
+
+\section*{Acknowledge}
+We would like to acknowledge Yangyi Wu at Peking University for the
+fruitful discussions during the early stage of this work.
+
+\bibliographystyle{IEEEtran}
+\bibliography{reference,main}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

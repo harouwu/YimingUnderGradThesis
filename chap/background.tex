@@ -1,0 +1,356 @@
+\section{Problem}\label{sec:problem}
+
+
+
+% \begin{itemize}
+% \item what are C macros
+% \item an example about why C macros are difficult
+%   \begin{itemize}
+%   \item needs to the choice for insertion
+%   \item needs to show concatenation and single \#
+%   \item needs to show high-order macros
+%   \item needs to show \#if and other directives
+%   \end{itemize}
+% \item explain the complexity of C macros
+% \item explain the complexity of propagating back
+%   \begin{itemize}
+%   \item the choice for insertion
+%   \item dealing with concatenation
+%   \end{itemize}
+% \end{itemize}
+
+% \begin{itemize}
+% \item A table of C preprocessor directives
+% \item An example to show the process of C preprocessing
+% \item A change example (introduce a guarded condition) to discuss the bidirectional behavior
+%   \begin{itemize}
+%   \item show that changing macro definition is inappropriate
+%   \item show that introducing new macro invocation is inappropriate
+%   \end{itemize}
+% \item More change examples
+%   \begin{itemize}
+%   \item change the variable name
+%   \item break only the outer level
+%   \item copying
+%   \end{itemize}
+% \item trivial solution 1: per file
+%   \begin{itemize}
+%   \item break a lot of macros
+%   \item removing macro definitions
+%   \end{itemize}
+% \item trivial solution 2: per line
+%   \begin{itemize}
+%   \item still breaks useful macros( in the second example, or in
+%     copying)
+%   \item may produce erroneous result when a macro invocation spans
+%     multiple lines
+%   \end{itemize}
+% \end{itemize}
+
+\subsection{The C Preprocessor}
+
+\begin{table*}[htbp]
+  \centering
+  \caption{Main preprocessor directives and operators}
+  \label{tab:preprocessor}
+  \begin{tabular}{|c|c|l|p{4cm}|}
+    \hline
+    Directives & Functionality & Example & Result\\
+    \hline
+    \hline
+    \code{\#progma} & Compiler options & \begin{lstlisting}
+#progma once
+\end{lstlisting} & removed from the preprocessed file\\
+    \hline
+    \code{\#include} & File Inclusion & \begin{lstlisting}
+#include <stdio.h>
+\end{lstlisting} & the content of "stdio.h"\\
+    \hline
+    \code{\#if, \#ifdef, \ldots} & Conditional compilation & \begin{lstlisting}
+#ifdef FEATURE1
+  x = x + 1;
+#endif
+\end{lstlisting} & \code{x = x + 1;}\\
+    \hline
+    \code{\#define X} & Object-like macro definition & \begin{lstlisting}
+#define X 100
+a = X;
+\end{lstlisting} & \code{a = 100;}\\
+    \hline
+    \code{\#define X(a, b)} & Function-like macro definition & \begin{lstlisting}
+#define F(x) x * 100
+F(10);
+\end{lstlisting} & \code{10 * 100;}\\
+    \hline
+    \code{a \#\# b} & Concatenation & \begin{lstlisting}
+#define X a_##100
+X
+\end{lstlisting} & \code{a\_100}\\
+    \hline
+    \code{\#b} & Stringification & \begin{lstlisting}
+#define F(x) #x;
+F(hello);
+\end{lstlisting} & \code{"hello";}\\
+\hline
+\code{\_\_FILE\_\_}, \code{\_\_DATE\_\_}, \ldots & Predefined macros &
+                                                                       \code{\_\_FILE\_\_}
+                                         & main.c \\
+                                        
+\hline
+    
+                                         
+  \end{tabular}
+\end{table*}
+
+Table~\ref{tab:preprocessor} shows the main preprocessor directives
+and operators. A preprocessor directive starts with a \# at the
+beginning of the line and ends at the end of the line. Macros can be
+defined by preprocessor directives but themselves are not preprocessor directives.
+Basically, we have four main types of preprocessor directives:
+\code{\#progma} providing compilation options, \code{\#include} for including header files, \code{\#if} for
+conditional compilation, and \code{\#define} for macro definitions. Additionally, within
+a macro definition, we can use operators such as \code{\#\#} and \code{\#}, for
+concatenating two variables or quoting a variable. Finally, there are
+some pre-defined macros such as \code{\_\_FILE\_\_}, which will be replaced by
+the current values of the fields. 
+
+When the C preprocessor processes a source file, it transforms the source file according to the following rules:
+\begin{itemize}
+\item The \code{\#include} and \code{\#if} directives are
+  first expanded, and then the expanded token sequences are scanned.
+\item For each macro invocation, the arguments are first preprocessed, and then
+  the invocation is expanded.
+\item If an argument contains \# or \#\#, the unpreprocessed argument is
+  used, otherwise the preprocessed argument is used.
+\item After a macro invocation is expanded, the expanded token
+  stream is scanned again, where any newly introduced macro
+  invocations are again expanded.
+\item To avoid infinite recursive expansion, if a macro has been
+  expanded during the expansion process, it will not be expanded
+  again.
+\item Any new preprocessor directives produced in the expansions will
+  not be used in processing. 
+\end{itemize}
+
+
+\begin{figure}[ht]
+  \centering
+\begin{lstlisting}
+#define SAFE_FREE(x) if (x) vfree(x);
+#define FREE(x) vfree(x);
+#define RESIZE(array, new_size, postprocess) \
+  g_resize_times++; \
+  postprocess(array); \
+  array = vmalloc(sizeof(int)*(new_size));
+#define GARRAY(x) g_array##x;
+
+RESIZE(GARRAY(2), 100, FREE);
+\end{lstlisting}
+  \caption{An example of code preprocessing\label{fig:example} }
+\end{figure}
+
+As a concrete example, let us consider the code in
+\figref{fig:example}. This example is contrived to exhibit many real
+world patterns of macro uses.  This piece of code contains four macro
+definitions and a macro invocation. The first two macro definitions
+are wrappers for a user-defined free function. The third one is for
+resizing an array with user-defined memory management and logging. The last one is
+for naming a set of special global variables.
+When the code is scanned by the preprocessor, first the arguments of $RESIZE$ are processed. In
+this case, \code{GARRAY(2)} is expanded into \code{g\_array2}. Though
+the third parameter \code{FREE} has been defined as a function-like
+macro, no argument is provided for \code{FREE}, so the preprocessor
+does not treat it as a macro invocation at this stage. Then the macro
+invocation to \code{RESIZE} is expanded, leading to the following
+code:
+\begin{lstlisting}
+g_resize_times++;
+FREE(g_array2);
+g_array2 = malloc(sizeof(int)*(100));
+\end{lstlisting}
+Now we
+can see that in the expanded macro, an argument list is actually
+provided for \code{FREE}. Then the system will expand
+\code{FREE(g\_array2)}, resulting in the following code. 
+\begin{lstlisting}
+g_resize_times++;
+vfree(g_array2);
+g_array2 = malloc(sizeof(int)*(100));
+\end{lstlisting}
+In
+other words, \code{RESIZE} is in fact a high-order macro
+where its third parameter is also a macro.
+
+\subsection{Designing the Backward Transformation}
+Now let us consider that a program-editing tool takes the preprocessed
+code. Realizing the invocation to \code{vfree} is unsafe, the
+programming editing tool inserts a guard before it, as
+shown below.
+\begin{lstlisting}
+g_resize_times++;
+if (g_array2) vfree(g_array2);
+g_array2 = malloc(sizeof(int)*(100));
+\end{lstlisting}
+
+
+Now let us consider how to design a backward transformation that takes
+this change as input, and produces a change on the unpreprocessed code,
+where the changed unpreprocessed code will produce exactly the changed
+preprocessed code. There are two options: 1. we can change the definition of
+\code{RESIZE} macro, adding this guard into the macro definition.
+2. we can expand the invocation to \code{RESIZE} macro, and add
+the guard to the expanded form. The first option makes global changes,
+affecting all places that invoke \code{RESIZE}. The second option
+makes only local changes, affecting only one place. However, since
+the backward transformation do not have the knowledge whether the change should be
+global or local, it is safer to choose the local option. In this example,
+probably we do not need to add the guard to every invocation to
+$vfree$, as it will cause unnecessary runtime overhead. The
+program-editing tool will have the knowledge to determine the safety
+of $vfree$ calls and add this guard to all necessary places.
+Furthermore,
+the local option also minimizes the interruption to the original
+program, as the global option affect many places in the program. This consideration forms our first requirement of the
+backward transformation.
+
+\begin{decision}
+A backward transformation should not change any macro definition.
+\end{decision}
+
+According to the requirement, we should expand the macro
+invocation with the guard added. Then there are again two
+options. We may subsequently expand all macro expansions as follows.
+\begin{equation}
+\begin{minipage}{7.6cm}
+\begin{lstlisting}
+g_resize_times++;
+if (g_array2) vfree(g_array2);
+g_array2 = malloc(sizeof(int)*(100));
+\end{lstlisting}
+\end{minipage}
+\label{eqn:expandall}
+\end{equation}
+Or we may expand only one level as follows.
+\begin{equation}
+\begin{minipage}{7.6cm}
+\begin{lstlisting}
+g_resize_times++;
+if (GARRAY(2)) FREE(GARRAY(2));
+GARRAY(2) = malloc(sizeof(int)*(100));
+\end{lstlisting}
+\end{minipage}
+\label{eqn:goal}
+\end{equation}
+\newcommand{\coderef}[1]{code piece~(\ref{#1})}
+We think \coderef{eqn:goal} is better than \coderef{eqn:expandall} because it
+keeps more of the original code structure that are easier to understand, reuse, and maintain. This leads to our second
+requirement.
+
+\begin{decision}
+A backward transformation should aim to keep existing macro invocations.
+\end{decision}
+
+Some might be tempted to go a step further by abstracting the guard into a new macro, or
+trying to reuse an existing macro that covers its functionality, as in the following. 
+%Furthermore, the added guard actually has been captured by another
+%macro definition: \code{SAFE\_MACRO}, so it is attempting to replaced
+%the second line with an invocation to existing macros, as follows.
+\begin{lstlisting}
+g_resize_times++;
+SAFE_FREE(GARRAY(2));
+GARRAY(2) = malloc(sizeof(int)*(100));
+\end{lstlisting}
+However, this is dangerous as very often macro definitions are
+ not designed to replace all occurrences of its expanded
+form. For example, Ernst et al.~\cite{ernst2002empirical} reports a
+macro definition, \lstinline!#define ISFUNC 0!, that defines a constant used in certain system
+calls. It obviously does not mean we shall replace all occurrences of \code{0}
+with \code{ISFUNC}.
+%but a backward transformation does not have the
+%information to determine where an invocation should be inserted. 
+This
+leads to our third requirement.
+
+\begin{decision}
+  A backward transformation should not introduce new macro invocations.
+\end{decision}
+
+Besides the three requirements, we have two additional correctness laws borrowed from the bidirectional transformation literature, namely GETPUT and
+PUTGET~\cite{Foster:2007}. Let $s$ be the unpreprocessed
+program, $t$ be the preprocessed program, $c_t$ be the change to $t$,
+and $c_s$ be the change to $s$ that is produced by a successful
+backward transformation.
+
+\begin{decision}[GETPUT]
+  If $c_t$ is empty, then $c_s$ is empty.
+\end{decision}
+
+\begin{decision}[PUTGET]
+  Let $s'=c_s(s)$ be the new unpreprocessed program obtained by
+  applying $c_s$ to $s$, and $t'=c_t(t)$ be the changed preprocessed
+  program. Preprocessing $s'$ produces $t'$.
+\end{decision}
+
+% \begin{decision}
+%   The backward transformation fails to produce $c_t$ if and only if
+%   there exists no $c_t$ satisfying the above five requirements.
+% \end{decision}
+
+The requirements together define the behavior of a backward
+transformation: it should propagate the change
+back into the unpreprocessed code by means of modifying macro parameters,
+modifying normal text, and expanding macro invocations, and at the same time expanding as
+fewer macro invocations as possible. 
+
+\subsection{Naive Solutions}\label{sec:naive}
+Naive solutions does not meet our above listed requirements as we demonstrate in this subsection. \\
+
+\noindent\emph{Naive solution I (per-file).}
+The first naive solution is to directly copy back the changed
+preprocessed files
+and replace the original unpreprocessed files. This solution is the easiest to
+implement but has two major deficiencies. First, the original unpreprocessed source files may contain
+macro definitions, which will be lost if we directly
+copy back the preprocessed files, causing problems elsewhere. Second, this will leads to the expansion
+of all macro invocations in the source file, as well as all \code{\#include}
+directives, destroying modularity completely.\\
+% A source file often contains thousands of lines expanded
+%from \code{\#include} directives, and thus such a backward
+%transformation often leads to almost unreadable source files.
+
+\noindent\emph{Naive solution II (per-line).}
+The second solution is to use more fine-grained units, copying back
+only the changed lines. This is doable with the assumption that modern
+compilers keep a traceability relationship between the lines
+in the unpreprocessed files and the preprocessed files. For example,
+when GCC preprocess our running example, it will replace lines 1-7 into
+empty lines, and put the three statements expanded from line 9 in one
+line, so that a one-to-one correspondence between lines are kept. 
+
+Although the second solution has the benefit of not removing macro
+definitions, it still has problems. First, a lot of
+macros are still unnecessarily expanded. In our example, if we copy back
+the changed line, \coderef{eqn:expandall} will be the result, which goes against our second 
+requirement and destroys modularity. The situation becomes even worse when we consider tools that
+copy lines of code within source files, e.g.,
+GenProg~\cite{le2012genprog} copies statements between two positions
+in the source files to fix bugs. In such cases all macro invocations
+in the copied lines will be lost. Second, if the original macro
+invocations span several lines, the backward mapping produces wrong
+results. For example, suppose there is a line break within the
+original macro invocation, as follows.
+\begin{lstlisting}
+RESIZE(GARRAY(2),
+  100, FREE);
+\end{lstlisting}
+In GCC, the macro invocation will be expanded into two lines, where
+the first line contains the three expanded statements, and the second
+line is empty. As a result, in the backward transformation only the
+first line will be copied back, resulting in an incorrect program.
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

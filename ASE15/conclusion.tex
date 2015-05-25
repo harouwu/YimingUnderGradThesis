@@ -1,0 +1,26 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+Handling the C preprocessor in program-editing tools is difficult, as a result
+many tools either produce unsound results or give up on handling CPP
+entirely. In this paper we show that we can separate the concerns by using bidirectional transformations to deal with the 
+preprocessor, so that 
+program-editing tools may focus only on the preprocessed code, achieving a
+more modular design.
+
+CPP also represents a family of transformation systems where the
+transformation program and the source data are bound together, for example bidirectional
+PHP~\cite{wang2012automating}. 
+Existing approaches~\cite{wang2012automating} often resort to ad-hoc treatment of the
+bidirectionalizing algorithm and correctness reasoning. The algorithm
+in this paper indicates a plausible systematic way of
+bidirectionalizing such systems: treating programs as data and
+bidirectionalize on the high-level operational semantics. We would like to see a
+general theory to be developed and applied to many different systems.
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

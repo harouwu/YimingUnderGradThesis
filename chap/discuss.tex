@@ -1,0 +1,53 @@
+\subsection{Discussion}
+\label{sec:discuss}
+In this subsection we discuss more related issues.
+\subsubsection{Supporting all configurations}
+Our current algorithm handles only one configuration. That is, giving a
+set of predefined macros passed at the command line, our approach
+only ensures that the propagated changes are correct with respect to
+this set of predefined macros. If the user switched to another set of
+predefined macros (a different configuration), provide no guarantee. This can happen, for example, a
+macro in a copied text is no longer defined in the other
+configuration.
+
+Many efforts \cite{Kastner2011,Garrido2013,Overbey2014} on analyzing
+and refactoring C code are devoted into handling multiple
+configurations, so potentially these approaches can be combined with
+ours to provide safe bidirectionalization for all configurations. A
+particular promising approach~\cite{Overbey2014} separates the
+handling of different configurations as separate layers, making 
+integration of the two approaches possible.
+
+
+\subsubsection{Levels of changes}
+Our current change operations are defined on the token level. Another
+option is to use fine granularity at the character level, e.g.,
+replacing a characters with a sequence of other characters. However,
+while this could give us fine-grained control of the backward behavior,
+we discard this idea because (1) most changes in practice do not have
+such a fine granularity, so token-level changes are sufficient; (2) character-level changes may add unnecessary complexities
+to the system, e.g., the user may replace a space into an empty space
+to concatenate two tokens.
+
+\subsubsection{Relation to delta-based lenses}
+Our bidirectional transformation reflects changes on the target to changes
+on the source, which is know as
+delta-based~\cite{Diskin2011,JOT:issue_2011_01/article6}, instead of 
+state-based~\cite{Foster:2007}. Nevertheless, we still adopt the bidirectional laws from
+the state-based settings because the delta-based laws require a relation
+between the changes on the source and those on the target, which does
+not exist in practice.
+
+% \begin{itemize}
+% \item considering all possible configurations
+% \item enrich the delta-lens framework
+% \item better C standard with restricted macro usages
+% \item obtaining changes from existing tools
+  
+% \end{itemize}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

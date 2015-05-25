@@ -1,0 +1,718 @@
+\section{Approach}
+\label{sec:approach}
+As mentioned before, the basic idea of our approach is to interpret
+CPP as a set of rewriting rules, where the backward
+transformation reverses each application of the rules. In this section,
+we first present this interpretation of CPP~(\secref{sec:forward}).
+Then we describe the change operations we support and first focus on
+one type of change: replacements.
+(\secref{sec:changes}). Since we need to reverse each application of
+the rules, we first record the applications as rewriting steps
+(\secref{sec:changes}), and then derive a backward transformation for
+each rule, respectively (\secref{sec:steps}). We also
+discuss how this process satisfies the requirements
+(\secref{sec:correctness}) and an optimization of the algorithm (\secref{sec:optimization}). Finally, we
+discuss how to convert other types of changes into replacement (\secref{sec:extend-other-changes}).
+
+
+% We introduce our
+% approach in the following steps. First, we present our model of
+% forward preprocessing, which forms the basis of the correctness
+% discussion (\secref{sec:forward}). Second, we introduce a model for
+% encoding changes on the preprocessed code (\secref{sec:changes}) and
+% describe how to backward transform one type of changes: replacement of
+% a token
+% (\secref{sec:backward}). % We introduce two core concepts, rewriting step and
+% % rewriting action, for recording the process of a forward
+% % transformation and perform the backward transformation.
+% The backward transformation is based on tracing the forward
+% transformation as rewriting steps (\secref{sec:steps}).
+% We also
+% discuss how this process satisfies the requirements and laws (\secref{sec:correctness}). Finally, we
+% discuss how to convert other types of changes into replacement (\secref{sec:extend-other-changes}).
+
+For the ease of presentation, we shall consider a subset of C
+preprocessor first: there is no \# operator nor \#\# operator, no
+\#include directive, nor does any macro expansion contain any
+self invocation. We will later discuss how to
+extend this simplified model to a full model (\secref{sec:fullC}).
+
+\newcommand{\dstart}{\ensuremath{\langle\#}\xspace}
+\newcommand{\dend}{\ensuremath{\rangle}\xspace}
+% \newcommand{\env}{\ensuremath{CTX}\xspace}
+
+\subsection{Modeling forward preprocessing}\label{sec:forward}
+We view a CPP program as a sequence of tokens. To
+recognize preprocessor directives from the sequence of tokens, % we
+% consider two special tokens, \dstart to denote a \# at the beginning of
+% a line and \dend to denote the end of line following a \dstart.
+we rely on two special tokens: \# at the
+beginning of a line, and the end of line
+following from a \# at the beginning of the line. We also assume  all
+macro definitions in scope are stored in a \emph{context}.
+
+We deem the semantics of CPP as a set of rewriting rules.
+Each rewriting rule is taken the form of
+$guard \hookrightarrow action$. When $guard$ is true, $action$ is
+performed to replace some tokens at the beginning of the current
+remaining token sequence, and set the position for the next rule
+application.
+
+Both $guard$ and $action$ are modelled as functions. Function $guard$
+takes the currently remaining token sequence and the current context,
+and returns a Boolean value to indicate whether the rule can be
+applied to the current token sequence or not. Function $action$ takes
+the currently remaining sequence and the current context, and returns
+four components $(finalized, changed, restIndex, newContext)$. % Index
+% $restIndex$ denotes the start position of the remaining sequence, and
+This result indicates that the tokens before $restIndex$ are replaced % . The replacing tokens are
+% further divided into
+by
+two consecutive subsequences, $finalized$ and $changed$, where $finalized$ is a sequence
+that does not need to be further scanned, and $changed$ is a sequence
+that needs to be scanned. The last component, $newContext$, is the updated
+context.
+% , where $guard$ is a condition to
+% determine whether this rule can be applied to the head of the current token
+% sequence, and $action$ takes a subsequence from the beginning of the
+% sequence, replaces it with another sequence, and separates the
+% replaced sequence into 
+% into a finalized sequence and the remaining sequence, where the
+% finalized sequence do not need to be further scanned and the remaining
+% sequence needs to be scanned. A forward transformation iterates
+% all rules, and applies the first applicable rule until the no more
+% token need to be scanned.
+The algorithm for forward preprocessing is given in
+Algorithm~\ref{alg:forward}. It repeatedly applies the
+rules in $R$ until the whole token sequence has been processed.
+
+\begin{algorithm}
+  \newcommand\mycommfont[1]{\rmfamily{#1}}
+  \SetCommentSty{mycommfont}
+  \caption{Algorithm for forward preprocessing  \label{alg:forward}}
+  \KwIn{token sequence $src$, rule list $R$}
+  \KwOut{new token sequence $res$}
+  $ctx \leftarrow \{\}$\;
+  \While{$src.length > 0$}{
+    \For{$r \in R$}{
+      \If{$r.guard(src, ctx)$} {
+        $(finalized, hanged, rest, ctx') \leftarrow r.action(src, env)$\;
+        break\;
+      }
+    }
+    $res \leftarrow res + finalized$\;
+    $src \leftarrow changed + src.sub(rest)$\;
+    \tcp{$sub(l)$ returns a
+      subsequence starting from $l$} 
+    $ctx \leftarrow ctx'$\;
+  }
+ % {\small Function $guard$ takes the remaining token sequence and the current definitions as
+ % input, and returns a Boolean value to denote whether the rule can be
+ % applied. $action$ takes the token sequence and the definitions
+ % as input, and returns a token sequence that needs not be scanned, a
+ % token sequence needs to be further scanned, and an updated set of definitions.}
+\end{algorithm}
+
+There are totally four rules in the rule list $R$. One processes
+conditionals such as $\#if$, $\#ifdef$, one processes all other
+preprocessor directives as we basically need to remove them and
+updates the context, one processes macro invocations, and the last one
+processes normal text. These rules are described below.
+% The rule list $R$ contains the following rules, in the order they
+% appear in the list.
+\begin{itemize}
+\item R1: This rule processes conditional compilations. Function $guard$ determines whether the token sequence
+  starts with a respective directive such as $\#if$,
+  $\#ifdef$. Function $action$ first
+  evaluates the condition based on the current context, and then replaces the
+  whole conditional with either the true branch or the false branch. The whole
+  replacing sequence is returned as $changed$ and $finalized$ is empty.
+\item R2: This rule processes other preprocessor directives. Function
+  $guard$ determines whether the token sequence starts with a
+  preprocess directive. Function $action$ parses the directives, makes
+  necessary changes to the context, and returns the index of the first token after the
+  directive as $restIndex$, with $finalized$ and $changed$ empty.
+\item R3: This rule expands a macro invocation. Function $guard$
+  determines whether the first token in the sequence is the name of an
+  object-like macro or the first two tokens are the name of a
+  function-like macro and an open parenthesis. Function $action$
+  consists of two steps.
+  \begin{itemize}
+  \item First, the arguments are preprocessed by recursively applying
+    R3 and R4\footnote{Including preprocessor directives in the
+      argument list is an undefined behavior in CPP~\cite{CStandard}. Here
+      we ignore directives in arguments}.
+    When expanding an argument, the current context is used, and the
+    token sequence includes only the argument.
+  \item Second, the occurrences of the parameters in the macro body are
+    substituted by the preprocessed arguments. The new body are returned
+    as $changed$, with $finalized$ empty, and $restIndex$ is the index
+    of the next token after the macro invocation.
+  \end{itemize}
+\item R4: This rule processes normal tokens not captured by the other rules. Function $guard$ always
+  returns true. Function $action$ returns the first token as
+  $finalized$, an empty $changed$, and the index of the next tokens as
+  $restIndex$.
+\end{itemize}
+
+As an example, let us consider the following program.
+\begin{equation}
+\begin{minipage}{0.4\columnwidth}
+\begin{lstlisting}
+#define x 100
+hello x
+\end{lstlisting}
+\end{minipage}
+\label{eqn:smallexample}
+\end{equation}
+% To preprocess this program, we recursively apply the rules over the
+% program. 
+The first applicable rule is R2, which parse the macro
+definition, store it in the context and moves to the next line. The remaining sequence is now \code{hello
+  x}. Then R4 is applied to move \code{hello} into the finalized
+sequence. Next, R3 is applied to expand \code{x} into \code{100}.
+Finally, \code{100} is scanned again and R4 moves it into the
+finalized sequence. Now the remaining sequence is empty and the
+preprocess stops.
+
+% From the definitions of the rules we can prove a simple property. For
+% any rule $r$, let $r.guard(src, c)$ be true and $r.action(src, c) = (f, h, restIndex, c')$. Supposing
+% $src'$ differs from $src$ only for the tokens at or after $restIndex$,
+% we know that $r.guard(src, c)=true$ and $(f, h, restIndex, c') = r.guard(src', c)$. In other
+% words, if we change the 
+
+\subsection{Modeling the changes}\label{sec:changes}
+Program-editing tools can change the program with a variety of 
+operations. In this paper we consider three basic kinds: replacement,
+insertion, and copy. These operations are summarized from popular
+bug-fixing tools such as GenProg~\cite{le2012genprog} and
+SemFix~\cite{nguyen2013semfix}, which typically fix a bug by copying
+or creating an expression to replace another one or inserting at some
+location.
+
+All the three operations directly manipulate the token sequences. A
+replacement is a pair $(l, s)$, where $l$ is the index of the token to
+be replaced, and $s$ is a token sequence that will replace the token
+at $l$. An insertion is a pair $(l, s)$, where token sequence $s$ will
+be inserted after the token at index $l$. A copy is a triple $(l,
+l_b, l_e)$, showing the token sequence between index $l_b$ (inclusive)
+and index $l_e$ (exclusive) is copied after the token at $l$.
+
+Note that the replacement naturally subsumes deletion. A change $(l,
+[])$ deletes a token, where $[]$ denotes an empty sequence.
+
+In the rest of the section we shall first show how to perform a
+backward transformation with replacements and then map the other two
+types of operations to replacements. % If a change set contains only
+% replacements, we could also interpret the change set as a total function
+% mapping each index into a token sequence, where unchanged indexes
+% are mapped to the original tokens at the indexes.
+
+\subsection{Rewriting Steps}\label{sec:steps}
+As mentioned in the introduction, our backward transformation reverses
+each application of rewriting rules. To perform a backward
+transformation, we use a data structure to record what rules have been
+applied to what parts of the source. We call such a record  \emph{rewriting steps}. Each rewriting
+step is a quadruple, $(src, i, ctx, r)$, specifying that rule $r$ has been
+applied to a sub sequence of $src$ starting at $i$ with context $ctx$. Token
+sequence $src$ is always the current token sequence, containing all
+modifications made from previous rule applications.
+% The index $i$ is always calculated based on current token sequences,
+% i.e., the tokens before $i$ has already been processed by other rules.
+Accordingly, a forward transformation is recorded as a sequence of
+rewriting steps. For example, preprocessing code piece \ref{eqn:smallexample}
+produces the following sequence of rewriting steps:
+$(P, 0, \{\}, R2)$, $(hello\ x, 0, \{x\}, R4)$, $(hello\ x, 1, \{x\}, R3)$, and
+$(hello\ 100, 1, \{x\}, R4)$, where $P$ is the original program.
+
+% We use a data structure to record how a rule application changes the
+% token sequence, which is the key to our bidirectionalization. We call
+% this data structure \emph{rewriting step}. Intuitively, we may first
+% consider 
+% A rewriting step is a
+% triple, $(ctx, args, body)$. The first component, $ctx$, is the
+% current context. The rest two steps contains two types of rewriting
+% actions, argument expansions and body expansions, which are inner
+% changes performed to form a rewriting step. Component $args$ contains
+% a set of argument expansions, and $body$ is a body expansion.
+
+% An argument expansion records how an argument to a macro invocation is
+% expanded, and is recursively defined as a sequence of
+% rewriting steps.
+
+% A body expansion 
+
+
+\subsection{Backward Transformation with Replacement}\label{sec:backward}
+The basic idea of our backward transformation is to propagate the
+changes backward along the sequence of rewriting steps, such that
+if we perform a forward preprocessing again, either exactly the same
+rewriting step is performed, or this rewriting step is replaced by a
+new sequence of equivalent rewriting steps (whose length can 
+be zero). The algorithm for backward
+transformation can be found in Algorithm~\ref{alg:backward}. The
+function $backward$ propagates changes along one rewriting step,
+or reports a failure if no proper propagation can be found.
+
+\begin{algorithm}
+  \newcommand\mycommfont[1]{\rmfamily{#1}}
+  \SetCommentSty{mycommfont}
+  \caption{Algorithm for backward transformation \label{alg:backward}}
+  \KwIn{a sequence of rewriting step $rs$}
+  \KwIn{a set of replacements $c$}
+  Reverse sequence $r$\;
+  \For{$r \in rs$}{
+    $c \leftarrow backward(rs, c)$\;
+    \If{$backward$ failed}{print ``Changes cannot be applied.''\; \Return{}\;}
+  }
+  \Return{$c$}\;
+\end{algorithm}
+
+The key for implementing the backward transformation is to implement the
+function $backward$. The behavior of $backward$ differs for each
+rewriting rule, and we discuss it from the simplest to
+the most complex rule.
+
+First, if the rewriting step is performed by R2, the forward
+preprocessing consumes the preprocessor directive. The backward
+transformation shifts the replacements according to the length of the
+consumed macro. For example, consider the following CPP program.
+\begin{lstlisting}
+#undef hello
+hello
+\end{lstlisting}
+Now if we have a replacement $(0, x)$, i.e, $hello$ is changed into
+$x$, the backward transformation shifts the replacement into $(4, x)$ to ensure
+that it still changes the macro invocation $hello$.
+
+Second, if the rewriting step is performed by R1, the forward
+transformation replaces the whole conditional directive with one of its branches. In the
+backward transformation, we map the changes on the replaced branch
+back to its original location, and shift other changes if necessary.
+Since we never change macro definitions, the conditional is guaranteed to 
+evaluate to the same branch.
+
+Third, if the rewriting step is performed by R4, the forward
+transformation moves one token to $finalized$. The backward
+transformation needs to ensure that R4 is still performed on the changed
+token sequence. % If $guard$ evaluates to true for any one of R1, R2, or
+% R3 on the changed sequence, the backward transformation reports an
+% failure, otherwise the backward transformation simply returns the
+% changes. Note that if the user replaces the original token into more
+% than one tokens, we need to check whether R4 is performed on each of
+% the changed token.
+For example, if the user replaces $hello$ in $hello\ c$ with $a\ b$,
+we need to check, starting from $a$, whether the only viable path is still to apply R4 twice to preprocess the replacing sequence, i.e., only $guard$ of R4 evaluates to true on either $a\ b\ c$
+or $b\ c$. Here failures may occur. For example, if the user changes
+$hello$ into $x$, where $hello$ is not a macro but $x$ is an
+object-like macro. Another example is that the user changes
+$GARRAY\ hello$ into $GARRAY\ (hello)$, where $GARRAY$ is a
+function-like macro. In this case, $GARRAY$ was previously preprocessed by R4
+because it is not followed by an open parenthesis, whereas in the changed
+sequence $GARRAY$ is, and therefore the backward
+transformation fails at the rewriting step on $GARRAY$. Such failures are necessary as in
+both the above cases, there is no way to propagate back the changes.
+
+Finally, the case of R3, which expands a macro invocation, is the most
+complex. R3 consists of two sub steps. We first try to reverse the two
+sub steps in an reversed order. If any of
+the sub step fails, we try to expand the macro invocation.
+
+In the second sub step, the occurrences of parameters in a macro body
+are replaced by expanded arguments. The backward transformation 
+maps the changes back to the arguments. There are two cases where an
+expansion may be triggered: (1) tokens that are not from the
+arguments are changed, and (2) multiple occurrences of the same
+parameter are changed to different values. 
+For example, giving the following piece of code,
+\begin{equation}\label{eqn:expansion}
+  \begin{minipage}{0.8\columnwidth}
+\begin{lstlisting}
+#define x 1
+#define plus(a) a+a
+plus(x);
+\end{lstlisting}
+  \end{minipage}
+\end{equation}
+if we changes $1+1$ into $1-1$ or $1+2$, an expansion will be triggered.
+
+In the first sub step, the arguments are preprocessed. The backward
+transformation recursively call $backward$ to propagate the changes
+along the rewriting steps of each argument. Finally, a safety check is
+performed on the propagated changes: if the changed argument contains
+a comma at the top level (and the comma is not enclosed by a pair of parentheses) or
+any unmatched parenthesis, we trigger an expansion. This is
+because a comma or an unmatched parenthesis can break the original
+structure of arguments.
+
+If the backward transformation on any of the sub step fails, we expand
+the macro invocation. The expansion will generate changes that replace
+the macro invocation with its expanded body. As an example, let us
+assume the second $1$ in $1+1$ is changed into $2$ in code
+piece~\ref{eqn:expansion}. After backward transformation, the
+propagated change will replace $plus$ in $plus(x)$ with $x+2$ and
+delete $(x)$.
+
+% To
+% perform the macro expansion, we need to generate the expanded form to
+% replace the macro invocation.
+The key to the expansion is how to construct the replacing sequence,
+$x+2$. From the forward transformation we know that the unchanged
+preprocessed token sequence is $1+1$, and both $1$s are from the
+argument $x$. So we copy the rewriting steps of $x$ to the locations
+of the two $1$s, and use the copied rewriting steps to propagate back
+the changes on the $1$s. The first $1$ is not changed, so the original $x$
+is kept. The second $1$ is changed into $2$, so the macro invocation
+$x$ is also expanded, and we get the final text $x+2$.
+
+%We first construct an unchanged expanded form, and then
+% propagate back the changes along the unchanged expanded form. First,
+% we replace the occurrences of parameters in the macro body by either
+% the preprocessed argument or the unpreprocessed argument (both the original
+% arguments without user changes). An occurrence of a parameter is
+% replaced by a preprocessed argument if any of the following conditions is
+% satisfied.
+% \begin{itemize}
+% \item The preprocessed argument starts with a left parenthesis.
+% \item The preprocessed argument contains a top-level comma.
+% \item The preprocessed argument contains any unclosed parenthesis.
+% \item The preprocessed argument becomes different if we preprocess it again.
+% \end{itemize}
+% Otherwise, the occurrence is replaced by an unpreprocessed argument. In
+% the previous example, $x$ does not satisfy any of the above condition,
+% so $a$ in the body of $plus$ is replaced by the unpreprocessed
+% argument, forming $x+x$.
+
+% Next, 
+% for any
+% occurrence of a parameter replaced by an unpreprocessed argument, the
+% rewriting steps of the argument is first copied at the new location to
+% preprocess the argument, and then we copy
+
+However, we cannot always copy the rewriting steps of an argument to
+the occurrences of its corresponding parameter. Basically, when we
+copy the rewriting step of an argument, we are assuming that the
+occurrence of the parameter can be replaced by its unpreprocessed
+argument, and all rewriting steps behave exactly the same as before.
+For example, when expanding $plus(x)$, we can replace the two
+occurrences of $a$ by $x$, forming $x+x$ where the two $x$ expands
+exactly the same way as the argument $x$, forming $1+1$. However, this is
+not always the case. Let us consider the following code.
+\begin{equation}\label{eqn:expandToParentheses}
+  \begin{minipage}{0.8\columnwidth}
+\begin{lstlisting}
+#define p (x)
+#define pplus(x) plus x hello
+pplus(p)  
+\end{lstlisting}
+    \end{minipage}
+\end{equation}
+With the macros defined in code piece \ref{eqn:expansion}, the above code
+is preprocessed into to $1+1\ hello$. However, if we need to expand
+$pplus(p)$, we cannot expand it into $plus\ p\ hello$, because it will
+only expand to $plus\ (1)\ hello$. This is because the use of $p$
+instead $(x)$ breaks the original macro invocation. % In fact, all the
+% first three conditions listed above are designed to prevent this case:
+% the expanded macro is used as part of another macro invocation and
+% replacing it with the unexpanded form may break the macro invocation.
+
+As a result, we have to add a safety check when we copy rewriting
+steps. We copy the rewriting
+steps of an argument only if none of the following conditions is satisfied.
+\begin{itemize}
+\item The preprocessed argument starts with a left parenthesis.
+\item The preprocessed argument contains a top-level comma.
+\item The preprocessed argument contains unclosed parentheses.
+\item The preprocessed argument becomes different if we preprocess it
+  again.
+\end{itemize}
+The first three conditions correspond to situations similar to the
+above example: the preprocessed argument is used as part of another
+macro invocation in the expanded form, and replacing it with the
+unpreprocessed one will break the macro invocation.  
+% In the previous example, when $1+1$ is replaced by $1+2$, we expand
+% the macro invocation $plus(x)$. Since the argument $x$ expands to
+% $100$, the three conditions are satisfied and the body is replaced as
+% $x+x$. Next we use the rewriting step of expanding $x$ to propagate
+% the changes on the two $1$s. The first $1$ is not changed, so the
+% original $x$ is kept. The second $1$ is changed into $2$, so the
+% original macro invocation $x$ is also expanded, and we get the final
+% text $x+2$, which is used to form a replacement of $plus$.
+% To see an example where we should use the expanded argument, let us
+% consider the following code.
+% \begin{lstlisting}
+% #define p (x)
+% #define pplus(x) plus x hello
+% pplus(p)  
+% \end{lstlisting}
+% With the definitions in code piece \ref{eqn:expansion}, the above code
+% expands to $1+1 hello$. However, if we need to expand $pplus(p)$, we cannot
+% expand it into $plus p hello$, because it will only expand to $plus
+% (1) hello$. This is because the use of $p$ instead $(x)$ breaks the
+% original macro invocation. In fact, all the first three conditions listed
+% above are designed to prevent this case: the expanded macro is used as
+% part of another macro invocation and replacing it with the unexpanded
+% form may break the macro invocation.
+The last condition corresponds to the following case.
+\begin{lstlisting}
+#define id(x) x
+id(plus p)
+\end{lstlisting}
+This piece of code expands to $1+1$, but if we expands $id(plus\ p)$
+into $plus\ p$, the other macro expansions will be blocked. In other words, with macro
+invocation, an argument will be scanned twice, but when the macro
+invocation is expanded, an argument will only be scanned once. We need
+to make sure this does not affect correctness.
+
+\subsubsection{Correctness}\label{sec:correctness}
+We can directly reason that the backward transformation satisfies
+Requirements 1, 3, 4 and 5. Requirement 2 will later be evaluated by
+our experiments. Requirement 1 holds because we never propagate
+changes to macro definitions. Requirement 3 holds because if we happen
+to introduce a new macro invocation, we must have changed a normal 
+token that should be preprocessed by R4 into part of a macro
+invocation, and the check in R4 will prevent such a change.
+Requirement~4 holds because we introduce new changes only when we
+expand a macro invocation, and we would not expand a macro invocation
+if nothing is changed. Requirement 5 has been reasoned throughout this
+subsection. To prove it formally, we need to inductively prove that each
+rewriting step either still behaves the same on the changed steps, or
+is replaced by a sequence of equivalent rewriting steps (the size of
+the sequence may be zero). A tricky point is when we copy rewriting
+steps of arguments to the
+expanded method body, the copied rewriting steps may be
+mixed with later rewriting steps. We can show that, still by
+induction, the order of applying these rewriting steps can be changed
+without affecting the final result. We omit the details due to space
+limitations.
+
+\subsubsection{Optimization}\label{sec:optimization}
+In the current algorithm, we need to record the whole program after
+each rewriting step, even if only a small portion has changed. In the
+backward direction, we also need to shift all changes at each step.
+This contributes to a major performance penalty of the algorithm.
+
+To optimize the algorithm, we first divide the original
+token sequence into a set of subsequences, where each subsequence is
+independently preprocessed by a set of rewriting steps. In this way, we
+can treat each subsequence as an independent program to perform the
+backward transformation, and then merge the changes. Giving a rewriting
+step $(src, i, ctx, r)$, if the token at $i$ is not generated by a
+preceding rewriting rule, i.e., is from the original program, then we
+say the location right before $i$ is a \emph{splitting point}. With
+this definition, we guarantee that no rule application crosses a
+splitting point. We divide the original program into
+subsequences along the splitting points, and perform the backward transformation
+independently for each subsequence before merging the changes. % A
+% splitting point guarantees that no rule application replaces a sub
+% sequence that crossing the splitting point, so we can split the
+% original program at splitting points. 
+When merging changes from two subsequences, we need to check that the
+preprocessed version of left sequence and the unpreprocessed version of
+the right sequence would not form a new macro invocation. This check
+was performed by R4 in the unoptimized algorithm.% \todo{And then rollback? I am worried that this
+  % handwaving discussion may annoy people who are more expert in
+  % parallel algorithms. Probably it is better to shorten the discussion
+  % and and emphasize that it is implemented. The current writing sounds
+  % like a piece of proposal for future work.}
+
+For example, code piece~\ref{eqn:smallexample} can be divided into
+three subsequences: the macro definition, $hello$, and $x$. Suppose
+$plus$ is a macro defined earlier. If the user changes $hello$ into
+$plus$ and changes $100$ into $(x)$, a new macro invocation is formed
+across the boundary and we should report a failure.
+
+
+\subsection{Extending to full CPP}\label{sec:fullC}
+In this sub section we discuss how we can extend the above algorithm
+to support full CPP. Due to space limitations, we
+only discuss the main ideas without the full details.
+
+To support \# and \#\# operators in forward preprocessing, we need to add
+two additional types of sub steps in R3, one for stringifying tokens
+and one for concatenating tokens. Furthermore, parameters used with
+these operators are replaced by their unpreprocessed forms but not their
+preprocessed forms, so in the first sub step we need to keep both the
+unpreprocessed and the preprocessed forms. % In the backward transformation, we
+% need to also propagate the changes along the two new sub steps, and
+% trigger a macro expansion when the propagation cannot be completed.
+% Furthermore, in the first sub step we need to check if the expanded
+% form and the unexpanded are changed consistently, and triggers a macro
+% expansion otherwise. In the macro expansion, we need to evaluate \#
+% and \#\# operators on the body before expansion, as the two operators
+% cannot exist on the top level.
+We need to add three extensions to the backward transformation. First,
+we need to design the backward transformation for the two new sub
+steps. Second, we need to add a safety check to determine whether the
+unpreprocessed form and the preprocessed form are changed
+consistently. Finally, when expanding a macro, we should not try to
+recover \# and \#\# operators as the two operators cannot exist on the
+top level.
+
+To support \#include in the forward preprocessing, we need to add
+another rewriting rule to support \#include. In the backward
+transformation, we need to trace how changes are propagated to each
+file, and check changes propagated back from different \#include
+directives of the same file are consistent.
+
+Finally, % with our current rewriting rules, a macro definition
+% ``$\#define\ x\ x$'' will expand forever. To prevent this, CPP does
+% not expand a macro invocation found during the expansion of an
+% invocation to the same macro.
+CPP does not allow expanding a macro within its own expansion to prevent
+infinite loops. 
+To support this, we need to add finer
+control of the context in our forward rewriting rules. When we are
+dealing with the tokens expanded from an invocation to macro $m$, the
+definition of $m$ should be removed from the current context.
+
+\subsection{Extending to other types of changes}\label{sec:extend-other-changes}
+We have discussed how to deal with replacements. Now let us proceed to
+insertions and copying. Note that an insertion can be directly
+converted into a replacement. If we insert a token $y$ before a token
+$x$, we can convert it as replacing $x$ with $y\ x$. However, this
+direct conversion may cause unnecessary macro expansions. For example,
+if we insert $y$ before $100$ in the preprocessed code piece
+\ref{eqn:smallexample}, $hello\ 100$, we should not expand $x$ in
+the backward transformation, but if we model the insertion as
+replacing $100$ with $y\ 100$, our backward transformation will expand
+$x$ because its body has been changed.
+
+The above example exhibit an insertion at a splitting point, and such
+an insertion is guaranteed not to expand
+macros. To reduce the number of unnecessary expansions, % we give special
+% treatment to insertions at splitting points. % \todo{So
+% we only reduce but not minimize expansions? Why are splitting points special?}
+% Since the splitting
+% points are not covered by any macro invocation, the insertions at
+% these locations should not expand any invocation.
+We treat the
+inserted token sequence at a splitting point as an independent sequence and check
+whether only R4 is applicable to it, since there is no way to put it
+back if any other rewriting rules can be applied on the inserted
+sequence. Then we use the same method used in the optimized algorithm
+to merge the subsequences.
+
+The copy operation is similar to insertion. The only difference is
+that copied segments may contain macro invocations and we shall
+try to recover these macro invocations. For this, we perform a
+special backward transformation. First, we generate changes on the
+preprocessed code that deletes all tokens except the segments being
+copied. Then we perform a backward transformation by ignoring
+rewriting steps with R1, R2, and R3 whose associated macro is not
+defined or defined differently at the target position. In this way we
+ensure that only macros that is defined at the target positions are recovered.
+Then, we insert the token sequence returned by the backward
+transformation to the target position.
+
+% Instead, we deal with an insertion by concatenating three
+% token sequences: the tokens before the insertion, the inserted tokens,
+% and the tokens after the insertion. We first generate a change that
+% deletes all tokens before the insertion, and perform a backward
+% transformation to get the token sequence before insertion.
+% In the above example, we first generates a change to delete $100$, and
+% a backward transformation will give us 
+
+
+% \subsection{Approach Overview}
+
+% There are three key issues.
+% \begin{itemize}
+% \item We show that different preprocessor directives and macro
+%   operators can be captured by a unified concept, text unit. The
+%   execution of the preprocess can be captured by the composition of
+%   text units, which enables a structural decomposition of the backward transformation.
+% \item Even with the composition structure, we still need to deal with
+%   the intersection of each type of text unit and each change
+%   operation. We further show that there exists a core change
+%   operation, replacement. We only need to consider the propagation of
+%   replacement on each type of text unit. The other change operations
+%   can be easily mapped to the core operation.
+% \item Since our bidirectional transformation not only changes the
+%   values transformed by the transformation but also the transformation
+%   program itself, it will produce two outputs, one is the changed
+%   program and one is the change to the data. When we apply the change
+%   to the data to the program, we get the final result.
+% \end{itemize}
+
+
+% \newcommand{\replace}[2]{\ensuremath{[{#1}]\backslash {#2}}}
+% \newcommand{\copyOpr}[3]{\ensuremath{[{#1},{#2}]\rightarrow [{#3}]}}
+% \newcommand{\del}[2]{\ensuremath{\cancel{[{#1},{#2}]}}}
+% \subsection{Modeling the Changes}
+
+% A location or offset of a character in the source code file is 
+% A location in the source code file is a pair $(f, o)$, where $f$ is
+% the name of the source file, and $o$ is the offset from the start of
+% the file, but treating all continuous whitespace characters as one character.
+
+% A replacement is a pair $(l, s)$, where $l$ is a location on which the
+% character is not a whitespace, and $s$ is
+% a string that will replace the character at $l$.
+
+% An insertion is a pair $(l, s)$, where $l$ is a location on which the
+% character is a whitespace, and $s$ is a string that will be inserted
+% at $l$.
+
+% A copy is a pair $(l_t, l_b, l_e)$, showing the string between $l_b$
+% and $l_e$ is copied into the location $l_t$, where $l$ is a location
+% on which the character is a whitespace. 
+
+
+
+
+
+% % Three atomic operations: replace, insert, copy, and delete.
+
+% % Replace: a tuple $(p, s)$, denoted as $\replace{p}{s}$, showing the char at $p$ is replaced by $s$.
+
+% % Copy: a tuple $(b, e, p)$, denoted as $\copyOpr{b}{e}{p}$, showing the string between $b$ and $e$ is
+% % copied to replace the character at $p$.
+
+% % Delete: a tuple $(b, e)$, denoted as $\del{b}{e}$, showing the string between $b$ and $e$ is
+% % deleted.
+
+% % Conflict rules: copy may overlap with the other two operations, but
+% % the copied content is not modified. 
+
+% % A set of standard operations: replace, copy, move, and delete.
+
+% % RReplace: a tuple $(b, e, s)$, where the string between $b$ and $e$ is
+% % replaced by $s$. RReplace can be modelled by Replace $(b, s)$ and
+% % delete $(b, e+1)$.
+
+% % CCopy is equal to copy.
+
+% % DDelete is equal to delete.
+
+% % MMove is a tuple $(b, e, p)$ that is equal to copy $(b, e, p)$ and
+% % delete $(b, e)$.
+
+% % \begin{definition}[Correctness]
+  
+% % \end{definition}
+
+
+% % \begin{definition}[Completeness]
+  
+% % \end{definition}
+
+% \subsection{Modeling Macro Expansion}
+% % confluence in backward transformation? -- a sub case of correctness
+
+% A text segment is a sequence of text units. A text unit is one of the
+% following types: 
+
+
+
+
+% \subsection{Forward Transformation}
+
+% \subsection{Backward Transformation}
+
+% We need to perform a check of the name collision
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

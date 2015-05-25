@@ -1,0 +1,109 @@
+\section{Evaluation}
+\label{sec:evaluation}
+
+% Research questions:
+% \begin{itemize}
+% \item Does our approach improve the performance of existing tools?
+% \item how many high-order macros in Linux kernel code? 
+% \end{itemize}
+
+% \subsection{Procedures}
+
+% The most widely-used bug-fixing tool is GenProg/RSRepair, which fixes a bug by applying the following three operations:
+% 1. replace a statement by another statement from a random location
+% 2. insert between two statements a statement from a random location
+% 3. delete a statement
+% However, GenProg only works on preprocessed code.
+% Then we consider two naive methods to reflect the change back:
+% 1. per file: we can detect which files are changed by GenProg, and then directly copied them back
+% 2. per line: the preprocessed C code contains line directives to trace their original line numbers, and we can directly copied the changed lines back
+% We could compare the two naive methods with our approach by randomly applying a large number of GenProg/RSRepair operations on statements expanded from macros in Linux kernel, and measure
+% 1. how many macro invocations are removed: The less macro invocations are removed, the closer the code resembles the original code 
+% 2. how often correctness is broken: Correctness may be broken if the copied statement has name collision with other defined macros, or the original macro invocation covers several lines, such as the following one.
+% FOO (
+%   int c,
+%   c++
+% )
+
+% I expect the result shows that 
+% 1. per file removes a huge number of macro invocations, per line removes a small number of method invocations, and our approach removes even less. 
+% 2. correctness is broken in a few cases in the two naive methods, but never in our approach
+
+% Our evaluation mainly contains two parts:
+% \begin{itemize}
+% \item The design of test data.
+% \item The design and performance of different bidirectional transforming algorithms.
+% \end{itemize}
+
+Our evaluation mainly contains two parts:
+\begin{itemize}
+\item The design of test data.
+\item The design and performance of different bidirectional transforming algorithms.
+\end{itemize}
+
+\subsection{Design of test data}
+
+The test data are generated mainly from the Linux kernel source code.
+The reason why Linux kernel is chosen is
+1: Linux Kernel source code is the most widely used code in C.
+2: There are a lot of macros used in the kernel code.
+
+We select 180 macros definitions from the kernel code as there are far more uses of object like macros than function like macros. In the test data, the ratio of object like macros to function like macros is about 1.5:1.
+We select about 8000 lines of code from 213 files in which the use of the previous 180 macros occurs. There are 563 occurrences of the macros in the selected code.
+
+We observed several real life cases of changing the code after the macro expansion. We found that there are mainly two types of changes when considering the original code with unexpanded macros: in-macro changes and inter-macro changes.
+
+The former type is about inserting/changing/deleting some parameters of a macro while the latter type is about inserting another statement into two statements or deleting some statements.
+
+So we generate our mutations over code in two aspects.
+Firstly, for each token in each statement, we generate a random value. If this random number exceeds the threshold value, we will change/delete these tokens. Change means we change some characters into other characters. Delete means we delete the whole token. We may also insert some tokens between tokens. The method is that we randomly select one or some successive tokens in this statement or adjacent statements, then we change the space to the concatenation of the space and the tokens we want to insert. By this method we can implement the insertion operation by replacement.
+Then, for each statement, we generate a random value. If it exceeds the threshold value (this value is different from the value above), we decide to delete the whole statement.
+
+To make the test data's utilization maximum, we have almost all statements changed. And without the loss of generality, we generate 10 different changed version from the same source code.
+The 10 versions are generated in two groups among which the possibilities of mutation are different.
+
+\subsection{Design of three different algorithms}
+The first algorithm to evaluate is the algorithm discussed in the paper, we call it $CPP-TRANS$.
+
+There are two naive algorithms used for comparison:
+\begin{itemize}
+\item $PER-FILE$ The algorithm simply copies the changed code back to the original code.
+\item $PER-LINE$ The algorithm traces the line numbers of the preprocessed code to the original code. It simply copies the changed lines to the original code and doesn't change the unchanged lines.
+\end{itemize}
+
+\subsection{Performance of three different algorithms}
+\begin{table*}[htbp]
+\centering
+\begin{tabular}{l|cc|cc|cc}
+\hline
+Algorithm  &High Mutation & &Low Mutation & &Average &  \\
+ &Remain &Error &Remain &Error &Remain &Error \\
+\hline
+CPP-TRANS &120 &0 &243.8 &0 &181.9 &0 \\
+PER-FILE &0 &0 &0 &0 &0 &0  \\
+PER-LINE &25.6 &5.8 &64.2 &2.4 &44.9 &4.1 \\
+\hline
+\end{tabular}
+\caption{Macros remainings and errors of different algorithms and data set}
+\end{table*}
+
+There are two factors to judge the three algorithms.
+
+The first one is the number of remaining macro invocations in the produced code.
+The second factor is the correctness of the algorithm which can be represented by the errors when running preprocessing on the produced code.
+
+In the above table, we can see that $CPP-TRANS$ keeps the most invocations in both data sets.
+$PER-FILE$ remains 0 invocations as it simply copies the resulting code to the original. 
+$PER-LINE$ performs better than $PER-FILE$ but it can only remain those macros invocations in which the whole line doesn't change during the mutation in the preprocessed code so our method's performance is far better than these two methods.
+In the Low Mutation set, far more lines remain the same, so $PER-LINE$ performs far better than in the High Mutation set.
+
+$PER-LINE$ produces several errors because there are some macro invocations which occupy several lines.
+$PER-FILE$ may produce errors either, if the mutation generates some changes which contains some macro names in the original code. But this doesn't happen in our evaluation.
+
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 

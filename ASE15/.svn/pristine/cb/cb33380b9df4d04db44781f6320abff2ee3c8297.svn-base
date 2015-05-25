@@ -1,0 +1,113 @@
+Construction:
+(The parsing of the macros and #IF have been done)
+1: seg0 = nil
+2: s = next semantic block.
+3: if s is a macro p
+		newunit.def = p
+		if p is functional
+			newunit.arguments = arguments_lists
+			for each i in newunit.arguments
+				newunit.construction()
+			newunit.expanded = p.body
+			for each parametre_reference i in p.nody
+				j = i.id
+				newunit.expanded[i.position] = newunit.arguments[j].expanded
+		else
+			newunit.arguments = nil
+			newunit.expanded = p.body
+		for each i in newunit.expanded
+			i.construction()
+	else
+		newunit = s
+4: seg0.push(newunit);
+5: goto 2
+
+getchangelis(st,len,change)
+	change1 = nil
+	for each (posi,char) in change
+		if (posi >= len && posi < len + i.expandedLen())
+			change1.push((posi-len,char))
+	return change1
+
+segment.mapback(change):
+change: list of pair (posi,char)
+1: change.sort_by_posi();
+2: len = 0
+3: for each unit i in seg0
+		i.mapback(getchangelis(len,i.expandedLen(),change)).printOringin()
+		len += i.expandedLen()
+
+m.mapback(change):
+1: new unit cur = self.copy()
+2: cur.break = false
+3: len = 0
+4: new textsegment cur.newaugs = self.arguments.copy()
+5: new string[self.arguments.size()] tars
+6: for each unit i in self.expanded
+		if i is string
+			j = i.mapback(getchangelis(len,i.expandedLen(),change))
+			if j != i then cur.break = true;
+			len += i.expandedLen()
+			i = j
+		else
+			j = i.mapback(getchangelis(len,i.expandedLen(),change))
+			if j.break then cur.break = true
+			if !cur.break then
+				for each arguments (id,tar) in j.changeLis
+					if self.def.is_argument(i.posi,id)
+						if tars[self.def.get_arguid(i.posi,id)]=="" || tars[...]=tar then tars[...] = tar
+						else cur.break=true; BREAK
+					else
+						cur.break=true; BREAK;
+7: if cur.break then
+		cur.expanded = nil
+		cur.changeLis = nil
+		cur.arguments = nil
+		for each unit i in self.expanded
+			if i is string
+				cur.expanded.push(i)
+			else
+				if i.break then
+					for each unit j in i.expanded 
+						if i.changeLis.find(j)!=nil
+							new textsegment tempargu = self.getargulis(i.posi,j.posi)
+							for each k in tempargu
+								if k is string
+									cur.expanded.push(j.mapback(getchange(i.changeLis.find(j),k.posi)))
+								else
+									cur.expanded.push(new MacroExpansion(getargu(self.arguments.find(k))).mapback(getchange(i.changeLis.find(j),k.posi)))
+								cur.changeLis.push((k.posi,--cur.expanded.end(),getchange(i.changeLis.find(j),k.posi)))
+						else
+							cur.expanded.push(j)
+				else
+					new MacroExpansion p = i.copy();
+					for each unit j in p.arguments
+						new textsegment tempargu = self.getargulis(i.posi,j.posi)
+						for each k in tempargu
+							if k is MacroExpansion
+								j = new MacroExpansion(k).mapback(getchange(i.changeLis.find(j),k.posi))
+							cur.changeLis.push((k.posi,--cur.expanded(),k.posi,getchange(i.changeLis.find(j),k.posi)))
+					cur.expanded.push(p)
+	else
+		for i = 0 to self.arguments.size() -1
+			cur.newaugs[i].mapback(getchange(cur.newaugs[i].expandedString,tars[i]))
+			cur.changeLis.push((i,tars[i]))
+		cur.arguments = cur.newaugs
+8: return cur
+
+
+m.printOrigin:
+1: if self.break then
+		for each unit i in self.expanded
+			if i is string
+				print(i)
+			else
+				i.printOrigin();
+	else
+		printMacro(self.def,self.arguments); //recursive
+
+
+
+
+
+

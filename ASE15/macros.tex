@@ -1,0 +1,32 @@
+\newcommand{\code}[1]{\texttt{\footnotesize #1}}
+\newcommand{\todo}[1]{{\bf \{TODO: {#1}\}}}
+
+\def\modify#1#2#3{{\small\underline{\sf{#1}}:} {\color{red}{\small #2}}
+{{\color{red}\mbox{$\Rightarrow$}}} {\color{blue}{#3}}}
+%\renewcommand{\modify}[3]{{#3}}
+
+\newcommand{\yxmodify}[2]{\modify{Yingfei}{#1}{#2}}
+
+\newcommand\mymargin[1]{\marginpar{{\flushleft\textsc\footnotesize {#1}}}}
+\newcommand\yxmargin[1]{\mymargin{YX:\;#1}}
+
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\eqnref}[1]{violation~\eqref{#1}}
+\newcommand{\secref}[1]{Section~\ref{#1}}
+\newcommand{\tblref}[1]{Table~\ref{#1}} 
+\newcommand{\smalltitle}[1]{{\smallskip \noindent \bf  {#1}.\ }}
+\newcommand{\smalltitlecolon}[1]{{\smallskip \noindent \bf  {#1}:\ }}
+
+
+\newcommand{\yxmodifyok}[2]{#2}
+
+\newcommand{\mycomment}[2]{{\small\color{magenta}\underline{\sf{#1}}:} {\color{magenta}{\small #2}}}
+\newcommand{\yxcomment}[1]{\mycomment{Yingfei}{#1}}
+
+% \renewcommand{\yxcomment}[1]{}
+% \renewcommand{\yxmodify}[2]{#2}
+
+
+\newcommand{\adag}{A-CFG\xspace}
+\newcommand{\anadag}{an A-CFG\xspace}
+\newcommand{\Anadag}{An A-CFG\xspace}

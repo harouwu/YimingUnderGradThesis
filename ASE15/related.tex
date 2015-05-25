@@ -1,0 +1,99 @@
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Bidirectional Transformation}
+Our work is inspired by research on bidirectional transformation. 
+%The need to execute programs in both forward and backward directions is widespread. 
+A classical scenario is the \emph{view-update problem}~\cite{BaSp81,DaBe82,Hegner90,Cui2000,Fegaras2010} from database design: a view represents a database computed for 
+a source by a query, and the problem comes when translating an update of the view back to a corresponding update on the source. 
+%The problem is central in the same way to \emph{model transformations}, playing a substantial role in software evolution:
+%having transformed a high-level model into a lower-level implementation, for a variety of reasons one often needs to reverse engineer a
+%revised higher-level model from an updated implementation~\cite{YuLHHKM12,XiLHZTM07}. 
+
+Languages have been designed to streamline the development of such applications involving transformations running
+bidirectionally. Notably the \emph{lenses} framework~\cite{HuMT04,MuHT04aplas,Foster:2007,BoFPPS08,FoPP08,WaGMH10,Diskin2011,Hofmann2012,FoMV12,RaLFC13}, covering a number of languages that provide bidirectional combinators as language constructs.
+%, and bidirectional programs built through such combinators are correct by construction. 
+A different approach 
+%in designing bidirectional programs 
+is to mechanically transform existing unidirectional programs to obtain a backward counterpart, a technique known as \emph{bidirectionalization}~\cite{MaHNHT07,Voigtlander09bff,voigtlander2010combining,WaGW11,VoHMW13,WaGMH13,MaWa13,MaWa13ppdp,WaNa14,MaWa14}. In the software model transformation literature, the underlying data to be transformed are usually in the form of graphs (instead of trees), and a relational (as oppose to functional) approach that specifies the bidirectional mappings between different 
+model formats is more common~\cite{qvt,Stevens2010,Schurr1994,Schurr2008,HiHIKMN10,Hidaka:2011}. 
+However, the requirement of our work goes beyond what these languages offer: in our framework, not only data, but also transformations (macros) are subject to bidirectional updates.
+%The latter offers a more convenient programming style by not restricting programmers to a small set of stylised combinators; but since the backward transformations are mechanically generated, finer control of their behaviors is lacking. 
+
+%A common trait of most bidirectional languages is the state-based updating: the state of the updated view, instead of 
+%the operation performing the update, is used as the input of the backward transformation. Exceptions do exist; and additional information
+%about how, on top of what, updates are made are used to improve efficiency~\cite{WaGW11} and precision~\cite{Diskin2011,Hofmann2012} of backward transformations. 
+
+
+%It will be interesting to see whether our implementation of bidirectional preprocessor can be implemented in the above 
+%languages. Such an exploration is orthogonal to our aim in this paper and is expected to be non-trivial. 
+
+
+%\emph{QVT} (Query/View/Transformation)\emph{-Relations}~\cite{qvt,Stevens2010} is a declarative language standardised by the Object Management Group, permitting both unidirectional and bidirectional model transformations to be written. 
+%But the standard falls short of a well-defined operational semantics.
+%\emph{TGG} (Triple Graph Grammar)~\cite{Schurr1994,Schurr2008} is a competing framework for specifying traceability links between different types of models. Different from QVT, TGG is highly operational and updates of models are handled incrementally. A notable exception of the above mentioned relational approach is \emph{GroundTram}~\cite{HiHIKMN10,Hidaka:2011}, where unidirectional queries on models serve as specifications and are bidiretionalized by the system. {\bf Xiong's papers?} 
+
+%The use of bidirectional transformation techniques in programming language design and implementation has become popular recently, 
+%particularly aiming at improved user experience~\cite{WaGMH10,haskell-lens, WaGMH13,MaWa13}. Our effort in this paper adds to the list, where a bidirectional C preprocessor is key to support comprehensible feedback to programmers. 
+
+\subsection{Analyzing and editing unpreprocessed C code}
+The C preprocessor poses a great challenge for static program
+analyses. The ability of producing a number of possible preprocessed
+variants causes a combinatorial explosion, rendering it infeasible to
+employee traditional tools that are designed to analyze a single
+variant at a time. Only until very recently, sound parsing and
+analyzing unpreprocessed C code is made possible through
+\emph{family-based
+  analyses}~\cite{Kastner2011,Gazzillo2012,Liebig2013}. Earlier tools
+have to resort to unsound heuristics or restrict to specific usage
+patterns~\cite{Baxter2001,Garrido2005,Padioleau2009}.
+
+Similarly, a lot of efforts in refactoring C code are devoted into
+dealing with multiple variants. Most approaches
+\cite{Garrido2002,Vittek2003,Spinellis2003,Garrido2013} try to find a
+suitable model that represent both the C program and the preprocessor
+directives. A recent approach~\cite{Overbey2014} suggests an
+alternative: perform refactoring on one variant and prevent the
+refactoring if problems may be caused in other variants. This is based
+on the observation that changes on one variant seldom causes problems
+in other variant.
+
+Unlike these approaches, our approach currently considers only one
+variant. In the future we may combine our approach with these
+approaches to deal with multiple variants. However, handling only one
+variant is already useful in many cases: (1) many programs, though
+with conditional compilation, do not have many variants; (2) as
+revealed by Overbey et al.~\cite{Overbey2014}, changes in one variant
+often do not cause problems in other variants.%  However, our approach requires minimal
+% changes to existing tools, so can potentially be applied to many areas
+% that do not require specialized effort.
+
+% Refactoring unpreprocessed C code is extremely difficult. Even without considering the above mentioned problem with parsing, dealing with macro expansion while editing remains tricky~\cite{Garrido2002,Vittek2003,Spinellis2003,Garrido2013,Overbey2014}. Even for relatively simple tasks such as identifying and removing dead code sophisticated analyses are required~\cite{Baxter2001,Tartler2011}. 
+
+% Our proposal in this paper does not apply to the cases here. We do
+% not consider multiple configurations, and we do not allow explicit
+% modification of preprocessor directives.
+
+% Though our approach is able to handle some refactorings, our approach
+% cannot replace these approaches because (1) as discussed before, our
+% approach do not consider multiple configurations, and (2) our approach
+% does not change preprocessor directives, which is necessary in
+% refactorings such as renaming macros and extract macros.
+
+%Work by Christian Kastner
+%
+%Parsing C/C++ code without pre-processing by Y Padioleau, CC'09
+%
+%SuperC: parsing all of C by taming the preprocessor, PLDI'12
+
+\subsection{Empirical studies on the C preprocessors}
+Over the years, there has been no shortage of academic empirical
+studies that are critical towards the C
+preprocessor~\cite{Spencer92,ernst2002empirical,Liebig2011}, and
+replacements of CPP are proposed such as syntactical preprocessors~\cite{Weise1993,McCloskey:2005} and aspect-oriented programming~\cite{Lohmann2006,Adams2009,Boucher2010} are plenty. However until present, there is no sign of any adoption of these alternatives in industry, with the C preprocessor is still being seen as the tool of the trade~\cite{Medeiros2015}. 
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End: 
