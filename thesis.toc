@@ -4,8 +4,68 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {0.1}Introduction}{1}{section.0.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{参考文献}{7}{appendix*.8}
+\contentsline {section}{\numberline {0.2}Problem}{7}{section.0.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {附录\hspace {0.25em plus 0.125em minus 0.08em}\ignorespaces A\hspace {0.3em}}附件}{13}{appendix.A}
+\contentsline {subsection}{\numberline {0.2.1}The C Preprocessor}{7}{subsection.0.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{致谢}{15}{appendix*.9}
+\contentsline {subsection}{\numberline {0.2.2}Designing the Backward Transformation}{9}{subsection.0.2.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.2.3}Naive Solutions}{11}{subsection.0.2.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {0.3}Approach}{13}{section.0.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.3.1}Modeling forward preprocessing}{13}{subsection.0.3.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.3.2}Modeling the changes}{16}{subsection.0.3.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.3.3}Rewriting Steps}{16}{subsection.0.3.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.3.4}Backward Transformation with Replacement}{17}{subsection.0.3.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Correctness}{20}{section*.12}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Optimization}{21}{section*.13}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.3.5}Extending to full CPP}{22}{subsection.0.3.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.3.6}Extending to other types of changes}{22}{subsection.0.3.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {0.4}Evaluation}{24}{section.0.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.4.1}Research Questions}{24}{subsection.0.4.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.4.2}Setup}{24}{subsection.0.4.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Implementation}{24}{section*.14}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Benchmark}{24}{section*.15}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Independent variables}{26}{section*.17}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Dependent variables}{26}{section*.18}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.4.3}Threats to Validity}{27}{subsection.0.4.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.4.4}Results}{27}{subsection.0.4.4}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{RQ1}{28}{section*.20}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{RQ2}{28}{section*.21}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{RQ3}{28}{section*.22}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {0.5}Related Work}{29}{section.0.5}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.5.1}Bidirectional Transformation}{29}{subsection.0.5.1}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.5.2}Analyzing and editing unpreprocessed C code}{29}{subsection.0.5.2}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {0.5.3}Empirical studies on the C preprocessors}{30}{subsection.0.5.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {0.6}Conclusion}{31}{section.0.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{参考文献}{33}{appendix*.23}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {附录\hspace {0.25em plus 0.125em minus 0.08em}\ignorespaces A\hspace {0.3em}}附件}{39}{appendix.A}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{致谢}{41}{appendix*.24}
