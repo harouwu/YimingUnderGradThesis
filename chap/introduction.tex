@@ -178,7 +178,22 @@ invocations only when necessary. In this way, we maintain the
 existing structure of the original program source as much as possible.
 
 实现这样的算法设计也是十分具有挑战的。
-
+典型的这类双向变换的方法~\parencite{MaHNHT07,Voigtlander09bff,MMHT10}是顺着程序的抽象语法树AST拆分双向变换。
+每一个子树对应着一个小的双向变换，组合起来就成为整个程序的双向变换。
+但是，一个未预处理的C++的程序并不能简单地解析成树状结构。
+比方说，在下列代码中，
+\begin{lstlisting}
+#define inc(x) 1+x
+#define double(x) 2*x
+inc(double) 2
+inc(double) (x)
+\end{lstlisting}
+第一个宏调用\code{inc(double)}会自动展开成为一个单独的$statement$。
+但是第二个宏调用不能单独展开成一个$statement$。它需要连上之后的\code{(x)}，循环展开后才算完整的句子。
+因此，我们不能把第二个宏调用\code{inc(double)}当作独立的一段并直接对他做双向变换的分析。
+为了克服这个困难，我们为描述类似C++程序这样的情况设计了新的模型。
+我们把预处理看作是对代码数据的重写规则（\emph{rewriting rules}）集，而不是直接把代码解析成抽象语法树。
+这样的模型把程序的双向变换看作是重写规则的双向变换。
 
 Implementing this design is also challenging. Typical approaches to
 bidirectionalization~\parencite{MaHNHT07,Voigtlander09bff,MMHT10} decompose
@@ -205,12 +220,41 @@ tree, we view the preprocessing as applying a set of rewriting rules
 to the code. This interpretation enables the bidirectionalization
 of a CPP program   as bidirectionalization of each rewriting rule.
 
+另外，该设计也可以被证明满足双向变换的正确性：
+（1）如果预处理后的程序没有变化，那么源代码也不会变化；
+（2）源代码在接受了反向映射的变化后，预处理后会得到相同的变化后的预处理后的代码。
+这两个性质在双向变化领域被称作GETPUT和PUTGET~\parencite{Foster:2007}。
+
 Furthermore, our approach is proved to be correct, in the
 sense of the following round-trip laws (1) if the preprocessed program is not changed, the
 unpreprocessed program will not be changed, and (2) preprocessing the
 unpreprocessed program with the reflected changes will produce exactly the
 same changed preprocessed program. These two properties are known as
 GETPUT and PUTGET~\parencite{Foster:2007} in the bidirectional transformation literature. 
+
+总之，该项目的贡献如下：
+\begin{itemize}
+% \item We propose a lightweight approach to support handling of the C
+%   preprocessor in program-editing tools. Our approach bidirectionalizes
+%   CPP, reflecting the changes on the preprocessed code
+%   back to the unpreprocessed code.
+% \item We demonstrate that our approach satisfies the two basic properties
+%   of bidirectional transformation, GETPUT and PUTGET, in the context
+%   of CPP.
+\item 我们提出了一个轻量级的在程序编辑工具方面的双向C预处理器。
+	我们分析了不同可能的设计并提出了五个反向变换应有的性质，
+	包括GETPUT和PUTGET
+	(\secref{sec:problem})。
+\item 我们提出了一个能够符合五个性质的算法。
+	该算法把C的预处理看作是重写规则的集合，
+	并结构性地把预处理的双向变换转换到重写规则的双向变换上
+	(\secref{sec:approach})。
+\item 我们在Linux内核上验证了我们的方法，并和另外两种基本的
+	做法进行比较：一个是直接把整个修改的文件映射回去；另一个是只把修改了的代码行映射回源代码。
+	实验的结果显示相较于其他方法，我们的方法破坏了相当少的宏调用，
+	并且总是可以给出正确的修改，而其他方法有时不行(\secref{sec:evaluation})。
+\end{itemize}
+
 
 To sum up, our paper makes the following contributions:
 \begin{itemize}
