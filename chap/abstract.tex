@@ -8,6 +8,8 @@
 \end{cabstract}
 
 \begin{eabstract}
-	Test of the English abstract.
+Many tools directly change programs, such as bug-fixing tools, program migration tools, etc. We call them \emph{program-editing tools}. On the other hand, many programing use the C preprocessor, such as C, C++, and Objective-C. Because of the complexity of preprocessors, many program-editing tools either fail to produce sound results under the presence of preprocessor directives, or give up completely and deal only with preprocessed code.
+
+In this paper we propose a lightweight approach that enables program-editing tools to work with the C preprocessor for (almost) free. The idea is that program-editing tools now simply target the preprocessed code, and our system, acting as a bidirectional C preprocessor, automatically propagates the changes on the preprocessed code back to the unpreprocessed code. The resulting source code is guaranteed to be correct and is kept similar to the original source as much as possible. We have evaluated our approach on Linux kernel with a set of generated changes. The evaluation results show the feasibility and effectiveness of our approach.
 \end{eabstract}
 

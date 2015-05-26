@@ -1,69 +1,54 @@
+\chapter{相关工作}
 \section{Related Work}
 \label{sec:related}
 
-\subsection{Bidirectional Transformation}
-Our work is inspired by research on bidirectional transformation. 
-%The need to execute programs in both forward and backward directions is widespread. 
-A classical scenario is the \emph{view-update problem}~\cite{BaSp81,DaBe82,Hegner90,Cui2000,Fegaras2010} from database design: a view represents a database computed for 
-a source by a query, and the problem comes when translating an update of the view back to a corresponding update on the source. 
-%The problem is central in the same way to \emph{model transformations}, playing a substantial role in software evolution:
-%having transformed a high-level model into a lower-level implementation, for a variety of reasons one often needs to reverse engineer a
-%revised higher-level model from an updated implementation~\cite{YuLHHKM12,XiLHZTM07}. 
+\subsection{双向变换领域}
+我们工作的灵感来自于双向变换领域的研究。
+双向变换领域中一个经典的使用情况就是数据库设计中的
+\emph{view-update problem}~\parencite{BaSp81,DaBe82,Hegner90,Cui2000,Fegaras2010}：
+一个域表示一个为一条查询指令计算好的数据库，
+研究工作主要关注于如何把在这个域上做的修改操作反向升级到源数据库中。
+这个工作就像\emph{模块转化}在软件进化中一样重要~\parencite{YuLHHKM12,XiLHZTM07}。
 
-Languages have been designed to streamline the development of such applications involving transformations running
-bidirectionally. Notably the \emph{lenses} framework~\cite{HuMT04,MuHT04aplas,Foster:2007,BoFPPS08,FoPP08,WaGMH10,Diskin2011,Hofmann2012,FoMV12,RaLFC13}, covering a number of languages that provide bidirectional combinators as language constructs.
-%, and bidirectional programs built through such combinators are correct by construction. 
-A different approach 
-%in designing bidirectional programs 
-is to mechanically transform existing unidirectional programs to obtain a backward counterpart, a technique known as \emph{bidirectionalization}~\cite{MaHNHT07,Voigtlander09bff,voigtlander2010combining,WaGW11,VoHMW13,WaGMH13,MaWa13,MaWa13ppdp,WaNa14,MaWa14}. In the software model transformation literature, the underlying data to be transformed are usually in the form of graphs (instead of trees), and a relational (as oppose to functional) approach that specifies the bidirectional mappings between different 
-model formats is more common~\cite{qvt,Stevens2010,Schurr1994,Schurr2008,HiHIKMN10,Hidaka:2011}. 
-However, the requirement of our work goes beyond what these languages offer: in our framework, not only data, but also transformations (macros) are subject to bidirectional updates.
-%The latter offers a more convenient programming style by not restricting programmers to a small set of stylised combinators; but since the backward transformations are mechanically generated, finer control of their behaviors is lacking. 
-
-%A common trait of most bidirectional languages is the state-based updating: the state of the updated view, instead of 
-%the operation performing the update, is used as the input of the backward transformation. Exceptions do exist; and additional information
-%about how, on top of what, updates are made are used to improve efficiency~\cite{WaGW11} and precision~\cite{Diskin2011,Hofmann2012} of backward transformations. 
+同时，针对这种双向变换的应用，学术界也设计了许多语言使得工作更加方便。
+其中广为人知晓的是 \emph{透镜}理论框架~\parencite{HuMT04,MuHT04aplas,Foster:2007,BoFPPS08,FoPP08,WaGMH10,Diskin2011,Hofmann2012,FoMV12,RaLFC13}。
+在这套框架下涵盖了许多为双向变换提供连接因子的语言架构。
+另一种比较主流的思想是自动化地为现存的非双向变换的程序
+找到对应的反向程序。这类的研究称为 \emph{双向变换化(Bidirectionalization)}
+~\parencite{MaHNHT07,Voigtlander09bff,voigtlander2010combining,WaGW11,VoHMW13,WaGMH13,MaWa13,MaWa13ppdp,WaNa14,MaWa14}。
+在软件工程的模块转换领域，需要被转换的数据通常以图（并非是树）的结构来保存。
+此时主流会使用一个关系型，而非函数型，的方法来描述不同模块之间的双向的不同的关系。
+~\parencite{qvt,Stevens2010,Schurr1994,Schurr2008,HiHIKMN10,Hidaka:2011}。
+但是，我们工作的要求现在并没有一种双向变换的技术可以提供。这是因为在我们的模型中，
+不仅座位数据的代码会出现变化，作为转换程序本身的宏、预处理指令，也会有相应的变化。
+因此，我们也为这类数据和转换程序都会变化的双向变换模型，提出了自己见解。
 
 
-%It will be interesting to see whether our implementation of bidirectional preprocessor can be implemented in the above 
-%languages. Such an exploration is orthogonal to our aim in this paper and is expected to be non-trivial. 
+\subsection{分析和修改未预处理的C代码}
+C的预处理器给静态程序分析带来了巨大的挑战。
+由于C的预处理器支持预处理变量，导致分析时，场景数量组合型快速增长。
+这使得传统的每次只处理一个变量的程序分析方法变得不可行。
+也仅直到最近，通过\emph{family-based
+analyses}~\parencite{Kastner2011,Gazzillo2012,Liebig2013}
+的方法才能对未预处理的C代码进行可靠的解析与分析。
+之前的许多工具都时常出现不可靠的操作，
+或者只能限制在非常严格的使用情况下使用~\parencite{Baxter2001,Garrido2005,Padioleau2009}。
 
+类似的，为了处理这种多变量的情况，在C代码重构的研究中学术界也花了很多功夫。
+大多数方法~\parencite{Garrido2002,Vittek2003,Spinellis2003,Garrido2013}都试图
+找到一个能够同时表示C语法和预处理器指令的合适模型。
+最近有一项工作~\parencite{Overbey2014}提出了另外一种方法：
+为某一个变量做重构，但如果这对其他变量产生影响就阻止重构。
+这项工作是基于预处理变量修改相互之间往往影响很小的观测而设计出来的。
+我们可以看到，解决预处理前代码的分析现在并没有优秀的解决方案。
 
-%\emph{QVT} (Query/View/Transformation)\emph{-Relations}~\cite{qvt,Stevens2010} is a declarative language standardised by the Object Management Group, permitting both unidirectional and bidirectional model transformations to be written. 
-%But the standard falls short of a well-defined operational semantics.
-%\emph{TGG} (Triple Graph Grammar)~\cite{Schurr1994,Schurr2008} is a competing framework for specifying traceability links between different types of models. Different from QVT, TGG is highly operational and updates of models are handled incrementally. A notable exception of the above mentioned relational approach is \emph{GroundTram}~\cite{HiHIKMN10,Hidaka:2011}, where unidirectional queries on models serve as specifications and are bidiretionalized by the system. {\bf Xiong's papers?} 
+需要承认的是，我们的项目现在暂时也只考虑一个变量。
+在未来我们可能会把我们的工作和多变量的算法相结合。
+但是，即使只能处理一个变量，我们的项目在许多方面都十分有用：
+（1）许多实际工作中的程序，尽管有许多条件编译选项，没有许多预处理变量。
+（2）Overbey等人~\parencite{Overbey2014}在他们的论文中指出，
+现实中修改一个变量往往不会对其他变量造成影响。
 
-%The use of bidirectional transformation techniques in programming language design and implementation has become popular recently, 
-%particularly aiming at improved user experience~\cite{WaGMH10,haskell-lens, WaGMH13,MaWa13}. Our effort in this paper adds to the list, where a bidirectional C preprocessor is key to support comprehensible feedback to programmers. 
-
-\subsection{Analyzing and editing unpreprocessed C code}
-The C preprocessor poses a great challenge for static program
-analyses. The ability of producing a number of possible preprocessed
-variants causes a combinatorial explosion, rendering it infeasible to
-employee traditional tools that are designed to analyze a single
-variant at a time. Only until very recently, sound parsing and
-analyzing unpreprocessed C code is made possible through
-\emph{family-based
-  analyses}~\cite{Kastner2011,Gazzillo2012,Liebig2013}. Earlier tools
-have to resort to unsound heuristics or restrict to specific usage
-patterns~\cite{Baxter2001,Garrido2005,Padioleau2009}.
-
-Similarly, a lot of efforts in refactoring C code are devoted into
-dealing with multiple variants. Most approaches
-\cite{Garrido2002,Vittek2003,Spinellis2003,Garrido2013} try to find a
-suitable model that represent both the C program and the preprocessor
-directives. A recent approach~\cite{Overbey2014} suggests an
-alternative: perform refactoring on one variant and prevent the
-refactoring if problems may be caused in other variants. This is based
-on the observation that changes on one variant seldom causes problems
-in other variant.
-
-Unlike these approaches, our approach currently considers only one
-variant. In the future we may combine our approach with these
-approaches to deal with multiple variants. However, handling only one
-variant is already useful in many cases: (1) many programs, though
-with conditional compilation, do not have many variants; (2) as
-revealed by Overbey et al.~\cite{Overbey2014}, changes in one variant
 often do not cause problems in other variants.%  However, our approach requires minimal
 % changes to existing tools, so can potentially be applied to many areas
 % that do not require specialized effort.
@@ -86,11 +71,14 @@ often do not cause problems in other variants.%  However, our approach requires 
 %
 %SuperC: parsing all of C by taming the preprocessor, PLDI'12
 
-\subsection{Empirical studies on the C preprocessors}
-Over the years, there has been no shortage of academic empirical
-studies that are critical towards the C
-preprocessor~\cite{Spencer92,ernst2002empirical,Liebig2011}, and
-replacements of CPP are proposed such as syntactical preprocessors~\cite{Weise1993,McCloskey:2005} and aspect-oriented programming~\cite{Lohmann2006,Adams2009,Boucher2010} are plenty. However until present, there is no sign of any adoption of these alternatives in industry, with the C preprocessor is still being seen as the tool of the trade~\cite{Medeiros2015}. 
+\subsection{C预处理器上的实例调查}
+许多年来，学术界不乏各类对C预处理器十分有见解的学术实例调查工作
+~\parencite{Spencer92,ernst2002empirical,Liebig2011}。
+同时也有一些C预处理的替代品被提出，比如语法预处理器~\parencite{Weise1993,McCloskey:2005}
+或者面向侧面开发方法~\parencite{Lohmann2006,Adams2009,Boucher2010}。
+但是直至今日，业界并没有什么采用这类替代预处理器的迹象，C预处理器依然是主流的工具~\parencite{Medeiros2015}。
+这也说明C预处理器带来的麻烦依然广泛存在。
+
 
 
 %%% Local Variables: 
