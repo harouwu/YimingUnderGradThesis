@@ -295,15 +295,12 @@ $backward$函数会把该替换操作位移到$(4, x)$来保证当前
 规则3包含了两个步骤。我们首先试图沿着两个步骤逆向重写代码。
 如果两个步骤中有一个失败了，那我们只能试着展开宏调用。
 
-在第二个小步骤中，
-
-In the second sub step, the occurrences of parameters in a macro body
-are replaced by expanded arguments. The backward transformation 
-maps the changes back to the arguments. There are two cases where an
-expansion may be triggered: (1) tokens that are not from the
-arguments are changed, and (2) multiple occurrences of the same
-parameter are changed to different values. 
-For example, giving the following piece of code,
+在第二个小步骤中，宏展开中各个参数出现的位置都已经用展开的参数替换了。
+如果有必要，反向变换需要把作用在展开后的参数上的修改都映射到参数上去。
+这时有两种情况会导致逆向重写失败，也就是说我们不得不展开宏调用：
+（1）被修改的词并不是宏的参数出现的位置中的；
+（2）同一个参数在多个地方出现，被多次修改，但不同地方修改的内容不一样。
+比方说，考虑以下代码段：
 \begin{equation}\label{eqn:expansion}
   \begin{minipage}{0.8\columnwidth}
 \begin{lstlisting}
@@ -313,36 +310,33 @@ plus(x);
 \end{lstlisting}
   \end{minipage}
 \end{equation}
-if we changes $1+1$ into $1-1$ or $1+2$, an expansion will be triggered.
+如果我们把 $1+1$ 变换成 $1-1$ 或者 $1+2$，我们在反向时就得展开宏调用。
 
-In the first sub step, the arguments are preprocessed. The backward
-transformation recursively call $backward$ to propagate the changes
-along the rewriting steps of each argument. Finally, a safety check is
-performed on the propagated changes: if the changed argument contains
-a comma at the top level (and the comma is not enclosed by a pair of parentheses) or
-any unmatched parenthesis, we trigger an expansion. This is
-because a comma or an unmatched parenthesis can break the original
-structure of arguments.
+在第一个小步骤中，我们预处理了宏的参数。
+反向变换应该循环地调用$backward$来先把参数上的修改通过反向的重写步骤应用到每个参数上。
+最终，我们需要对整个代码段在映射修改时做一次安全检查：
+如果被修改的参数在最后含有了一个逗号，并且这个逗号没有被单独的括号包裹住；
+或者是存在括号不匹配的情况，我们还是必须展开宏调用。
+这是因为一个顶层的逗号或者不匹配的括号会破环原有的参数列表结构，影响程序的正确性。
 
-If the backward transformation on any of the sub step fails, we expand
-the macro invocation. The expansion will generate changes that replace
-the macro invocation with its expanded body. As an example, let us
-assume the second $1$ in $1+1$ is changed into $2$ in code
-piece~\ref{eqn:expansion}. After backward transformation, the
-propagated change will replace $plus$ in $plus(x)$ with $x+2$ and
-delete $(x)$.
+如果在上述两个反向步骤中，反向变换失败，我们不得不展开宏调用。
+展开宏调用时，会产生作用在宏展开式上的相应修改操作。
+举个例子，我们不妨假设在上面的代码例子~\ref{eqn:expansion}中$1+1$中的第二个$1$被替换成$2$。
+此时，映射来的修改会把 $plus(x)$ 中的 $plus$ 替换成 $x+2$ 然后删除掉 $(x)$。
+
 
 % To
 % perform the macro expansion, we need to generate the expanded form to
 % replace the macro invocation.
-The key to the expansion is how to construct the replacing sequence,
-$x+2$. From the forward transformation we know that the unchanged
-preprocessed token sequence is $1+1$, and both $1$s are from the
-argument $x$. So we copy the rewriting steps of $x$ to the locations
-of the two $1$s, and use the copied rewriting steps to propagate back
-the changes on the $1$s. The first $1$ is not changed, so the original $x$
-is kept. The second $1$ is changed into $2$, so the macro invocation
-$x$ is also expanded, and we get the final text $x+2$.
+
+在展开宏调用的过程中，关键是如何构造替换序列，在刚才的例子里时$x+2$。
+从正向变换我们可以看出，没有变过的预处理词序列时 $1+1$， 
+而且这两个 $1$ 都来自参数 $x$。
+所以我们把参数 $x$ 的重写步骤拷贝到两个 $1$ 的词上。
+然后使用这些重写步骤来反向映射作用在这两个 $1$ 上的修改操作。
+第一个 $1$ 并没有变化，所以原来的 $x$ 可以继续保留。
+但第二个 $1$ 被替换成了 $2$，因此该宏调用需要被展开，$x$ 也需要被展开。
+于是我们得到了最终的替换文本 $x+2$。  
 
 %We first construct an unchanged expanded form, and then
 % propagate back the changes along the unchanged expanded form. First,
@@ -368,15 +362,15 @@ $x$ is also expanded, and we get the final text $x+2$.
 % rewriting steps of the argument is first copied at the new location to
 % preprocess the argument, and then we copy
 
-However, we cannot always copy the rewriting steps of an argument to
-the occurrences of its corresponding parameter. Basically, when we
-copy the rewriting step of an argument, we are assuming that the
-occurrence of the parameter can be replaced by its unpreprocessed
-argument, and all rewriting steps behave exactly the same as before.
-For example, when expanding $plus(x)$, we can replace the two
-occurrences of $a$ by $x$, forming $x+x$ where the two $x$ expands
-exactly the same way as the argument $x$, forming $1+1$. However, this is
-not always the case. Let us consider the following code.
+但是，我们不能总是把参数的重写步骤原封不动滴拷贝到每个参数在展开式中出现的地方。
+基本上说，当我们拷贝一个参数的重写步骤时，我们其实是在假设每一个参数
+出现的位置可以用参数的未预处理形式来替换。而且替换后每个地方参数的
+重写规则与它单独展开是一致的。
+比方说，当展开 $plus(x)$ 时，我们可以把两个 $a$ 出现的地方替换成 $x$。
+此时生成的展开式 $x+x$ 中两个参数出现的地方的展开重写规则序列和 $x$是一样的。
+然后就能得到 $1+1$。
+但是，情况并不总是这么理想，我们可以考虑以下的代码例子。
+
 \begin{equation}\label{eqn:expandToParentheses}
   \begin{minipage}{0.8\columnwidth}
 \begin{lstlisting}
@@ -386,29 +380,27 @@ pplus(p)
 \end{lstlisting}
     \end{minipage}
 \end{equation}
-With the macros defined in code piece \ref{eqn:expansion}, the above code
-is preprocessed into to $1+1\ hello$. However, if we need to expand
-$pplus(p)$, we cannot expand it into $plus\ p\ hello$, because it will
-only expand to $plus\ (1)\ hello$. This is because the use of $p$
-instead $(x)$ breaks the original macro invocation. % In fact, all the
-% first three conditions listed above are designed to prevent this case:
-% the expanded macro is used as part of another macro invocation and
-% replacing it with the unexpanded form may break the macro invocation.
 
-As a result, we have to add a safety check when we copy rewriting
-steps. We copy the rewriting
-steps of an argument only if none of the following conditions is satisfied.
+加上之前代码段 \ref{eqn:expansion} 中定义的宏，这里的例子最终会
+预处理为$1+1\ hello$。但是，如果我们需要展开$pplus(p)$，
+我们并不能把它直接展开成$plus\ p\ hello$，因为这只会展开成
+$plus\ (1)\ hello$。这是因为在这里使用 $p$ 而不是 $(x)$ 
+破坏了原有的宏调用。
+
+%???????????
+
+因此，我们需要在拷贝重写步骤的时候做一次安全检查。我们当且仅当
+以下条件都不满足时，才会拷贝重写步骤。
+
 \begin{itemize}
-\item The preprocessed argument starts with a left parenthesis.
-\item The preprocessed argument contains a top-level comma.
-\item The preprocessed argument contains unclosed parentheses.
-\item The preprocessed argument becomes different if we preprocess it
-  again.
+\item 预处理参数起始字符是一个左括号。
+\item 预处理参数在顶层包含一个逗号。
+\item 预处理参数中存在括号不匹配情况。
+\item 如果我们重新预处理该参数，结果会不同。
 \end{itemize}
-The first three conditions correspond to situations similar to the
-above example: the preprocessed argument is used as part of another
-macro invocation in the expanded form, and replacing it with the
-unpreprocessed one will break the macro invocation.  
+前三个条件对应着之前例子中类似的情况：
+预处理中参数在展开式中被用于其他的宏调用，替换它会导致展开式中的宏调用出错，
+给程序引入错误。
 % In the previous example, when $1+1$ is replaced by $1+2$, we expand
 % the macro invocation $plus(x)$. Since the argument $x$ expands to
 % $100$, the three conditions are satisfied and the body is replaced as
@@ -432,157 +424,114 @@ unpreprocessed one will break the macro invocation.
 % above are designed to prevent this case: the expanded macro is used as
 % part of another macro invocation and replacing it with the unexpanded
 % form may break the macro invocation.
-The last condition corresponds to the following case.
+最后一个条件对应着以下情况。
 \begin{lstlisting}
 #define id(x) x
 id(plus p)
 \end{lstlisting}
-This piece of code expands to $1+1$, but if we expands $id(plus\ p)$
-into $plus\ p$, the other macro expansions will be blocked. In other words, with macro
-invocation, an argument will be scanned twice, but when the macro
-invocation is expanded, an argument will only be scanned once. We need
-to make sure this does not affect correctness.
+这段代码展开后得到$1+1$，但是如果我们把 $id(plus\ p)$
+展开成  $plus\ p$，另外一个宏展开就会被阻塞。
+换句话说，在宏调用中，一个参数会被扫描两次。
+但是当宏调用被展开时，一个参数只会被扫描一次。
+我们需要确认这之间的区别不会影响变换的正确性。
 
-\subsubsection{Correctness}\label{sec:correctness}
-We can directly reason that the backward transformation satisfies
-Requirements 1, 3, 4 and 5. Requirement 2 will later be evaluated by
-our experiments. Requirement 1 holds because we never propagate
-changes to macro definitions. Requirement 3 holds because if we happen
-to introduce a new macro invocation, we must have changed a normal 
-token that should be preprocessed by R4 into part of a macro
-invocation, and the check in R4 will prevent such a change.
-Requirement~4 holds because we introduce new changes only when we
-expand a macro invocation, and we would not expand a macro invocation
-if nothing is changed. Requirement 5 has been reasoned throughout this
-subsection. To prove it formally, we need to inductively prove that each
-rewriting step either still behaves the same on the changed steps, or
-is replaced by a sequence of equivalent rewriting steps (the size of
-the sequence may be zero). A tricky point is when we copy rewriting
-steps of arguments to the
-expanded method body, the copied rewriting steps may be
-mixed with later rewriting steps. We can show that, still by
-induction, the order of applying these rewriting steps can be changed
-without affecting the final result. We omit the details due to space
-limitations.
+\subsubsection{正确性}\label{sec:correctness}
+根据之前一节对反向变换的描述，我们可以简单推导出我们的反向变换满足
+性质1、3、4和5。性质2将会在实验部分呗证实。
+该反向变换满足性质1因为我们从不把修改操作映射到宏定义重。
+该反向变换满足性质3因为如果我们通过修改操作引入了一个新的宏调用，
+我们需要把一个普通的文本词变成宏调用的一部分。但是这个文本词本来
+是通过规则4被预处理的。而规则4中反向变换的安全检查会组织错误的发生。
+该反向变换满足性质4因为我们智慧在不得不展开某个宏调用时才会引入
+新的修改操作，而该处没有修改操作，我们不会展开宏调用。
+该反向变换满足性质5可以这样推导。
+为了正式地证明性质5，我们需要诱导性地证明每一个重写步骤
+只能依然有修改是保持同样行为，或者它会被一串等价的重写步骤
+序列替换（该序列长度可以为0）。
+所幸，当我们拷贝参数的重写步骤到展开式中时，
+拷贝后的重写步骤可能会和之后的重写步骤混合起来。
+我们可以指出，由于这些重写步骤序列作用位置不同且是覆盖性的，调换重写
+步骤序列的位置并不会对结果产生影响。
 
 \subsubsection{Optimization}\label{sec:optimization}
-In the current algorithm, we need to record the whole program after
-each rewriting step, even if only a small portion has changed. In the
-backward direction, we also need to shift all changes at each step.
-This contributes to a major performance penalty of the algorithm.
+在现有的算法中，我们需要在每一步重写步骤后把整个程序的状态都记录下来，
+即使只是很小的一部分发生了改变。
+在反向变换中，每一步我们都需要调整所有修改操作的位移。
+这样的算法使我们的系统十分笨重。
 
-To optimize the algorithm, we first divide the original
-token sequence into a set of subsequences, where each subsequence is
-independently preprocessed by a set of rewriting steps. In this way, we
-can treat each subsequence as an independent program to perform the
-backward transformation, and then merge the changes. Giving a rewriting
-step $(src, i, ctx, r)$, if the token at $i$ is not generated by a
-preceding rewriting rule, i.e., is from the original program, then we
-say the location right before $i$ is a \emph{splitting point}. With
-this definition, we guarantee that no rule application crosses a
-splitting point. We divide the original program into
-subsequences along the splitting points, and perform the backward transformation
-independently for each subsequence before merging the changes. % A
-% splitting point guarantees that no rule application replaces a sub
-% sequence that crossing the splitting point, so we can split the
-% original program at splitting points. 
-When merging changes from two subsequences, we need to check that the
-preprocessed version of left sequence and the unpreprocessed version of
-the right sequence would not form a new macro invocation. This check
-was performed by R4 in the unoptimized algorithm.% \todo{And then rollback? I am worried that this
-  % handwaving discussion may annoy people who are more expert in
-  % parallel algorithms. Probably it is better to shorten the discussion
-  % and and emphasize that it is implemented. The current writing sounds
-  % like a piece of proposal for future work.}
+为了优化该算法，我们首先把源程序中的词序列切分成一组序列，
+序列有自己独立的一套重写步骤。
+这样，我们就能把每个序列当作单独的程序来做反向变换，再把修改融合到一起。
+给定一个重写步骤 $(src, i, ctx, r)$，如果在 $i$ 位置的词不是由
+之前的重写规则生成的，也就是说在原来的代码中就有，那么我们就可以认为
+位置 $i$ 可以是一个\emph{切分点}。
+有了切分点的定义后， 由于词是程序的最小单位，我们可以认为没有
+重写规则会同时作用在切分点的两边。
+我们依据切分点把程序切分成序列的集合，然后依次在序列上做反向变换，再融合这些修改。
+当然，再合并两个子序列时，我们还需要特殊检查两边程序在预处理后，
+合并起来不会形成新的宏调用。这个检查方法与之前提到的规则4的安全检查方法类似。
 
-For example, code piece~\ref{eqn:smallexample} can be divided into
-three subsequences: the macro definition, $hello$, and $x$. Suppose
-$plus$ is a macro defined earlier. If the user changes $hello$ into
-$plus$ and changes $100$ into $(x)$, a new macro invocation is formed
-across the boundary and we should report a failure.
+比方说，之前的代码段~\ref{eqn:smallexample}可以被切分成三个子序列：
+宏定义， $hello$，和 $x$。
+假设之前定义过宏 $plus$。 如果程序编辑工具把 $hello$ 修改成了 $plus$，
+把 $100$ 修改成了 $(x)$， 那么两个子序列在预处理后，合并起来就在边界上
+形成了一个新的宏调用。我们应该报错。
 
 
-\subsection{Extending to full CPP}\label{sec:fullC}
-In this sub section we discuss how we can extend the above algorithm
-to support full CPP. Due to space limitations, we
-only discuss the main ideas without the full details.
+\subsection{扩展到完整的C预处理器}\label{sec:fullC}
+本节中我们讨论如何把我们的算法扩展到支持完整的C预处理。
+由于篇幅限制，我们只讨论核心思想而非细节。
 
-To support \# and \#\# operators in forward preprocessing, we need to add
-two additional types of sub steps in R3, one for stringifying tokens
-and one for concatenating tokens. Furthermore, parameters used with
-these operators are replaced by their unpreprocessed forms but not their
-preprocessed forms, so in the first sub step we need to keep both the
-unpreprocessed and the preprocessed forms. % In the backward transformation, we
-% need to also propagate the changes along the two new sub steps, and
-% trigger a macro expansion when the propagation cannot be completed.
-% Furthermore, in the first sub step we need to check if the expanded
-% form and the unexpanded are changed consistently, and triggers a macro
-% expansion otherwise. In the macro expansion, we need to evaluate \#
-% and \#\# operators on the body before expansion, as the two operators
-% cannot exist on the top level.
-We need to add three extensions to the backward transformation. First,
-we need to design the backward transformation for the two new sub
-steps. Second, we need to add a safety check to determine whether the
-unpreprocessed form and the preprocessed form are changed
-consistently. Finally, when expanding a macro, we should not try to
-recover \# and \#\# operators as the two operators cannot exist on the
-top level.
+为了在正向预编译中支持 \# 和 \#\#操作，我们需要在之前提到的规则3的
+正向变换中添加两个新的小步骤。一个为了支持\#可以字符化一个词，一个支持
+\#\#可以连接两个词。
+另外，如果在参数中出现这两类操作，我们会直接使用未预处理的形式
+来替换展开式中出现的位置。
 
-To support \#include in the forward preprocessing, we need to add
-another rewriting rule to support \#include. In the backward
-transformation, we need to trace how changes are propagated to each
-file, and check changes propagated back from different \#include
-directives of the same file are consistent.
+在反向变换中，我们需要添加3个新的扩展。第一，我们需要为原有的规则3
+依据之前所添加的小步骤，设计两个新的反向步骤来支持\#和\#\#操作。
+第二，我们需要检查使用这两个操作的代码在预处理之前和预处理之后是否
+有同样的修改。最后，当展开一个宏的时候，我们并不需要去回复\#和\#\#
+操作，因为他们不能出现在没有宏定义指令的地方。
 
-Finally, % with our current rewriting rules, a macro definition
-% ``$\#define\ x\ x$'' will expand forever. To prevent this, CPP does
-% not expand a macro invocation found during the expansion of an
-% invocation to the same macro.
-CPP does not allow expanding a macro within its own expansion to prevent
-infinite loops. 
-To support this, we need to add finer
-control of the context in our forward rewriting rules. When we are
-dealing with the tokens expanded from an invocation to macro $m$, the
-definition of $m$ should be removed from the current context.
+为了在正向变换中支持~\code{\#include}指令，我们需要为~\code{\#include}指令
+添加新的一条重写规则。其内容为删除这行宏指令并引入新的文件内容。
+在反向变换中，我们需要记录加入了哪些文件和内容，
+并根据不同的~\code{\#include}指令，把这些文件引入都一一返回回去，
+这样才能保持一致。
 
-\subsection{Extending to other types of changes}\label{sec:extend-other-changes}
-We have discussed how to deal with replacements. Now let us proceed to
-insertions and copying. Note that an insertion can be directly
-converted into a replacement. If we insert a token $y$ before a token
-$x$, we can convert it as replacing $x$ with $y\ x$. However, this
-direct conversion may cause unnecessary macro expansions. For example,
-if we insert $y$ before $100$ in the preprocessed code piece
-\ref{eqn:smallexample}, $hello\ 100$, we should not expand $x$ in
-the backward transformation, but if we model the insertion as
-replacing $100$ with $y\ 100$, our backward transformation will expand
-$x$ because its body has been changed.
+最后，一个完整的C预处理器不允许宏的循环调用。
+为了支持这个功能，我们需要在正向重写规则中添加一些细节的考察。
+当我们在不断重写由宏 $m$ 展开的词时，我们需要检查是否有再次使用这个宏展开的情况。
+如果出现，应该报错。
 
-The above example exhibit an insertion at a splitting point, and such
-an insertion is guaranteed not to expand
-macros. To reduce the number of unnecessary expansions, % we give special
-% treatment to insertions at splitting points. % \todo{So
-% we only reduce but not minimize expansions? Why are splitting points special?}
-% Since the splitting
-% points are not covered by any macro invocation, the insertions at
-% these locations should not expand any invocation.
-We treat the
-inserted token sequence at a splitting point as an independent sequence and check
-whether only R4 is applicable to it, since there is no way to put it
-back if any other rewriting rules can be applied on the inserted
-sequence. Then we use the same method used in the optimized algorithm
-to merge the subsequences.
+\subsection{扩展到其他修改操作上}\label{sec:extend-other-changes}
+在上文中我们详细地讨论了如何处理修改操作。
+现在让我们来讨论如何处理插入和拷贝操作。
+我们可以注意到，插入操作可以直接被转换为修改操作。
+如果我们要在词 $x$ 之前插入一个词 $y$， 那我们可以把这个插入操作
+转换为一个将 $x$ 变为  $y\ x$ 的替换操作。
+但是，这样的转换有时会引入不必要的宏调用展开。
+比方说，如果我门在之前的代码段~\ref{eqn:smallexample}中
+在 $100$ 之前插入了一个词 $y$，那么我们在反向变换中并不需要拆开 $x$ 这个宏。
+但如果我们把这个插入操作转换成一个替换操作的话，比如把 $100$ 变成 $y\ 100$，
+那么我们就需要吧宏 $x$ 拆开。
 
-The copy operation is similar to insertion. The only difference is
-that copied segments may contain macro invocations and we shall
-try to recover these macro invocations. For this, we perform a
-special backward transformation. First, we generate changes on the
-preprocessed code that deletes all tokens except the segments being
-copied. Then we perform a backward transformation by ignoring
-rewriting steps with R1, R2, and R3 whose associated macro is not
-defined or defined differently at the target position. In this way we
-ensure that only macros that is defined at the target positions are recovered.
-Then, we insert the token sequence returned by the backward
-transformation to the target position.
+刚才的例子是在切分点上插入了一段词，而这样的插入可以简单证明，不会影响到宏，
+也不需要再反向编译时展开宏。
+为了减少不必要的反向宏展开，我们把插入在切分点的修改操作
+看作是添加了一个独立的子序列，然后直接在上面检查是否可以应用规则4。
+如果其他规则可以在这个插入序列上应用，那说明这段插入是错误的，将会由我们的安全检查报错。
+这样一来，其余的代码依然可以使用之前的算法处理。
+
+拷贝操作的处理和插入操作类似。二者之间唯一的区别是，拷贝操作引入的代码段中
+可能包含宏调用，而我们需要尽量不展这些宏调用。
+为此，我们需要对这段词序列做一次反向转换。
+这次反向转换算法如下：
+（1）首先，我们假定对这段代码以外的所有预处理后代码做删除操作。
+（2）然后，我们剔除掉那些没有在目标代码段定义的宏并做一次反向变换。
+这样我们就能保证只有在目标代码段的上下文环境中定义的宏会被正确滴反向变换回去。
+最后我们可以把已经做好反向变换的这段代码插入到预处理前的相应位置中。
 
 % Instead, we deal with an insertion by concatenating three
 % token sequences: the tokens before the insertion, the inserted tokens,

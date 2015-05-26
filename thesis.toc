@@ -26,13 +26,13 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1.4}考虑替换操作的反向变换}{15}{subsection.2.1.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Correctness}{18}{section*.12}
+\contentsline {subsubsection}{正确性}{18}{section*.12}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{Optimization}{19}{section*.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.5}Extending to full CPP}{20}{subsection.2.1.5}
+\contentsline {subsection}{\numberline {2.1.5}扩展到完整的C预处理器}{19}{subsection.2.1.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.6}Extending to other types of changes}{20}{subsection.2.1.6}
+\contentsline {subsection}{\numberline {2.1.6}扩展到其他修改操作上}{20}{subsection.2.1.6}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.2}Evaluation}{22}{section.2.2}
 \defcounter {refsection}{0}\relax 
