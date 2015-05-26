@@ -1,3 +1,4 @@
+\chapter{背景介绍}
 \section{Problem}\label{sec:problem}
 
 
@@ -50,10 +51,11 @@
 \subsection{The C Preprocessor}
 
 \begin{table*}[htbp]
-  \centering
-  \caption{Main preprocessor directives and operators}
+  \small
+  %\centering
+  \caption{主流预处理器指令与操作}
   \label{tab:preprocessor}
-  \begin{tabular}{|c|c|l|p{4cm}|}
+  \begin{tabular}{|p{3cm}|p{3cm}|l|p{4cm}|}
     \hline
     Directives & Functionality & Example & Result\\
     \hline
@@ -102,36 +104,25 @@ F(hello);
   \end{tabular}
 \end{table*}
 
-Table~\ref{tab:preprocessor} shows the main preprocessor directives
-and operators. A preprocessor directive starts with a \# at the
-beginning of the line and ends at the end of the line. Macros can be
-defined by preprocessor directives but themselves are not preprocessor directives.
-Basically, we have four main types of preprocessor directives:
-\code{\#progma} providing compilation options, \code{\#include} for including header files, \code{\#if} for
-conditional compilation, and \code{\#define} for macro definitions. Additionally, within
-a macro definition, we can use operators such as \code{\#\#} and \code{\#}, for
-concatenating two variables or quoting a variable. Finally, there are
-some pre-defined macros such as \code{\_\_FILE\_\_}, which will be replaced by
-the current values of the fields. 
+表~\ref{tab:preprocessor}显示了主流预处理器的指令与操作。
+一条预处理指令在行首以\#开头，在行末结束。
+宏可以被预处理指令定义，但是它们自身并不是预处理指令。
+本质上，我们认为现在有四种主要的预处理指令：
+\code{\#progma}~提供了编译选项，\code{\#include}~描述了包含的头文件，
+\code{\#if}~提供了条件编译选项，\code{\#define}~是宏定义指令。
+另外，在一个宏定义重，我们可以使用类似\code{\#\#}~和\code{\#}~的指令来连接两个变量活着字符化一个变量。
+最后，还存在一些预定义的宏，如~\code{\_\_FILE\_\_}~，会随着上下文的不同而被替换。
 
-When the C preprocessor processes a source file, it transforms the source file according to the following rules:
+当C预处理器处理一个源文件的时候，它会依据以下的方法来转换源程序文件：
 \begin{itemize}
-\item The \code{\#include} and \code{\#if} directives are
-  first expanded, and then the expanded token sequences are scanned.
-\item For each macro invocation, the arguments are first preprocessed, and then
-  the invocation is expanded.
-\item If an argument contains \# or \#\#, the unpreprocessed argument is
-  used, otherwise the preprocessed argument is used.
-\item After a macro invocation is expanded, the expanded token
-  stream is scanned again, where any newly introduced macro
-  invocations are again expanded.
-\item To avoid infinite recursive expansion, if a macro has been
-  expanded during the expansion process, it will not be expanded
-  again.
-\item Any new preprocessor directives produced in the expansions will
-  not be used in processing. 
+\item 首先展开~\code{\#include}~和~\code{\#if}~指令，然后再重复扫描展开后的代码词序列
+\item 对于每个宏调用，预处理器先处理参数的展开，然后再展开宏调用。
+\item 对于含有 \# 和 \#\#的参数，预处理器并不会处理这类参数。相反，预处理器会把参数直接文本拷贝到展开项中。
+\item 当一个宏调用被展开之后，这个被展开的程序词序列会被再次扫描。
+      如果这时还有宏没有展开，预处理器会把宏调用展开。
+\item 为了避免循环转开，如果一个宏定义已经在展开过程中被展开，那么它就不会被再次展开。
+\item 如果在展开宏的过程中生成了新的预处理指令，该指令并不会被预处理器执行。
 \end{itemize}
-
 
 \begin{figure}[ht]
   \centering
@@ -149,77 +140,62 @@ RESIZE(GARRAY(2), 100, FREE);
   \caption{An example of code preprocessing\label{fig:example} }
 \end{figure}
 
-As a concrete example, let us consider the code in
-\figref{fig:example}. This example is contrived to exhibit many real
-world patterns of macro uses.  This piece of code contains four macro
-definitions and a macro invocation. The first two macro definitions
-are wrappers for a user-defined free function. The third one is for
-resizing an array with user-defined memory management and logging. The last one is
-for naming a set of special global variables.
-When the code is scanned by the preprocessor, first the arguments of $RESIZE$ are processed. In
-this case, \code{GARRAY(2)} is expanded into \code{g\_array2}. Though
-the third parameter \code{FREE} has been defined as a function-like
-macro, no argument is provided for \code{FREE}, so the preprocessor
-does not treat it as a macro invocation at this stage. Then the macro
-invocation to \code{RESIZE} is expanded, leading to the following
-code:
+这里举一个实例，让我们来考虑在\figref{fig:example}里的代码片段。
+这个例子向我们展示了许多实际项目中的宏定义与宏调用。
+这段代码中含有四段宏定义和一个宏调用。
+前两个宏定义被包含在一个用户自定义的空间释放函数里。
+第三个宏定义是为了用户自定义的内存空间管理和日志记录而重新调整数组的大小。
+最后一个宏是为了定义一组特殊的全局变量。
+当预处理器扫描这段代码时，第一个参数~$RESIZE$~将会被处理。
+此时，~\code{GARRAY(2)}~会被展开成~\code{g\_array2}~。
+尽管第三个参数~\code{FREE}~已经被定义成一个函数状的宏（\emph{function-like macro}），
+但是并没有能够提供给~\code{FREE}~的参数，因此此时预处理器并不会把它当作一个宏调用来处理。
+然后~\code{RESIZE}~的宏调用被展开，于是我们得到了以下的代码：
 \begin{lstlisting}
 g_resize_times++;
 FREE(g_array2);
 g_array2 = malloc(sizeof(int)*(100));
 \end{lstlisting}
-Now we
-can see that in the expanded macro, an argument list is actually
-provided for \code{FREE}. Then the system will expand
-\code{FREE(g\_array2)}, resulting in the following code. 
+现在我们能看到在展开的宏中，我们已经给~\code{FREE}~提供了一个参数列表。
+因此接着系统会展开~\code{FREE(g\_array2)}~，我们得到以下代码：
 \begin{lstlisting}
 g_resize_times++;
 vfree(g_array2);
 g_array2 = malloc(sizeof(int)*(100));
 \end{lstlisting}
-In
-other words, \code{RESIZE} is in fact a high-order macro
-where its third parameter is also a macro.
+换句话说，\code{RESIZE}~实际上是一个高阶宏（\emph{high-order macro}），
+因为他的第三个参数也是宏。
 
-\subsection{Designing the Backward Transformation}
-Now let us consider that a program-editing tool takes the preprocessed
-code. Realizing the invocation to \code{vfree} is unsafe, the
-programming editing tool inserts a guard before it, as
-shown below.
+\subsection{反向变换的设计}
+现在让我们来考虑一下输入为预处理后代码的程序编辑工具们。
+比方在下面的例子中，程序编辑工具会发现~\code{vfree}~可能存在内存泄漏的可能，
+所以工具会在这句代码前加入一个保护语句，如下：
 \begin{lstlisting}
 g_resize_times++;
 if (g_array2) vfree(g_array2);
 g_array2 = malloc(sizeof(int)*(100));
 \end{lstlisting}
 
-
-Now let us consider how to design a backward transformation that takes
-this change as input, and produces a change on the unpreprocessed code,
-where the changed unpreprocessed code will produce exactly the changed
-preprocessed code. There are two options: 1. we can change the definition of
-\code{RESIZE} macro, adding this guard into the macro definition.
-2. we can expand the invocation to \code{RESIZE} macro, and add
-the guard to the expanded form. The first option makes global changes,
-affecting all places that invoke \code{RESIZE}. The second option
-makes only local changes, affecting only one place. However, since
-the backward transformation do not have the knowledge whether the change should be
-global or local, it is safer to choose the local option. In this example,
-probably we do not need to add the guard to every invocation to
-$vfree$, as it will cause unnecessary runtime overhead. The
-program-editing tool will have the knowledge to determine the safety
-of $vfree$ calls and add this guard to all necessary places.
-Furthermore,
-the local option also minimizes the interruption to the original
-program, as the global option affect many places in the program. This consideration forms our first requirement of the
-backward transformation.
+现在让我们来考虑一下反向变换。反向变换一般来说输入是预处理后代码上的修改，
+然后产生预处理前代码上的修改。
+当生成的修改作用在预处理前的代码上后，新的代码在预处理后会得到与作用输入修改的预处理后代码相同的结构。
+对于之前例子里面程序编辑工具做出的修改，我们有两种处理拌饭：
+（1）我们可以修改~\code{RESIZE}~的宏定义，把加入的~\code{IF}~语句加入到宏定义中；
+（2）我们可以展开~\code{RESIZE}~的宏调用，并按照预处理后的修改吧保护语句添加到原程序中。
+第二个选项只影响到了这一小段局部的代码，而第一个选项有会影响到全局的其他宏调用。
+但是，因为反向变换并不知道应该把修改作用到局部还是全局，一个更安全的做法是选择只影响局部的代码。
+在本例中，有很大可能我们并不需要对每一个$vfree$的调用都加上保护语句，因为这样会带来大量不必要运行时间。
+我们有理由相信程序编辑程序会根据需要选择是否在$vfree$前加上保护语句。
+进一步讲，局部的选项会尽可能小地修改原有代码，因为全局会影响程序的许多部分。
+这些可能性让我们想到一个双向预处理器的第一个性质。
 
 \begin{decision}
-A backward transformation should not change any macro definition.
+反向变换不应该改变任何宏定义。
 \end{decision}
 
-According to the requirement, we should expand the macro
-invocation with the guard added. Then there are again two
-options. We may subsequently expand all macro expansions as follows.
+根据我们定义的第一个性质，我们应该展开宏调用后再在源代码中加入保护语句。
+然而现在在映射修改时我们又面临着以下两个展开的选择。我们可以把所有的宏都依次展开：
+
 \begin{equation}
 \begin{minipage}{7.6cm}
 \begin{lstlisting}
@@ -230,7 +206,7 @@ g_array2 = malloc(sizeof(int)*(100));
 \end{minipage}
 \label{eqn:expandall}
 \end{equation}
-Or we may expand only one level as follows.
+活着我们也可以只把宏展开一层：
 \begin{equation}
 \begin{minipage}{7.6cm}
 \begin{lstlisting}
@@ -242,53 +218,46 @@ GARRAY(2) = malloc(sizeof(int)*(100));
 \label{eqn:goal}
 \end{equation}
 \newcommand{\coderef}[1]{code piece~(\ref{#1})}
-We think \coderef{eqn:goal} is better than \coderef{eqn:expandall} because it
-keeps more of the original code structure that are easier to understand, reuse, and maintain. This leads to our second
-requirement.
+我们认为\coderef{eqn:goal}比\coderef{eqn:expandall}更好，因为它保存了更多原有的结构，
+这使得代码更加易懂，重用或是维护。
+这就引入了我们的第二条性质。
 
 \begin{decision}
-A backward transformation should aim to keep existing macro invocations.
+反向变换应该尽可能保存现有的宏调用。
 \end{decision}
 
-Some might be tempted to go a step further by abstracting the guard into a new macro, or
-trying to reuse an existing macro that covers its functionality, as in the following. 
-%Furthermore, the added guard actually has been captured by another
-%macro definition: \code{SAFE\_MACRO}, so it is attempting to replaced
-%the second line with an invocation to existing macros, as follows.
+也许有人会提议我们进一步地把这个保护语句缩减成一个新的宏，
+或者复用现有的某一个宏来实现保护语句的功能。
+在本例子中，我们的保护语句被~\code{SAFE\_MACRO}~这个新宏定义包含。
+代码可能如下：
 \begin{lstlisting}
 g_resize_times++;
 SAFE_FREE(GARRAY(2));
 GARRAY(2) = malloc(sizeof(int)*(100));
 \end{lstlisting}
-However, this is dangerous as very often macro definitions are
- not designed to replace all occurrences of its expanded
-form. For example, Ernst et al.~\cite{ernst2002empirical} reports a
-macro definition, \lstinline!#define ISFUNC 0!, that defines a constant used in certain system
-calls. It obviously does not mean we shall replace all occurrences of \code{0}
-with \code{ISFUNC}.
-%but a backward transformation does not have the
-%information to determine where an invocation should be inserted. 
-This
-leads to our third requirement.
+但是，这样做是十分危险的。因为宏定义并不是用来替换所有语义相同的代码片段的。
+比方说，Ernst等人~\parencite{ernst2002empirical}就在文章中描述过某一个宏定义，
+\lstinline!#define ISFUNC 0!， 定义了一个在系统调用中时常用到的常数。
+很明显，我们并不能把整个系统里的~\code{0}都替换成~\code{ISFUNC}。
+这就引入了我们的第三个性质。
 
 \begin{decision}
-  A backward transformation should not introduce new macro invocations.
+  反向变换不应该引入新的宏调用。
 \end{decision}
 
-Besides the three requirements, we have two additional correctness laws borrowed from the bidirectional transformation literature, namely GETPUT and
-PUTGET~\cite{Foster:2007}. Let $s$ be the unpreprocessed
-program, $t$ be the preprocessed program, $c_t$ be the change to $t$,
-and $c_s$ be the change to $s$ that is produced by a successful
-backward transformation.
+除了已经提到的三个性质之外，我们还有两条从双向变换领域借鉴过来的性质，
+叫做 GETPUT 和 PUTGET~\parencite{Foster:2007}。
+令$s$是预处理前的源程序，$t$是预处理后代码，$c_t$是作用在$t$上的变化，
+$c_s$是完全的反向变换所提供的作用在$s$上的变化。
 
 \begin{decision}[GETPUT]
-  If $c_t$ is empty, then $c_s$ is empty.
+  如果$c_t$是空的，那么$c_s$也是空的。
 \end{decision}
 
 \begin{decision}[PUTGET]
-  Let $s'=c_s(s)$ be the new unpreprocessed program obtained by
-  applying $c_s$ to $s$, and $t'=c_t(t)$ be the changed preprocessed
-  program. Preprocessing $s'$ produces $t'$.
+  令$s'=c_s(s)$为新的预处理前的源代码。意为把生成的$c_s$作用在$s$上。
+  令$t'=c_t(t)$为作用了修改操作的预处理后代码。
+  对$s'$做预处理会得到$t'$。
 \end{decision}
 
 % \begin{decision}
@@ -296,57 +265,47 @@ backward transformation.
 %   there exists no $c_t$ satisfying the above five requirements.
 % \end{decision}
 
-The requirements together define the behavior of a backward
-transformation: it should propagate the change
-back into the unpreprocessed code by means of modifying macro parameters,
-modifying normal text, and expanding macro invocations, and at the same time expanding as
-fewer macro invocations as possible. 
+以上五条性质一起定义了反向变换的行为：它应该通过
+修改宏调用参数、修改普通代码、展开宏调用并且展开尽可能少的宏调用
+的方法来把预处理后的修改映射到源代码上。 
 
-\subsection{Naive Solutions}\label{sec:naive}
-Naive solutions does not meet our above listed requirements as we demonstrate in this subsection. \\
+\subsection{简单的方法}\label{sec:naive}
+我们将在本节中讨论为什么简单的方法并不能满足我们提出的五条性质。\\
 
-\noindent\emph{Naive solution I (per-file).}
-The first naive solution is to directly copy back the changed
-preprocessed files
-and replace the original unpreprocessed files. This solution is the easiest to
-implement but has two major deficiencies. First, the original unpreprocessed source files may contain
-macro definitions, which will be lost if we directly
-copy back the preprocessed files, causing problems elsewhere. Second, this will leads to the expansion
-of all macro invocations in the source file, as well as all \code{\#include}
-directives, destroying modularity completely.\\
-% A source file often contains thousands of lines expanded
-%from \code{\#include} directives, and thus such a backward
-%transformation often leads to almost unreadable source files.
+\noindent\emph{简单的方法 I (per-file).}
+第一种简单的方法是直接把修改过的文件不加处理地拷贝覆盖源代码。
+这种方法十分容易实现，我们称之为\emph{per-file}，但是他有两大缺点。
+首先，原有的未预处理源代码可能含有宏定义，然而现在的做法会让这些宏定义都丢失掉，
+那么在其他地方，比如包含了该文件并调用了相应宏的其他代码，可能就会出现错误。
+其次，这会导致把文件中所有的宏调用都展开，甚至包括所有的~\code{\#include}~指令。
+整个代码面目全非，破坏了完整性。
 
-\noindent\emph{Naive solution II (per-line).}
-The second solution is to use more fine-grained units, copying back
-only the changed lines. This is doable with the assumption that modern
-compilers keep a traceability relationship between the lines
-in the unpreprocessed files and the preprocessed files. For example,
-when GCC preprocess our running example, it will replace lines 1-7 into
-empty lines, and put the three statements expanded from line 9 in one
-line, so that a one-to-one correspondence between lines are kept. 
+\noindent\emph{简单的办法 II (per-line).}
+第二个简单的办法是利用代码的性质，只把预处理后代码中被修改的行反向映射回源代码。
+我们把这个方法称作\emph{per-line}。这个做法看起来是可行的，因为现代的预处理器
+会记录下预处理前后行间的对应关系。
+比方说，当GCC预处理我们之前的例子时，它会把1-7行替换成空行。
+同时它会把从第9行开始的几行展开压缩成一行。
+可以看到，现代预处理器都记录下了源代码与预处理代码行间的一一映射。
 
-Although the second solution has the benefit of not removing macro
-definitions, it still has problems. First, a lot of
-macros are still unnecessarily expanded. In our example, if we copy back
-the changed line, \coderef{eqn:expandall} will be the result, which goes against our second 
-requirement and destroys modularity. The situation becomes even worse when we consider tools that
-copy lines of code within source files, e.g.,
-GenProg~\cite{le2012genprog} copies statements between two positions
-in the source files to fix bugs. In such cases all macro invocations
-in the copied lines will be lost. Second, if the original macro
-invocations span several lines, the backward mapping produces wrong
-results. For example, suppose there is a line break within the
-original macro invocation, as follows.
+虽然第二种方法相较于第一种有了不删除宏定义的好处，它依然存在隐患。
+首先，依然有不少宏被不必要地展开了。
+在我们的例子中，如果我们把修改的那一行复制回去，那么\coderef{eqn:expandall}就会时结果，
+但这与我们定义的第二条性质不符。
+甚至，如果我们考虑有的工具会在代码中挑选代码复制插入来修改，比如GenProg~\cite{le2012genprog}
+就会在代码中拷贝不同地方的代码来修改程序的错误。
+这样一来拷贝的行中所有的宏调用都会被展开，代码的完整性还是被破环。
+另外，这还并不是最严重的。
+如果源文件中的宏调用是一个多行宏（在我们的调研与实验中也确实发现了这样的情况\secref{sec:evaluation}），
+那么只替换宏调用的第一行会直接带来错误的结果，反而引入了新的bug。
+比方说，如果在源代码的宏调用中插入了一个断行，如下：
 \begin{lstlisting}
 RESIZE(GARRAY(2),
   100, FREE);
 \end{lstlisting}
-In GCC, the macro invocation will be expanded into two lines, where
-the first line contains the three expanded statements, and the second
-line is empty. As a result, in the backward transformation only the
-first line will be copied back, resulting in an incorrect program.
+在GCC中，这个宏调用会被展开成两行。其中第一行时全部的宏展开语句，而第二行是空行。
+因此，修改操作只会作用于第一行。
+如果反向变换仅仅把第一行替换成新的代码，那么就会留下不正确的程序。
 
 
 
