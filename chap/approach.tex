@@ -1,18 +1,16 @@
+\chapter{算法设计}
 \section{Approach}
 \label{sec:approach}
-As mentioned before, the basic idea of our approach is to interpret
-CPP as a set of rewriting rules, where the backward
-transformation reverses each application of the rules. In this section,
-we first present this interpretation of CPP~(\secref{sec:forward}).
-Then we describe the change operations we support and first focus on
-one type of change: replacements.
-(\secref{sec:changes}). Since we need to reverse each application of
-the rules, we first record the applications as rewriting steps
-(\secref{sec:changes}), and then derive a backward transformation for
-each rule, respectively (\secref{sec:steps}). We also
-discuss how this process satisfies the requirements
-(\secref{sec:correctness}) and an optimization of the algorithm (\secref{sec:optimization}). Finally, we
-discuss how to convert other types of changes into replacement (\secref{sec:extend-other-changes}).
+正如之前提到的，我们算法的基本思想是把C预处理器当作一组重写规则，
+而反向变换就是这些规则相应的逆向规则。
+在本章钟，我们会先描述本项目的C预处理器的模型（\secref{sec:forward}）。
+然后我们会描述该系统所支持的修改操作。
+接着我们会集中阐述其中第一种操作：替换操作的处理方法（\secref{sec:changes}）。
+因为我们需要吧每一条重写规则反向应用，因此我们需要记录下预处理时使用
+重写规则的顺序（\secref{sec:changes}），然后按照顺序依次为这些规则生成反向变换（\secref{sec:steps}）。
+我们也会讨论这些步骤/过程为何能满足我们之前讨论的双向预处理器的五条性质（\secref{sec:correctness}），
+并且给出一个更优化的算法。
+最终，我们会讨论如何把不同类型的修改操作都转换成替换操作（\secref{sec:extend-other-changes}）。
 
 
 % We introduce our
@@ -31,47 +29,42 @@ discuss how to convert other types of changes into replacement (\secref{sec:exte
 % discuss how this process satisfies the requirements and laws (\secref{sec:correctness}). Finally, we
 % discuss how to convert other types of changes into replacement (\secref{sec:extend-other-changes}).
 
-For the ease of presentation, we shall consider a subset of C
-preprocessor first: there is no \# operator nor \#\# operator, no
-\#include directive, nor does any macro expansion contain any
-self invocation. We will later discuss how to
-extend this simplified model to a full model (\secref{sec:fullC}).
+为了读者可以更快理解我们算法设计的思想，我们暂时只考虑C预处理器指令的一个子集：
+去除 \# 操作和 \#\#操作，去除~\code{\#include}~操作，也不考虑宏出现循环调用的情况。
+我们会在之后的章节中（\secref{sec:fullC}）讨论如何把子集上的模型扩充到
+支持全部C预处理指令的完整模型。
 
 \newcommand{\dstart}{\ensuremath{\langle\#}\xspace}
 \newcommand{\dend}{\ensuremath{\rangle}\xspace}
 % \newcommand{\env}{\ensuremath{CTX}\xspace}
 
-\subsection{Modeling forward preprocessing}\label{sec:forward}
-We view a CPP program as a sequence of tokens. To
-recognize preprocessor directives from the sequence of tokens, % we
-% consider two special tokens, \dstart to denote a \# at the beginning of
-% a line and \dend to denote the end of line following a \dstart.
-we rely on two special tokens: \# at the
-beginning of a line, and the end of line
-following from a \# at the beginning of the line. We also assume  all
-macro definitions in scope are stored in a \emph{context}.
+\subsection{模拟正向变换：预处理}\label{sec:forward}
+我们把C预处理程序需要处理的程序看作词（\emph{token}）的一个序列。
+为了从词序列中识别出预处理指令，我们依赖于两个特征词：
+行首的\#符号和该行最后的换行符。
+我们同时也假设当前环境中所有定义的宏都存储在环境变量\emph{$context$}里。
 
-We deem the semantics of CPP as a set of rewriting rules.
-Each rewriting rule is taken the form of
-$guard \hookrightarrow action$. When $guard$ is true, $action$ is
-performed to replace some tokens at the beginning of the current
-remaining token sequence, and set the position for the next rule
-application.
+我们把C预处理器语法看作是重写规则的一个集合。
+每个重写规则都有$guard \hookrightarrow action$这样的形式。
+当$guard$是真时，$action$会把当前词序列的前几项替换成指定的词，
+然后在替换的位置后继续下一条替换指令。
 
-Both $guard$ and $action$ are modelled as functions. Function $guard$
-takes the currently remaining token sequence and the current context,
-and returns a Boolean value to indicate whether the rule can be
-applied to the current token sequence or not. Function $action$ takes
-the currently remaining sequence and the current context, and returns
-four components $(finalized, changed, restIndex, newContext)$. % Index
-% $restIndex$ denotes the start position of the remaining sequence, and
-This result indicates that the tokens before $restIndex$ are replaced % . The replacing tokens are
-% further divided into
-by
-two consecutive subsequences, $finalized$ and $changed$, where $finalized$ is a sequence
-that does not need to be further scanned, and $changed$ is a sequence
-that needs to be scanned. The last component, $newContext$, is the updated
-context.
+在模型中，$guard$和$action$ 都可以被看作是函数。
+$guard$函数输入输入时当先剩下的词序列和当前的上下文环境$context$，
+它将会输出一个表示是否要把当前规则应用到现在的词序列的布尔值。
+$action$函数把当前还剩下的词序列，上下文环境当作输入，然后生成
+一个四元组 $(finalized, changed, 
+restIndex, newContext)$。
+这个四元组中的变量含义如下：
+$restIndex$表示在这变量之前的词都已经被重写规则处理过了。
+在这些被处理过的词序列中，$finalized$表示了一串不需要再应用规则的词序列，
+而$changed$是可能还需要呗扫描的序列。
+而最后一个变量$newContext$ 代表着更新过的上下文环境。
+
+有了这些定义后，我们算法中的正向变换部分在算法~\ref{alg:forward}中展示。
+该算法循环应用规则$R$直至整个词序列都被处理。
+
+
 % , where $guard$ is a condition to
 % determine whether this rule can be applied to the head of the current token
 % sequence, and $action$ takes a subsequence from the beginning of the
@@ -82,9 +75,6 @@ context.
 % sequence needs to be scanned. A forward transformation iterates
 % all rules, and applies the first applicable rule until the no more
 % token need to be scanned.
-The algorithm for forward preprocessing is given in
-Algorithm~\ref{alg:forward}. It repeatedly applies the
-rules in $R$ until the whole token sequence has been processed.
 
 \begin{algorithm}
   \newcommand\mycommfont[1]{\rmfamily{#1}}
@@ -113,49 +103,42 @@ rules in $R$ until the whole token sequence has been processed.
  % token sequence needs to be further scanned, and an updated set of definitions.}
 \end{algorithm}
 
-There are totally four rules in the rule list $R$. One processes
-conditionals such as $\#if$, $\#ifdef$, one processes all other
-preprocessor directives as we basically need to remove them and
-updates the context, one processes macro invocations, and the last one
-processes normal text. These rules are described below.
-% The rule list $R$ contains the following rules, in the order they
-% appear in the list.
+在C预处理情况中，规则列表$R$中总共有四个规则。
+其中一个处理条件预处理指令，例如$\#if$, $\#ifdef$；
+一个处理其他的预处理指令，这样我们可以用它来清除预处理指令并且更新上下文环境；
+一个处理宏调用；
+最后一个处理普通字符文本。
+这四个规则如下定义：
+
 \begin{itemize}
-\item R1: This rule processes conditional compilations. Function $guard$ determines whether the token sequence
-  starts with a respective directive such as $\#if$,
-  $\#ifdef$. Function $action$ first
-  evaluates the condition based on the current context, and then replaces the
-  whole conditional with either the true branch or the false branch. The whole
-  replacing sequence is returned as $changed$ and $finalized$ is empty.
-\item R2: This rule processes other preprocessor directives. Function
-  $guard$ determines whether the token sequence starts with a
-  preprocess directive. Function $action$ parses the directives, makes
-  necessary changes to the context, and returns the index of the first token after the
-  directive as $restIndex$, with $finalized$ and $changed$ empty.
-\item R3: This rule expands a macro invocation. Function $guard$
-  determines whether the first token in the sequence is the name of an
-  object-like macro or the first two tokens are the name of a
-  function-like macro and an open parenthesis. Function $action$
-  consists of two steps.
+\item 规则1: 这个规则处理条件编译选项。$guard$函数将判定当前词序列的开头是否是一个独立
+  的预处理条件指令，例如$\#if$，$\#ifdef$。如果为真，
+  $action$函数首先会在当前上下文环境中检验条件选项是否为真，然后根据是否为真选择使用
+  真值分支或假值分支编译。
+  选择分支后，用该分支替换原有的指令，并把替换成功的新词序列记录在$changed$里。
+  而$finalized$是空的。
+\item 规则2: 这个规则处理其余所有预处理指令。$guard$函数将判定当前词序列的开头是否是一个
+  独立的预处理指令。如果为真，
+  $action$函数会解析这条指令，并对当前上下文环境做出必要的调整，比如添加一条宏定义。
+  最后，该指令之后的词下标将会被记录成$restIndex$，而$finalized$和$changed$为空。
+\item 规则3: 这条规则会展开宏调用。$guard$函数将判定当前词序列的开头第一个词是否是一个
+  对象宏调用（\emph{object-like macro}）或者当前词序列的开头前两个非空白词是否是是一个
+  函数宏调用（\emph{function-like macro}）和一个开括号。如果为真，
+  $action$函数会做以下两个步骤的操作：
   \begin{itemize}
-  \item First, the arguments are preprocessed by recursively applying
-    R3 and R4\footnote{Including preprocessor directives in the
-      argument list is an undefined behavior in CPP~\cite{CStandard}. Here
-      we ignore directives in arguments}.
-    When expanding an argument, the current context is used, and the
-    token sequence includes only the argument.
-  \item Second, the occurrences of the parameters in the macro body are
-    substituted by the preprocessed arguments. The new body are returned
-    as $changed$, with $finalized$ empty, and $restIndex$ is the index
-    of the next token after the macro invocation.
+  \item 首先，我们会用规则3和规则4循环调用处理参数\footnote{在C预处理器中未定义
+    把预编译指令放在参数中的操作~\parencite{CStandard}。在次我们认为在
+    参数中不存在预处理指令}。
+  \item 然后，我们把宏展开中各个参数出现的位置都替换成已经处理完了的宏参数。
+    整个展开的部分都被记录在$changed$里，而$finalized$是空的，$restIndex$记录
+    了宏调用之后的第一个词的位置。
   \end{itemize}
-\item R4: This rule processes normal tokens not captured by the other rules. Function $guard$ always
-  returns true. Function $action$ returns the first token as
-  $finalized$, an empty $changed$, and the index of the next tokens as
-  $restIndex$.
+\item 规则4: 这个规则处理那些没有被其余规则处理的普通文本自负。$guard$函数总是返回真。
+  $action$函数会把词序列中的第一个词放入$finalized$中，返回一个空的$changed$，
+  并把下一个词的下标标记为$restIndex$。
 \end{itemize}
 
-As an example, let us consider the following program.
+让我们来看一个例子来理解这些规则的应用。考虑以下程序。
 \begin{equation}
 \begin{minipage}{0.4\columnwidth}
 \begin{lstlisting}
@@ -167,13 +150,13 @@ hello x
 \end{equation}
 % To preprocess this program, we recursively apply the rules over the
 % program. 
-The first applicable rule is R2, which parse the macro
-definition, store it in the context and moves to the next line. The remaining sequence is now \code{hello
-  x}. Then R4 is applied to move \code{hello} into the finalized
-sequence. Next, R3 is applied to expand \code{x} into \code{100}.
-Finally, \code{100} is scanned again and R4 moves it into the
-finalized sequence. Now the remaining sequence is empty and the
-preprocess stops.
+当我们的系统处理这段代码时，第一个能应用的规则是规则2。
+它会把第一个宏定义解析出来，存储在上下文中，并把接下来的下标移动到下一行。
+这时剩余的词序列为~\code{hello x}。
+接着应用规则4，并把~\code{hello}移动到$finalized$的序列中。
+然后应用规则3，把宏调用 \code{x} 展开成 \code{100}。
+最终，系统将会再次扫描一遍 \code{100} 并使用规则4把它移动到$finalized$序列中。
+当剩余词序列为空时，整个处理过程就停下了。
 
 % From the definitions of the rules we can prove a simple property. For
 % any rule $r$, let $r.guard(src, c)$ be true and $r.action(src, c) = (f, h, restIndex, c')$. Supposing
@@ -181,49 +164,49 @@ preprocess stops.
 % we know that $r.guard(src, c)=true$ and $(f, h, restIndex, c') = r.guard(src', c)$. In other
 % words, if we change the 
 
-\subsection{Modeling the changes}\label{sec:changes}
-Program-editing tools can change the program with a variety of 
-operations. In this paper we consider three basic kinds: replacement,
-insertion, and copy. These operations are summarized from popular
-bug-fixing tools such as GenProg~\cite{le2012genprog} and
-SemFix~\cite{nguyen2013semfix}, which typically fix a bug by copying
-or creating an expression to replace another one or inserting at some
-location.
+\subsection{模拟修改}\label{sec:changes}
+程序编辑工具可以通过各种各样的方式对一段程序进行修改。
+本文中我们考虑三种基本的修改：替换、插入和福祉。
+这三种基本的修改是我们在分析了现有的主流代码修复工具
+例如GenProg~\cite{le2012genprog} 和 SemFix~\cite{nguyen2013semfix}
+之后总结而成。
+这些代码修复工具往往会拷贝或创造一个语句来替换现有语句或插入来修改程序错误。
 
-All the three operations directly manipulate the token sequences. A
-replacement is a pair $(l, s)$, where $l$ is the index of the token to
-be replaced, and $s$ is a token sequence that will replace the token
-at $l$. An insertion is a pair $(l, s)$, where token sequence $s$ will
-be inserted after the token at index $l$. A copy is a triple $(l,
-l_b, l_e)$, showing the token sequence between index $l_b$ (inclusive)
-and index $l_e$ (exclusive) is copied after the token at $l$.
+这三种操作都直接地对词序列进行操作。
+一个替换操作描述为一个二元对$(l, s)$，其中$l$是要被替换的词的位置，
+而$s$是将要替换在$l$位置的一串词序列。
+一个插入操作也是一个二元对$(l, s)$，其中词序列$s$将会被插入到位置$l$
+之后。
+一个拷贝操作时一个三元组$(l, l_b, l_e)$。它表示从位置$l_b$（包含）起至
+$l_e$（不包含）的词序列将会被拷贝插入到位置$l$的词之后。
 
-Note that the replacement naturally subsumes deletion. A change $(l,
-[])$ deletes a token, where $[]$ denotes an empty sequence.
+我们可以看出替换操作涵盖的删除操作。一个形式为$(l, [])$
+的替换操作就代表删除了一个词，其中$[]$表示空序列。
 
-In the rest of the section we shall first show how to perform a
-backward transformation with replacements and then map the other two
-types of operations to replacements. % If a change set contains only
+本章接下来的部分，我们将讨论如何实现一个可以处理替换操作的反向变换操作。
+我们也会讨论如何把其他两种操作转换成替换操作。
+% If a change set contains only
 % replacements, we could also interpret the change set as a total function
 % mapping each index into a token sequence, where unchanged indexes
 % are mapped to the original tokens at the indexes.
 
-\subsection{Rewriting Steps}\label{sec:steps}
-As mentioned in the introduction, our backward transformation reverses
-each application of rewriting rules. To perform a backward
-transformation, we use a data structure to record what rules have been
-applied to what parts of the source. We call such a record  \emph{rewriting steps}. Each rewriting
-step is a quadruple, $(src, i, ctx, r)$, specifying that rule $r$ has been
-applied to a sub sequence of $src$ starting at $i$ with context $ctx$. Token
-sequence $src$ is always the current token sequence, containing all
-modifications made from previous rule applications.
-% The index $i$ is always calculated based on current token sequences,
-% i.e., the tokens before $i$ has already been processed by other rules.
-Accordingly, a forward transformation is recorded as a sequence of
-rewriting steps. For example, preprocessing code piece \ref{eqn:smallexample}
-produces the following sequence of rewriting steps:
-$(P, 0, \{\}, R2)$, $(hello\ x, 0, \{x\}, R4)$, $(hello\ x, 1, \{x\}, R3)$, and
-$(hello\ 100, 1, \{x\}, R4)$, where $P$ is the original program.
+\subsection{重写步骤}\label{sec:steps}
+正如在序言中介绍过的，我们的反向变换操作会逆向实施之前提到的重写规则。
+为了生成好的反向变换，我们设计了一个数据结构来记录下正向展开时
+使用了哪些规则，分别应用在代码的哪个部分。
+我们把这种记录的数据结构称作 \emph{重写步骤}。
+每一个重写步骤都是一个四元组， $(src, i, ctx, r)$。
+其中$r$表示规则$r$已经被应用到一段子序列$src$。
+自序列位置在$i$，应用规则时的上下文环境为$ctx$。
+其中$src$总是代表了暂时的词序列，区别于源序列与最终系列，是应用了
+之前所有规则后生成的临时序列。
+
+相应的，一个完整的正向序列会被记录成一个重写步骤序列。
+比方说，正向处理之前例子中的代码段 \ref{eqn:smallexample} 时，
+我们的算法会产生以下的重写步骤序列：
+$(P, 0, \{\}, R2)$，$(hello\ x, 0, \{x\}, R4)$，$(hello\ x, 1, \{x\}, R3)$，和
+$(hello\ 100, 1, \{x\}, R4)$。
+其中$p$是源程序。
 
 % We use a data structure to record how a rule application changes the
 % token sequence, which is the key to our bidirectionalization. We call
@@ -243,16 +226,14 @@ $(hello\ 100, 1, \{x\}, R4)$, where $P$ is the original program.
 % A body expansion 
 
 
-\subsection{Backward Transformation with Replacement}\label{sec:backward}
-The basic idea of our backward transformation is to propagate the
-changes backward along the sequence of rewriting steps, such that
-if we perform a forward preprocessing again, either exactly the same
-rewriting step is performed, or this rewriting step is replaced by a
-new sequence of equivalent rewriting steps (whose length can 
-be zero). The algorithm for backward
-transformation can be found in Algorithm~\ref{alg:backward}. The
-function $backward$ propagates changes along one rewriting step,
-or reports a failure if no proper propagation can be found.
+\subsection{考虑替换操作的反向变换}\label{sec:backward}
+反向操作的基本思想是把预编译后代码上的修改通过重写规则序列
+一步步映射到预处理前的代码上。这样当我们再跑一次正向变换时，
+只会有两种情况：1. 程序会按照相同的重写规则再次正向展开
+2. 程序会按照登记啊的重写规则序列展开，这个规则序列长度可以是0。
+我们设计的反向变换操作在算法~\ref{alg:backward}中。
+其中$backward$函数沿着每一个重写步骤映射程序上的修改，
+或者是当它发现没有合适的修改可以映射时报错。
 
 \begin{algorithm}
   \newcommand\mycommfont[1]{\rmfamily{#1}}
@@ -268,55 +249,53 @@ or reports a failure if no proper propagation can be found.
   \Return{$c$}\;
 \end{algorithm}
 
-The key for implementing the backward transformation is to implement the
-function $backward$. The behavior of $backward$ differs for each
-rewriting rule, and we discuss it from the simplest to
-the most complex rule.
+我们从伪代码中可以看出，实现反向变换的关键在于如何实现 $backward$ 函数。
+$backward$ 函数的行为随着规则的不同而改变。
+在此，我们根据复杂度，从简单到复杂讨论该函数的功能。
 
-First, if the rewriting step is performed by R2, the forward
-preprocessing consumes the preprocessor directive. The backward
-transformation shifts the replacements according to the length of the
-consumed macro. For example, consider the following CPP program.
+首先，如果当前重写步骤是依据规则2处理的，这意味着此处处理了一个非条件的
+预编译指令，正向预编译时，这条指令被预处理器删除。反向变换会根据预处理
+指令的位置来考虑是否要偏移操作。比方说，考虑以下的代码程序：
 \begin{lstlisting}
 #undef hello
 hello
 \end{lstlisting}
-Now if we have a replacement $(0, x)$, i.e, $hello$ is changed into
-$x$, the backward transformation shifts the replacement into $(4, x)$ to ensure
-that it still changes the macro invocation $hello$.
+现在如果我们有一个$(0, x)$的替换操作，那么在这个例子中，
+$hello$会被替换成$x$。
+$backward$函数会把该替换操作位移到$(4, x)$来保证当前
+替换操作依然是作用在$hello$这个词上。
 
-Second, if the rewriting step is performed by R1, the forward
-transformation replaces the whole conditional directive with one of its branches. In the
-backward transformation, we map the changes on the replaced branch
-back to its original location, and shift other changes if necessary.
-Since we never change macro definitions, the conditional is guaranteed to 
-evaluate to the same branch.
+第二，如果当前重写步骤是依据规则1处理的，这意味着此处预处理器
+处理一个条件预处理指令。预处理器当时把这一段替换成了条件指令的一个分支。
+在反向变换中，我们把在分支上发生的修改操作映射到原来的条件指令中，
+同时计算必要的偏移量等。
+因为我们不会改变宏的定义，此处的条件预处理指令在再次预处理时，
+还是会选择相同的分支进行替换。
 
-Third, if the rewriting step is performed by R4, the forward
-transformation moves one token to $finalized$. The backward
-transformation needs to ensure that R4 is still performed on the changed
-token sequence. % If $guard$ evaluates to true for any one of R1, R2, or
-% R3 on the changed sequence, the backward transformation reports an
-% failure, otherwise the backward transformation simply returns the
-% changes. Note that if the user replaces the original token into more
-% than one tokens, we need to check whether R4 is performed on each of
-% the changed token.
-For example, if the user replaces $hello$ in $hello\ c$ with $a\ b$,
-we need to check, starting from $a$, whether the only viable path is still to apply R4 twice to preprocess the replacing sequence, i.e., only $guard$ of R4 evaluates to true on either $a\ b\ c$
-or $b\ c$. Here failures may occur. For example, if the user changes
-$hello$ into $x$, where $hello$ is not a macro but $x$ is an
-object-like macro. Another example is that the user changes
-$GARRAY\ hello$ into $GARRAY\ (hello)$, where $GARRAY$ is a
-function-like macro. In this case, $GARRAY$ was previously preprocessed by R4
-because it is not followed by an open parenthesis, whereas in the changed
-sequence $GARRAY$ is, and therefore the backward
-transformation fails at the rewriting step on $GARRAY$. Such failures are necessary as in
-both the above cases, there is no way to propagate back the changes.
+第三，如果当前重写步骤是依据规则4处理的，这意味着此处预处理器
+处理了一段非指令非宏调用的普通文本字符。正向预处理器应该把一个
+词放到$finalized$里去了。
+反向变换需要保证在修改过后的词序列上，依然会应用规则4。
+举例来说，如果用户把$hello\ c$ 中的 $hello$ 替换成了 $a\ b$，
+我们需要检查，从$a$开始，是否唯一的预处理办法就是应用两次规则4来替换当前序列。
+在这个例子中，只有当规则4的$guard$函数能够在要么 $a\ b\ c$ 或者 $b\ c$上返回真才行。
+这时候就会发生反向变换失败的情况。
+比方说，如果程序编辑程序给出的修改时把$hello$修改成$x$，
+其中$hello$并不是宏调用，但$x$是宏调用。那么此时应该报错。
+另一个情况是程序编辑程序把$GARRAY\ hello$替换成了$GARRAY\ (hello)$。
+此时$GARRAY$是一个含有一个参数函数式宏调用。
+在这种情况下，之前$GARRAY$被当作文本使用规则4重写因为它之后并不是括号。
+而在新的序列中，$GARRAY$变成了一个宏展开。此时很有可能造成程序错误。
+以上两种情况$backward$函数都应该报错，自动程序并不能轻易地把修改映射到代码中去。
 
-Finally, the case of R3, which expands a macro invocation, is the most
-complex. R3 consists of two sub steps. We first try to reverse the two
-sub steps in an reversed order. If any of
-the sub step fails, we try to expand the macro invocation.
+% ???????????
+
+最后，如果当前重写步骤是依据规则3处理的，这意味着此处预处理器
+处理了一个宏调用。这种情况是最复杂的。
+规则3包含了两个步骤。我们首先试图沿着两个步骤逆向重写代码。
+如果两个步骤中有一个失败了，那我们只能试着展开宏调用。
+
+在第二个小步骤中，
 
 In the second sub step, the occurrences of parameters in a macro body
 are replaced by expanded arguments. The backward transformation 

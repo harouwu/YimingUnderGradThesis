@@ -14,29 +14,31 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {1.1.3}简单的方法}{9}{subsection.1.1.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.2}Approach}{11}{section.1.2}
+\contentsline {chapter}{\numberline {第二章\hspace {0.3em}}算法设计}{11}{chapter.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.1}Modeling forward preprocessing}{11}{subsection.1.2.1}
+\contentsline {section}{\numberline {2.1}Approach}{11}{section.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.2}Modeling the changes}{14}{subsection.1.2.2}
+\contentsline {subsection}{\numberline {2.1.1}模拟正向变换：预处理}{11}{subsection.2.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.3}Rewriting Steps}{14}{subsection.1.2.3}
+\contentsline {subsection}{\numberline {2.1.2}模拟修改}{14}{subsection.2.1.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.4}Backward Transformation with Replacement}{15}{subsection.1.2.4}
+\contentsline {subsection}{\numberline {2.1.3}重写步骤}{14}{subsection.2.1.3}
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.4}考虑替换操作的反向变换}{15}{subsection.2.1.4}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{Correctness}{18}{section*.12}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{Optimization}{19}{section*.13}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.5}Extending to full CPP}{20}{subsection.1.2.5}
+\contentsline {subsection}{\numberline {2.1.5}Extending to full CPP}{20}{subsection.2.1.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.2.6}Extending to other types of changes}{20}{subsection.1.2.6}
+\contentsline {subsection}{\numberline {2.1.6}Extending to other types of changes}{20}{subsection.2.1.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.3}Evaluation}{22}{section.1.3}
+\contentsline {section}{\numberline {2.2}Evaluation}{22}{section.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3.1}Research Questions}{22}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {2.2.1}Research Questions}{22}{subsection.2.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3.2}Setup}{22}{subsection.1.3.2}
+\contentsline {subsection}{\numberline {2.2.2}Setup}{22}{subsection.2.2.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{Implementation}{22}{section*.14}
 \defcounter {refsection}{0}\relax 
@@ -46,9 +48,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{Dependent variables}{24}{section*.18}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3.3}Threats to Validity}{25}{subsection.1.3.3}
+\contentsline {subsection}{\numberline {2.2.3}Threats to Validity}{25}{subsection.2.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.3.4}Results}{25}{subsection.1.3.4}
+\contentsline {subsection}{\numberline {2.2.4}Results}{25}{subsection.2.2.4}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{RQ1}{26}{section*.20}
 \defcounter {refsection}{0}\relax 
@@ -56,15 +58,15 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{RQ3}{26}{section*.22}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.4}Related Work}{27}{section.1.4}
+\contentsline {section}{\numberline {2.3}Related Work}{27}{section.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.4.1}Bidirectional Transformation}{27}{subsection.1.4.1}
+\contentsline {subsection}{\numberline {2.3.1}Bidirectional Transformation}{27}{subsection.2.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.4.2}Analyzing and editing unpreprocessed C code}{27}{subsection.1.4.2}
+\contentsline {subsection}{\numberline {2.3.2}Analyzing and editing unpreprocessed C code}{27}{subsection.2.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {1.4.3}Empirical studies on the C preprocessors}{28}{subsection.1.4.3}
+\contentsline {subsection}{\numberline {2.3.3}Empirical studies on the C preprocessors}{28}{subsection.2.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {1.5}Conclusion}{29}{section.1.5}
+\contentsline {section}{\numberline {2.4}Conclusion}{29}{section.2.4}
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{参考文献}{31}{appendix*.23}
 \defcounter {refsection}{0}\relax 
