@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  27 MAY 2015 16:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  27 MAY 2015 23:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1493,7 +1493,6 @@ Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
 \bigstrutjot=\dimen199
 )
 (./ASE15/macros.tex)
-\fmbox=\box66
 \c@definition=\count352
 \c@decision=\count353
 \c@law=\count354
@@ -1615,13 +1614,13 @@ File: english.lbx 2014/06/25 v2.9a biblatex localization (PK/JW/AB)
 \@quotelevel=\count365
 \@quotereset=\count366
 LaTeX Font Info:    Try loading font information for T1+ntxtlf on input line 11
-4.
+1.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/t1ntxtlf.fd
 File: t1ntxtlf.fd 2015/01/17 v1.0 font definition file for T1/ntx/tlf
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.05pt on input line 114.
+(Font)              scaled to size 12.05pt on input line 111.
  (./thesis.aux
 (./chap/copyright.aux) (./chap/abstract.aux) (./chap/introduction.aux)
 (./chap/background.aux) (./chap/approach.aux) (./chap/evaluation2.aux)
@@ -1629,114 +1628,114 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (./chap/originauth.aux))
 \openout1 = `thesis.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 114.
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 111.
 LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 11
-4.
+1.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2012/03/22 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for OMS/ntxsy/m/n on input line 114.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OMS/ntxsy/m/n on input line 111.
 LaTeX Font Info:    Try loading font information for OMS+ntxsy on input line 11
-4.
+1.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/omsntxsy.fd
 File: omsntxsy.fd 2012/11/14 Fontinst v1.933 font definitions for OMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 114.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 114
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 111.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 111
 .
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C00/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C05/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C09/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C10/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C20/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C19/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C40/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C42/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C43/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C50/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C52/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C49/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C60/mj/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C61/mj/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C63/mj/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C64/mj/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C65/mj/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C70/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C31/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C32/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C33/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C34/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C35/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C36/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C37/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C80/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C81/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C01/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C11/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C21/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C41/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for C62/song/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 114.
-LaTeX Font Info:    ... okay on input line 114.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C00/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C05/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C09/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C10/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C20/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C19/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C40/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C42/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C43/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C50/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C52/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C49/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C60/mj/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C61/mj/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C63/mj/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C64/mj/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C65/mj/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C70/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C31/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C32/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C33/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C34/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C35/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C36/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C37/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C80/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C81/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C01/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C11/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C21/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C41/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for C62/song/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 111.
+LaTeX Font Info:    ... okay on input line 111.
 
 (/usr/local/texlive/2014/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count367
 \scratchdimen=\dimen258
-\scratchbox=\box67
+\scratchbox=\box66
 \nofMPsegments=\count368
 \nofMParguments=\count369
 \everyMPshowfont=\toks38
@@ -1800,7 +1799,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Option `colorlinks' set `true' on input line 114.
+Package hyperref Info: Option `colorlinks' set `true' on input line 111.
 Package biblatex Info: Input encoding 'UTF-8' specified.
 Package biblatex Info: Automatic encoding selection.
 (biblatex)             Assuming data encoding 'UTF-8'.
@@ -1827,18 +1826,18 @@ Package biblatex Warning: The following entry could not be found
 (biblatex)                LaTeX afterwards.
 
 )
-Package biblatex Info: Reference section=0 on input line 114.
-Package biblatex Info: Reference segment=0 on input line 114.
+Package biblatex Info: Reference section=0 on input line 111.
+Package biblatex Info: Reference segment=0 on input line 111.
 \c@mv@tabular=\count373
 \c@mv@boldtabular=\count374
 \c@lstlisting=\count375
 
 
 Package mathastext Warning: current meaning of amsmath \resetMathstrut@ saved o
-n input line 114.
+n input line 111.
 
-\AtBeginShipoutBox=\box68
-Package hyperref Info: Link coloring ON on input line 114.
+\AtBeginShipoutBox=\box67
+Package hyperref Info: Link coloring ON on input line 111.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -1847,9 +1846,9 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count376
 )
-LaTeX Info: Redefining \ref on input line 114.
-LaTeX Info: Redefining \pageref on input line 114.
-LaTeX Info: Redefining \nameref on input line 114.
+LaTeX Info: Redefining \ref on input line 111.
+LaTeX Info: Redefining \pageref on input line 111.
+LaTeX Info: Redefining \nameref on input line 111.
 
 (./thesis.out) (./thesis.out)
 \@outlinefile=\write4
@@ -1866,75 +1865,75 @@ File: UTF8.enc 2012/05/07 4.8.3
 File: UTF8.chr 2012/05/07 4.8.3
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 26.1pt on input line 123.
+(Font)              scaled to size 26.1pt on input line 120.
 
 <pkulogo.pdf, id=140, 401.5pt x 401.5pt>
 File: pkulogo.pdf Graphic file (type pdf)
  <use pkulogo.pdf>
-Package pdftex.def Info: pkulogo.pdf used on input line 123.
+Package pdftex.def Info: pkulogo.pdf used on input line 120.
 (pdftex.def)             Requested size: 62.63618pt x 62.63985pt.
 
 <pkuword.pdf, id=141, 526.96875pt x 150.5625pt>
 File: pkuword.pdf Graphic file (type pdf)
  <use pkuword.pdf>
-Package pdftex.def Info: pkuword.pdf used on input line 123.
+Package pdftex.def Info: pkuword.pdf used on input line 120.
 (pdftex.def)             Requested size: 146.15916pt x 41.76016pt.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <26.1> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 123.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 120.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 26.1pt on input line 123.
-LaTeX Font Info:    Try loading font information for C70+rm on input line 123.
+(Font)              scaled to size 26.1pt on input line 120.
+LaTeX Font Info:    Try loading font information for C70+rm on input line 120.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/ctex/fd/c70rm.fd
 File: c70rm.fd 2007/05/06 v0.8a ctexutf8 font definition file
 )
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 22.08pt on input line 123.
+(Font)              scaled to size 22.08pt on input line 120.
 Package CJKpunct Info: punctuation spaces for family 'zhsong' do not exist. Use
- family 'def' instead. on input line 123.
+ family 'def' instead. on input line 120.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <22.08> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 123.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 120.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 22.08pt on input line 123.
+(Font)              scaled to size 22.08pt on input line 120.
 \pkuthss@tmp@linecount=\count377
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 18.07pt on input line 123.
+(Font)              scaled to size 18.07pt on input line 120.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 15.06pt on input line 123.
-LaTeX Font Info:    Try loading font information for U+ntxmia on input line 123
+(Font)              scaled to size 15.06pt on input line 120.
+LaTeX Font Info:    Try loading font information for U+ntxmia on input line 120
 .
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxmia.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsym on input line 123
+LaTeX Font Info:    Try loading font information for U+ntxsym on input line 120
 .
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 123
+LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 120
 .
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
-LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 123
+LaTeX Font Info:    Try loading font information for T1+ntxtt on input line 120
 .
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/t1ntxtt.fd
 File: t1ntxtt.fd 2012/04/20 v3.1
 )
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 18.07pt on input line 123.
+(Font)              scaled to size 18.07pt on input line 120.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 15.06pt on input line 123.
+(Font)              scaled to size 15.06pt on input line 120.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 12.05pt on input line 123.
+(Font)              scaled to size 12.05pt on input line 120.
 LaTeX Font Info:    Try loading font information for C70+zhkai on input line 12
-3.
+0.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/zhmetrics/c70zhkai.fd
 File: c70zhkai.fd 2009/09/23 4.8.2
@@ -2027,24 +2026,24 @@ LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 
 ]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.03pt on input line 65.
+(Font)              scaled to size 9.03pt on input line 72.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.0pt on input line 65.
+(Font)              scaled to size 5.0pt on input line 72.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 9.03pt on input line 65.
+(Font)              scaled to size 9.03pt on input line 72.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 5.0pt on input line 65.
+(Font)              scaled to size 5.0pt on input line 72.
  [2]
 LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 1
-28.
+36.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.05pt on input line 128.
+(Font)              scaled to size 12.05pt on input line 136.
 
-Overfull \hbox (19.1038pt too wide) in paragraph at lines 128--132
+Overfull \hbox (19.1038pt too wide) in paragraph at lines 136--140
 \C70/rm/m/n/12.05/4e † ^^M \C70/rm/m/n/12.05/54 ^^L \C70/rm/m/n/12.05/53 ï \C70
 /rm/m/n/12.05/80 ý \C70/rm/m/n/12.05/76 „ \C70/rm/m/n/12.05/8b ¾ ¡ \C70/rm/m/n/
 12.05/5e v \C70/rm/m/n/12.05/63 Ð \C70/rm/m/n/12.05/51 ú \C70/rm/m/n/12.05/4e †
@@ -2055,14 +2054,10 @@ L| \C70/rm/m/n/12.05/53 ^^E \C70/rm/m/n/12.05/62 ì\T1/ntxtlf/m/n/12.05 GETPUT\C
 70/rm/m/n/12.05/54 Œ\T1/ntxtlf/m/n/12.05 PUTGET
  []
 
-) [3]
+[3]) [4]
 \openout2 = `chap/background.aux'.
 
- (./chap/background.tex [4
-
-
-
-]
+ (./chap/background.tex
 ç¬¬ä¸€ç« 
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <15.06> not available
 (Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 51.
@@ -2084,7 +2079,11 @@ Overfull \hbox (14.09712pt too wide) in paragraph at lines 58--105
 [][] 
  []
 
-[5] [6]
+[5
+
+
+
+] [6]
 Package CJKpunct Info: punctuation spaces for family 'zhkai' do not exist. Use 
 family 'def' instead. on input line 193.
  [7] [8]
@@ -2193,11 +2192,24 @@ C70/rm/m/n/12.05/7c { \C70/rm/m/n/12.05/4e -|\C70/rm/m/n/12.05/ff ^^Z|  $[][][]
 [][][][][][][]$\C70/rm/m/n/12.05/88 h
  []
 
-[25] [26 <./pics/class.png (PNG copy)>] [27] [28]
-Underfull \vbox (badness 1484) has occurred while \output is active []
+[25]
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 12.05pt on input line 116.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 12.05pt on input line 116.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 12.05pt on input line 116.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 12.05pt on input line 116.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.54pt on input line 116.
+LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
+(Font)              scaled to size 10.54pt on input line 116.
+ [26 <./pics/class.png (PNG copy)>] [27]
+Underfull \vbox (badness 2644) has occurred while \output is active []
 
- [29])
-[30]
+ [28]
+[29]) [30]
 \openout2 = `chap/related.aux'.
 
  (./chap/related.tex
@@ -2233,14 +2245,14 @@ LaTeX Warning: Citation 'Medeiros2015' on page 32 undefined on input line 79.
 
 ]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/it' will be
-(Font)              scaled to size 10.54pt on input line 155.
+(Font)              scaled to size 10.54pt on input line 152.
 LaTeX Font Info:    Font shape `T1/ntxtlf/bx/n' in size <10.54> not available
-(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 155.
+(Font)              Font shape `T1/ntxtlf/b/n' tried instead on input line 152.
 
 LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
-(Font)              scaled to size 10.54pt on input line 155.
+(Font)              scaled to size 10.54pt on input line 152.
 
-Overfull \hbox (25.47853pt too wide) in paragraph at lines 165--165
+Overfull \hbox (25.47853pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 ware: Evo-lu-tion and Pro-cess\T1/ntxtlf/m/n/10.54 , \T1/
 ntxtlf/b/n/10.54 2013\T1/ntxtlf/m/n/10.54 , \T1/ntxtlf/m/it/10.54 25\T1/ntxtlf/
 m/n/10.54 (12): 1285^^U1304. [][]$\T1/ntxtt/m/n/10.54 http : //dx.doi.org/10.10
@@ -2248,14 +2260,14 @@ m/n/10.54 (12): 1285^^U1304. [][]$\T1/ntxtt/m/n/10.54 http : //dx.doi.org/10.10
  []
 
 [35]
-Overfull \hbox (50.66576pt too wide) in paragraph at lines 165--165
+Overfull \hbox (50.66576pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 ment\T1/ntxtlf/m/n/10.54 ''. \T1/ntxtlf/m/it/10.54 ACM Tr
 ans. Database Syst. \T1/ntxtlf/m/n/10.54 2000[]06: 179^^U227. [][]$\T1/ntxtt/m/
 n/10.54 http : //doi.acm.org/10.1145/357775.357777$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
 [36]
-Overfull \hbox (145.42001pt too wide) in paragraph at lines 165--165
+Overfull \hbox (145.42001pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 Sci-ence of Com-puter Pro-gram-ming\T1/ntxtlf/m/n/10.54 ,
  \T1/ntxtlf/b/n/10.54 2014\T1/ntxtlf/m/n/10.54 . [][]$\T1/ntxtt/m/n/10.54 http 
 : //www.sciencedirect.com/science/article/pii/S0167642314003323$[][]\T1/ntxtlf/
@@ -2263,35 +2275,35 @@ m/n/10.54 .
  []
 
 [37]
-Overfull \hbox (25.32664pt too wide) in paragraph at lines 165--165
+Overfull \hbox (25.32664pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 ta-tion\T1/ntxtlf/m/n/10.54 . Bei-jing, China: ACM, \T1/n
 txtlf/b/n/10.54 2012\T1/ntxtlf/m/n/10.54 : 323^^U334. [][]$\T1/ntxtt/m/n/10.54 
 http : //doi.acm.org/10.1145/2254064.2254103$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
 
-Overfull \hbox (3.50587pt too wide) in paragraph at lines 165--165
+Overfull \hbox (3.50587pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/n/10.54 ing-ton, DC, USA: IEEE Com-puter So-ci-ety, \T1/ntxtlf/b/n
 /10.54 2001\T1/ntxtlf/m/n/10.54 : 281^^U. [][]$\T1/ntxtt/m/n/10.54 http : //dl.
 acm.org/citation.cfm ?
  []
 
 
-Overfull \hbox (10.66667pt too wide) in paragraph at lines 165--165
+Overfull \hbox (10.66667pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/n/10.54 USA: IEEE Com-puter So-ci-ety, \T1/ntxtlf/b/n/10.54 2005\T
 1/ntxtlf/m/n/10.54 : 379^^U388. [][]$\T1/ntxtt/m/n/10.54 http : //dx.doi.org/10
 .1109/ICSM.2005.23$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
 
-Overfull \hbox (48.01921pt too wide) in paragraph at lines 165--165
+Overfull \hbox (48.01921pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 gi-neer-ing\T1/ntxtlf/m/n/10.54 . Hong Kong, China: ACM, 
 \T1/ntxtlf/b/n/10.54 2014\T1/ntxtlf/m/n/10.54 : 75^^U85. [][]$\T1/ntxtt/m/n/10.
 54 http : //doi.acm.org/10.1145/2635868.2635908$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
 [38]
-Overfull \hbox (50.21152pt too wide) in paragraph at lines 165--165
+Overfull \hbox (50.21152pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 neer-ing\T1/ntxtlf/m/n/10.54 . Antwerp, Bel-gium: ACM, \T
 1/ntxtlf/b/n/10.54 2010\T1/ntxtlf/m/n/10.54 : 333^^U336. [][]$\T1/ntxtt/m/n/10.
 54 http : //doi.acm.org/10.1145/1858996.1859064$[][]\T1/ntxtlf/m/n/10.54 . 
@@ -2319,17 +2331,17 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/b/n' will be
  (./chap/originauth.tex) [43
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 178.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 178.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 175.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 175.
 
 (./thesis.aux (./chap/copyright.aux) (./chap/abstract.aux)
 (./chap/introduction.aux) (./chap/background.aux) (./chap/approach.aux)
 (./chap/evaluation2.aux) (./chap/related.aux) (./chap/conclusion.aux)
 (./chap/acknowledge.aux) (./chap/originauth.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 178.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 178.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 175.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 175.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
-(rerunfilecheck)             Checksum: 4A33C8C692DD3A5C63E6C1F534B276BA;3457.
+(rerunfilecheck)             Checksum: F3F06462B63620162C66FB021595795D;3398.
 
 
 LaTeX Warning: There were undefined references.
@@ -2344,27 +2356,27 @@ Package logreq Info: Writing requests to 'thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34103 strings out of 493109
- 553168 string characters out of 6135004
- 918528 words of memory out of 5000000
- 36172 multiletter control sequences out of 15000+600000
+ 34092 strings out of 493109
+ 553142 string characters out of 6135004
+ 919475 words of memory out of 5000000
+ 36155 multiletter control sequences out of 15000+600000
  200112 words of font info for 496 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 50i,17n,77p,10426b,3046s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 50i,17n,77p,10426b,3044s stack positions out of 5000i,500n,10000p,200000b,80000s
 </Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.t
 tf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.
 ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simkai
 .ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhe
 i.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simk
 ai.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/sim
-kai.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/si
+kai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/si
 mhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/s
-imkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/
-simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts
-/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Font
-s/simkai.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fon
+imhei.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/
+simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts
+/simhei.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Font
+s/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fon
 ts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fo
-nts/simhei.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/F
+nts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/F
 onts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/
 Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library
 /Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Librar
@@ -2374,8 +2386,8 @@ ary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Lib
 rary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Li
 brary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/L
 ibrary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/
-Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming
-/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yimin
+Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming
+/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yimin
 g/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yimi
 ng/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yim
 ing/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yi
@@ -2454,7 +2466,7 @@ live/2014/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/local/texlive/2
 014/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2014/te
 xmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/local/texlive/2014/texmf-dis
 t/fonts/type1/public/txfonts/txsya.pfb>
-Output written on thesis.pdf (53 pages, 794641 bytes).
+Output written on thesis.pdf (53 pages, 793692 bytes).
 PDF statistics:
  1660 PDF objects out of 1728 (max. 8388607)
  1315 compressed objects within 14 object streams

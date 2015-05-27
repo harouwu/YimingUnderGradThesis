@@ -18,7 +18,7 @@
 % 图书馆要求电子版论文的目录必须为黑色，
 % 且某些教务要求打印版论文的文字部分为纯黑色而非灰度打印，
 % 【因此最终打印和提交论文前，请将“colorlinks”改为“nocolorlinks”。】
-\documentclass[UTF8, colorlinks]{pkuthss}
+\documentclass[UTF8, colorlinks, uppermark]{pkuthss}
 
 % 使用 biblatex 排版参考文献，并规定其格式。
 % 默认按照引用顺序排序（“sorting = none”），详见 biblatex-caspervector 的文档
@@ -50,10 +50,7 @@
 \usepackage{multirow}
 
 \input{ASE15/macros}
-\newsavebox{\fmbox}
-\newenvironment{smpage}[1]
-{\begin{lrbox}{\fmbox}\begin{minipage}{#1}}
-{\end{minipage}\end{lrbox}\usebox{\fmbox}}
+
 
 
 %\theoremstyle{definition}
@@ -76,7 +73,7 @@
 	cauthor = {吴逸鸣},
 	eauthor = {Yiming Wu},
 	studentid = {1100012807},
-	date = {2015.05.26},
+	date = {2015.05.28},
 	school = {信息科学技术学院},
 	cmajor = {计算机科学与技术}, emajor = {Computer Sciense \& Engineering},
 	direction = {计算机技术},
@@ -116,7 +113,7 @@
 	\frontmatter
 	% 此后到下一 \pagestyle 命令之前不排版页眉或页脚。
 	\pagestyle{empty}
-
+ 
 	% 自动生成标题页。
 	\maketitle
 	% 版权声明；因封面要求单面打印，故新开右页。
