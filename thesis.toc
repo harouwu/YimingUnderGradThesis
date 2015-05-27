@@ -70,7 +70,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {4.1.1}双向变换领域}{31}{subsection.4.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.1.2}分析和修改未预处理的C代码}{32}{subsection.4.1.2}
+\contentsline {subsection}{\numberline {4.1.2}分析和修改未预处理的C代码}{31}{subsection.4.1.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {4.1.3}C预处理器上的实例调查}{32}{subsection.4.1.3}
 \defcounter {refsection}{0}\relax 

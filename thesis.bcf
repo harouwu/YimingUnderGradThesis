@@ -2047,13 +2047,12 @@
     <bcf:citekey order="35">Lohmann2006</bcf:citekey>
     <bcf:citekey order="35">Adams2009</bcf:citekey>
     <bcf:citekey order="35">Boucher2010</bcf:citekey>
-    <bcf:citekey order="36">Medeiros2015</bcf:citekey>
+    <bcf:citekey order="36">wang2012automating</bcf:citekey>
     <bcf:citekey order="37">wang2012automating</bcf:citekey>
-    <bcf:citekey order="38">wang2012automating</bcf:citekey>
-    <bcf:citekey order="39">test-en</bcf:citekey>
+    <bcf:citekey order="38">test-en</bcf:citekey>
+    <bcf:citekey order="39">test-zh</bcf:citekey>
+    <bcf:citekey order="40">test-en</bcf:citekey>
     <bcf:citekey order="40">test-zh</bcf:citekey>
-    <bcf:citekey order="41">test-en</bcf:citekey>
-    <bcf:citekey order="41">test-zh</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="none" type="entry" sortscheme="none">
   <bcf:sorting>

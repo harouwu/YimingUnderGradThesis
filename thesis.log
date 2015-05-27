@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  27 MAY 2015 23:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  27 MAY 2015 23:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1809,19 +1809,19 @@ Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'thesis.bbl' found.
 (./thesis.bbl
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 10.54pt on input line 2021.
+(Font)              scaled to size 10.54pt on input line 50.
 
 
 Package biblatex Warning: The following entry could not be found
 (biblatex)                in the database:
-(biblatex)                test-en
+(biblatex)                test-zh
 (biblatex)                Please verify the spelling and rerun
 (biblatex)                LaTeX afterwards.
 
 
 Package biblatex Warning: The following entry could not be found
 (biblatex)                in the database:
-(biblatex)                test-zh
+(biblatex)                test-en
 (biblatex)                Please verify the spelling and rerun
 (biblatex)                LaTeX afterwards.
 
@@ -2158,27 +2158,38 @@ Package pdftex.def Info: pics/original-eps-converted-to.pdf used on input line
 46.
 (pdftex.def)             Requested size: 256.0748pt x 236.42754pt.
  [24 <./pics/original-eps-converted-to.pdf>]
-Overfull \hbox (13.3467pt too wide) in paragraph at lines 61--68
-[]\C70/rm/m/n/12.05/56 þ [][]\T1/ntxtlf/m/n/12.05 3.1.2[][]\C70/rm/m/n/12.05/4e
- - \C70/rm/m/n/12.05/76 „ \C70/rm/m/n/12.05/53 Ì \C70/rm/m/n/12.05/54 ^^Q \C70/
-rm/m/n/12.05/7b ­ \C70/rm/m/n/12.05/59 4 \C70/rm/m/n/12.05/88 h \C70/rm/m/n/12.
-05/79 : \C70/rm/m/n/12.05/4e † \C70/rm/m/n/12.05/8b Í \C70/rm/m/n/12.05/54 Œ \C
-70/rm/m/n/12.05/4e ã \C70/rm/m/n/12.05/78 ^^A \C70/rm/m/n/12.05/6b µ \C70/rm/m/
-n/12.05/53 U \C70/rm/m/n/12.05/51 C \C70/rm/m/n/12.05/4e K \C70/rm/m/n/12.05/95
- ô \C70/rm/m/n/12.05/76 „ \C70/rm/m/n/12.05/51 s \C70/rm/m/n/12.05/80 T \C70/rm
-/m/n/12.05/51 s \C70/rm/m/n/12.05/7c û|\C70/rm/m/n/12.05/30 ^^B|  $[][][][][][]
-[][][][][][]$\C70/rm/m/n/12.05/4e -
+Overfull \hbox (4.3092pt too wide) in paragraph at lines 61--68
+[]\C70/rm/m/n/12.05/56 þ [][]\T1/ntxtlf/m/n/12.05 3.1[][]\C70/rm/m/n/12.05/4e -
+ \C70/rm/m/n/12.05/76 „ \C70/rm/m/n/12.05/53 Ì \C70/rm/m/n/12.05/54 ^^Q \C70/rm
+/m/n/12.05/7b ­ \C70/rm/m/n/12.05/59 4 \C70/rm/m/n/12.05/88 h \C70/rm/m/n/12.05
+/79 : \C70/rm/m/n/12.05/4e † \C70/rm/m/n/12.05/8b Í \C70/rm/m/n/12.05/54 Œ \C70
+/rm/m/n/12.05/4e ã \C70/rm/m/n/12.05/78 ^^A \C70/rm/m/n/12.05/6b µ \C70/rm/m/n/
+12.05/53 U \C70/rm/m/n/12.05/51 C \C70/rm/m/n/12.05/4e K \C70/rm/m/n/12.05/95 ô
+ \C70/rm/m/n/12.05/76 „ \C70/rm/m/n/12.05/51 s \C70/rm/m/n/12.05/80 T \C70/rm/m
+/n/12.05/51 s \C70/rm/m/n/12.05/7c û|\C70/rm/m/n/12.05/30 ^^B|  $[][][][][][][]
+[][][][][]$\C70/rm/m/n/12.05/4e -
  []
 
+Package epstopdf Info: Source file: <pics/class.eps>
+(epstopdf)                    date: 2015-05-27 23:29:03
+(epstopdf)                    size: 165799 bytes
+(epstopdf)             Output file: <pics/class-eps-converted-to.pdf>
+(epstopdf)             Command: <repstopdf --outfile=pics/class-eps-converted-t
+o.pdf pics/class.eps>
+(epstopdf)             \includegraphics on input line 80.
+runsystem(repstopdf --outfile=pics/class-eps-converted-to.pdf pics/class.eps)..
+.executed safely (allowed).
 
-Package pdftex.def Warning: Option `bb' does not make sense,
-(pdftex.def)                using `viewport' instead on input line 80.
+Package epstopdf Info: Result file: <pics/class-eps-converted-to.pdf>
+(epstopdf)                    date: 2015-05-27 23:29:40
+(epstopdf)                    size: 180398 bytes.
+<pics/class-eps-converted-to.pdf, id=784, 1072.005pt x 748.7975pt>
+File: pics/class-eps-converted-to.pdf Graphic file (type pdf)
 
-<pics/class.png, id=784, 1072.005pt x 748.7975pt>
-File: pics/class.png Graphic file (type png)
- <use pics/class.png>
-Package pdftex.def Info: pics/class.png used on input line 80.
-(pdftex.def)             Requested size: 398.33858pt x 278.23969pt.
+<use pics/class-eps-converted-to.pdf>
+Package pdftex.def Info: pics/class-eps-converted-to.pdf used on input line 80.
+
+(pdftex.def)             Requested size: 398.33858pt x 278.23901pt.
 
 Overfull \hbox (10.62355pt too wide) in paragraph at lines 92--98
 []$[][][][]$\C70/rm/m/n/12.05/53 Ê \C70/rm/m/n/12.05/51 v \C70/rm/m/n/12.05/5b 
@@ -2205,7 +2216,7 @@ LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.54pt on input line 116.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
 (Font)              scaled to size 10.54pt on input line 116.
- [26 <./pics/class.png (PNG copy)>] [27]
+ [26 <./pics/class-eps-converted-to.pdf>] [27]
 Underfull \vbox (badness 2644) has occurred while \output is active []
 
  [28]
@@ -2214,24 +2225,11 @@ Underfull \vbox (badness 2644) has occurred while \output is active []
 
  (./chap/related.tex
 ç¬¬å››ç« 
-
-LaTeX Warning: Citation 'YuLHHKM12' on page 31 undefined on input line 11.
-
-
-LaTeX Warning: Citation 'XiLHZTM07' on page 31 undefined on input line 11.
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [31
+[31
 
 
 
-]
-
-LaTeX Warning: Citation 'Medeiros2015' on page 32 undefined on input line 79.
-
-) [32]
+]) [32]
 \openout2 = `chap/conclusion.aux'.
 
  (./chap/conclusion.tex
@@ -2266,15 +2264,7 @@ ans. Database Syst. \T1/ntxtlf/m/n/10.54 2000[]06: 179^^U227. [][]$\T1/ntxtt/m/
 n/10.54 http : //doi.acm.org/10.1145/357775.357777$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
-[36]
-Overfull \hbox (145.42001pt too wide) in paragraph at lines 162--162
-\T1/ntxtlf/m/it/10.54 Sci-ence of Com-puter Pro-gram-ming\T1/ntxtlf/m/n/10.54 ,
- \T1/ntxtlf/b/n/10.54 2014\T1/ntxtlf/m/n/10.54 . [][]$\T1/ntxtt/m/n/10.54 http 
-: //www.sciencedirect.com/science/article/pii/S0167642314003323$[][]\T1/ntxtlf/
-m/n/10.54 . 
- []
-
-[37]
+[36] [37]
 Overfull \hbox (25.32664pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 ta-tion\T1/ntxtlf/m/n/10.54 . Bei-jing, China: ACM, \T1/n
 txtlf/b/n/10.54 2012\T1/ntxtlf/m/n/10.54 : 323^^U334. [][]$\T1/ntxtt/m/n/10.54 
@@ -2295,14 +2285,14 @@ Overfull \hbox (10.66667pt too wide) in paragraph at lines 162--162
 .1109/ICSM.2005.23$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
-
+[38]
 Overfull \hbox (48.01921pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 gi-neer-ing\T1/ntxtlf/m/n/10.54 . Hong Kong, China: ACM, 
 \T1/ntxtlf/b/n/10.54 2014\T1/ntxtlf/m/n/10.54 : 75^^U85. [][]$\T1/ntxtt/m/n/10.
 54 http : //doi.acm.org/10.1145/2635868.2635908$[][]\T1/ntxtlf/m/n/10.54 . 
  []
 
-[38]
+
 Overfull \hbox (50.21152pt too wide) in paragraph at lines 162--162
 \T1/ntxtlf/m/it/10.54 neer-ing\T1/ntxtlf/m/n/10.54 . Antwerp, Bel-gium: ACM, \T
 1/ntxtlf/b/n/10.54 2010\T1/ntxtlf/m/n/10.54 : 333^^U336. [][]$\T1/ntxtt/m/n/10.
@@ -2342,27 +2332,18 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 175.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 175.
 Package rerunfilecheck Info: File `thesis.out' has not changed.
 (rerunfilecheck)             Checksum: F3F06462B63620162C66FB021595795D;3398.
-
-
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run Biber on the file:
-(biblatex)                thesis
-(biblatex)                and rerun LaTeX afterwards.
-
 Package logreq Info: Writing requests to 'thesis.run.xml'.
 \openout1 = `thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34092 strings out of 493109
- 553142 string characters out of 6135004
- 919475 words of memory out of 5000000
- 36155 multiletter control sequences out of 15000+600000
+ 34090 strings out of 493109
+ 553199 string characters out of 6135004
+ 920398 words of memory out of 5000000
+ 36151 multiletter control sequences out of 15000+600000
  200112 words of font info for 496 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 50i,17n,77p,10426b,3044s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 50i,17n,77p,10426b,3043s stack positions out of 5000i,500n,10000p,200000b,80000s
 </Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.t
 tf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.
 ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simkai
@@ -2466,10 +2447,10 @@ live/2014/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/local/texlive/2
 014/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2014/te
 xmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/local/texlive/2014/texmf-dis
 t/fonts/type1/public/txfonts/txsya.pfb>
-Output written on thesis.pdf (53 pages, 793692 bytes).
+Output written on thesis.pdf (53 pages, 855876 bytes).
 PDF statistics:
- 1660 PDF objects out of 1728 (max. 8388607)
- 1315 compressed objects within 14 object streams
- 275 named destinations out of 1000 (max. 500000)
+ 1667 PDF objects out of 1728 (max. 8388607)
+ 1321 compressed objects within 14 object streams
+ 277 named destinations out of 1000 (max. 500000)
  601 words of extra memory for PDF output out of 10000 (max. 10000000)
 

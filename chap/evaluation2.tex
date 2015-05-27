@@ -19,7 +19,7 @@
 
 为了回答以上几个研究问题，我们在一组生成的Linux内核源代码上做了一组控制
 实验。
-另外，我们将我们的算法和前文\secref{sec:naive}中提到的两个简答的方法
+另外，我们将我们的算法和前文\secref{sec:naive}中提到的两个简单方法
 进行比较。
 本章的余下部分，我们会介绍实现与实验的细节。
 
@@ -44,9 +44,9 @@ JCPP项目中内置了基本的依照GCC规则的C处理器，
 \begin{figure}
 \centering
 \includegraphics[width=9cm]{pics/original.eps}
-\caption{数据结构示例}
+\caption{数据结构示例 \label{pic:datastruct}}
 \end{figure}
-\label{pic:datastruct}
+
 图~\ref{pic:datastruct}展示了宏定义和宏调用展开后的数据结构。构造过程如下：
 \begin{itemize}
 \item 预处理器扫描源代码发现宏定义指令，将宏定义及其展开式纪录在数据结构中。
@@ -54,7 +54,7 @@ JCPP项目中内置了基本的依照GCC规则的C处理器，
   调用，分析参数数量，确认宏调用
 \item 确认宏调用后，在 $pos$ 位置建立切分点，认为 $f(a, b)$ 是一个独立代码段单元。
   在实现中，这些单元用$Unit$类及其子类实现
-\item 独立对$f(a, b)$递归正向展开。正向展开算法在前文中提到（\ref{alg:forward}）。
+\item 独立对$f(a, b)$递归正向展开。正向展开算法在前文中提到（算法~\ref{alg:forward}）。
   纪录展开时响应参数位置。
 \end{itemize}
 
@@ -72,15 +72,15 @@ $[a, b]$表示参数列表， $pos$表示展开在源代码中的位置。
 
 
 \subsubsection{BXCPP框架}
-我们基于JCPP实现了自己的双向预处理器BXCPP。所有的项目代码和试验数据都可以
+我们基于JCPP实现了自己的双向预处理器BXCPP。所有的项目代码和实验数据都可以
 在我们的项目网站\footnote{\url{https://github.com/harouwu/BXCPP}}上找到。
 在此我们简介一下BXCPP框架中主要的几个类。
 \begin{figure}
 \centering
-\includegraphics[bb=0 0 1068 746,width=14cm]{pics/class.png}
-\caption{主要类类图。}
+\includegraphics[width=14cm]{pics/class.eps}
+\caption{主要类类图。\label{pic:classd}}
 \end{figure}
-\label{pic:classd}
+
 
 图~\ref{pic:classd}是代码中主要类的类图。小箭头表示包含关系，空心箭头表示继承关系。
 我们重写了JCPP中的预处理器 $Preprocessor$类，构造自己的双向C预处理器 $MyPreprocessor$。
@@ -99,7 +99,7 @@ $InsertUnit$表示展开式中插入宏参数的代码段单元。
 从类图中可以看到，$MySegment$ 和 $Unit$ 类互相包含。
 $MySegment$ 中含有 $Unit$ 代码段单元的序列，
 而$Unit$在展开时，又包含新的代码段$MySegment$。
-这样循环的关系模拟了上一节~\ref{sec:datastruct}中的数据结构，实现了算法。
+这样循环的关系模拟了上一节~\secref{sec:datastruct}中的数据结构，实现了算法。
 
 另外，项目中还定义了许多其他类，如$Token$类描述了词的文本类型等。
 具体的项目文档和程序细节，可以访问我们的项目网站了解。
@@ -186,8 +186,8 @@ per-file和per-line不同。
 \subsubsection{因变量}
 实验中我们认为有两个因变量。
 （1）\emph{剩余宏调用的数量}。我们在反向预处理后再次调用正向预处理，
-  依次纪录有多少宏调用呗展开。因为实验的方法中没有一种会引入新的宏调用，
-  所以纪录下的就是声誉宏调用的数量。
+  依次纪录有多少宏调用被展开。因为实验的方法中没有一种会引入新的宏调用，
+  所以纪录下的就是剩余宏调用的数量。
   为了减少包含系统头文件中的宏调用带来的干扰，我们只会记录当前文件中的
   宏调用展开次数。
 （2）\emph{错误的数量}。这里的错误是指当我们在反向预处理后再次调用正向预处理，
