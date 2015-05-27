@@ -2049,10 +2049,6 @@
     <bcf:citekey order="35">Boucher2010</bcf:citekey>
     <bcf:citekey order="36">wang2012automating</bcf:citekey>
     <bcf:citekey order="37">wang2012automating</bcf:citekey>
-    <bcf:citekey order="38">test-en</bcf:citekey>
-    <bcf:citekey order="39">test-zh</bcf:citekey>
-    <bcf:citekey order="40">test-en</bcf:citekey>
-    <bcf:citekey order="40">test-zh</bcf:citekey>
   </bcf:section>
   <bcf:sortlist section="0" name="none" type="entry" sortscheme="none">
   <bcf:sorting>
