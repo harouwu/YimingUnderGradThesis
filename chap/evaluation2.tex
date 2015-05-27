@@ -1,7 +1,7 @@
 \chapter{实验与分析}
 \section{Evaluation}
 \label{sec:evaluation}
-\subsection{Research Questions}
+\subsection{研究问题}
 本章中，我们将围绕以下几个研究问题来展开讨论。
 \begin{itemize}
 \item {\bf 研究问题1: 宏调用保留。} 针对我们提出的双向预编译器性质2，
@@ -132,27 +132,27 @@ RSRepair\parencite{QiMLDW14}会直接食用语句级别的修改。
 而第一种词级别饿修改则模拟了 PAR~\parencite{kim2013automatic}
 中使用的例如替换参数、修改操作符等细微操作。
 
-More concretely, we had a probability $p$ to perform an operation on
-each token, where the operation is one of insertion, replacement and
-deletion, which had equal probability. The replacement was performed
-by randomly mutating some characters in the token. The insertion was
-performed by randomly copying a token from somewhere else. Similarly,
-we had a probability $q$ to perform an operation on each statement,
-where the operation is copy or deletion. The copied statement was
-directly obtained from the previous statement. We recognized a
-statement by semicolon.
+具体的修改生成过程如下：我们以概率$p$选择在每个词上进行操作。
+这个操作可以是插入、替换或删除，三者等概率。
+替换操作随机调换一个词中不同字符的位置。
+插入操作随机从别处拷贝一个词插入。
+类似的，对于每个句子，我们也有味$q$的概率对它生成修改。
+修改内容可以是复制或者删除。
+复制操作直接把之前一句语句复制过来。
+我们根据C语法，根据分号来划分句子。
 
-Different tools may have different editing patterns:
-a migration tool typically changes many places in a program, whereas a
-bug-fixing tool may change a few places to fix a bug. To simulate these two different
-densities of changes, we used two different set of probabilities. For
-the high-density changes, we set $p=0.33$ and $q=0.1$. For
-the low-density changes, we set $p=0.1$ and $q=0.05$.
+不同的程序编辑工作会有不同的修改模式：
+一个移动工具可能会修改程序中的许多未知，但一个代码修复工具只会修改
+程序的少数地方。
+为了模拟不同工具之间给出的修改模式，
+我们设计了两套不同概率的修改操作集。
+一套是高修改密度的操作集合，我们设置$p=0.33$ 和 $q=0.1$。
+另一套是低修改密度的操作集合，我们设置$p=0.1$ 和 $q=0.05$。
 
-We generated ten sets of changes, five with high-density and five with
-low-density. The number of the changes generated for each set is shown in Table~\ref{tbl:changes}.
+我们生成了10组修改操作集合，其中5个是高密度的，5个是低密度的。
+具体生成的修改数量在表~\ref{tbl:changes}中。
 \begin{table}[htbp]
-\caption{Changes generated for the experiment}\label{tbl:changes}
+\caption{C实验中生成的修改操作}\label{tbl:changes}
 \centering
 % \begin{tabular}{|l|lllll|lllll|}
 %   \hline
@@ -177,48 +177,40 @@ low-density. The number of the changes generated for each set is shown in Table~
 \end{tabular}
 \end{table}
 
-\subsubsection{Independent variables}
-We considered the following independent variables. (1)
-\emph{Techniques}, we compared our approach with the two naive
-solutions, per-file and per-line. (2) \emph{Density of changes}, we
-evaluated both on the five high-density change sets and the five
-low-density change sets. % (3) \emph{Types of changes}, we distinguished token-level changes, statement-level changes, and
-% combinations of them.
+\subsubsection{自变量}
+实验中我们认为以下变量是自变量：
+（1）\emph{Techniques}，我们认为我们的算法和另外两种简单的算法，
+per-file和per-line不同。
+（2）\emph{修改密度}，不同组之间，修改出现的密度不同。我们的实验中同时出现高密度和低密度。
 
-\subsubsection{Dependent variables}
-We considered two dependent variables. (1) \emph{Number of remaining
-  macro invocations}. We re-ran the preprocessor after the backward
-transformation, and counted how macro invocations are expanded during
-preprocessing. Since none of the techniques will actively introduce
-new macro invocations% \footnote{Strictly speaking, new macro
-  % invocations may be introduced passively by the user, e.g., a token
-  % is accidentally changed into an object-like macro. Since the
-  % probability is very small, we can safely ignore these cases.}
-, the
-number of expanded invocations is the number of remaining invocations.
-To avoid noise from included files, we count only the macro
-invocations in the current file.
-(2) \emph{Number of errors}. We re-ran the preprocessor, and compared
-the new preprocessed program with the previously changed program by
-Unix file-comparing tool $fc$. Every time $fc$ reported a difference,
-we counted it as an error. (3) \emph{Failures}. Our approach may fail
-to propagate the changes, and we record whether a failure is reported
-for each change set.
+\subsubsection{因变量}
+实验中我们认为有两个因变量。
+（1）\emph{剩余宏调用的数量}。我们在反向预处理后再次调用正向预处理，
+  依次纪录有多少宏调用呗展开。因为实验的方法中没有一种会引入新的宏调用，
+  所以纪录下的就是声誉宏调用的数量。
+  为了减少包含系统头文件中的宏调用带来的干扰，我们只会记录当前文件中的
+  宏调用展开次数。
+（2）\emph{错误的数量}。这里的错误是指当我们在反向预处理后再次调用正向预处理，
+  比较新生成的预处理后代码和之前应用修改的预处理后代码之间是否不同。
+  这里我们使用Unix系统提供的文件比较工作 $fc$。
+  每当$fc$给出一处不同时，我们认为是一个错误。
+（3）\emph{报错}。我们的方法会检测修改能否被映射回去，
+我们对于生成的修改操作集合，我们也会记录报错的数量。
 
-\subsection{Threats to Validity}
-A threat to external validity is whether the results on generated
-changes can be generalized to real world changes. To alleviate this
-threat, we used different types of changes and different density of
-changes, in the hope of covering a good variety of real-world changes.
 
-A threat to internal validity is that our implementation of the three
-approaches may be wrong. To alleviate this threat, we investigated all
-errors we found in the experiments, to make sure it is a true defect
-of the respective approach but not a defect in our implementation.
+\subsection{影响实验可信度的因素}
+一个影响实验外部可信度的因素是我们生成的这些修改操作能不能被一般化为
+真实项目中产生的程序修改。
+为了减轻该因素的影响，我们使用了从现有工具分析得来的不同类型的修改，
+同时控制修改出现的频率，这样可以更好地模拟现实项目中的程序修改。
 
-\subsection{Results}
+一个影响实验内部可信度的因素是我们实现的三种双向预处理器可能实现错误。
+为了减轻该因素的影响，我们通过在Linux内核，自写测试集上不断修改错误来
+保证我们的实现是可信可靠的，不会对实验产生负面影响。
+
+\subsection{实验结果}
 \begin{table}[htbp]
-  \caption{Experimental Results}\label{tbl:results}
+  \caption{实验结果}\label{tbl:results}
 \centering
 \begin{tabular}{|l|l|lllll|}
   \hline
@@ -256,10 +248,11 @@ of the respective approach but not a defect in our implementation.
               & Errors & 0 & 0 & 0 & 0 & 0 \\
   \hline\end{tabular}
 \\
-\parbox{\columnwidth}{\footnotesize Row ``Macros'' shows the number of
-    remaining macros. Row ``Errors'' shows the number of errors caused. Row ``Failures'' indicates whether a
-    failure is reported in the backward transformation.}
+\parbox{\columnwidth}{ \ \\
+\footnotesize ``Macros'' 行表示剩余的宏调用数量。``Errors'' 行表示修改造成的错误数量
+      ``Failure'' 行表示反向预处理器发生了多少错误。}
 \end{table}
+
 % \begin{table*}[htbp]
 % \caption{Macros remainings and errors of different algorithms and data set}
 % \centering
@@ -275,44 +268,57 @@ of the respective approach but not a defect in our implementation.
 % \end{tabular}
 % \end{table*}
 
-The result of our evaluation is shown in Table~\ref{tbl:results}. We
-discuss the results with respect to the research questions below.
+我们实验的结果在表~\ref{tbl:results}中。
+接着我们将会讨论本章开始时提到的三个研究问题的解答。 
 
-\subsubsection{RQ1} As we can see, our approach preserves macro invocations. Per-line preserves very few macro
-invocations, while per-file, as we expected, preserves no macro
-invocations. We further investigated why per-line preserves so few
-macro invocations. One main reason we found is that there are usually
-multiple macro invocations per line, and per-line will expand all of
-them if any tokens in this line is changed.
-\subsubsection{RQ2} Our approach and per-file lead to no errors while
-several errors are caused by per-line. This is because there are quite
-a few macro invocations that cross multiple lines. These macros 
-take expressions or statements as argument, which are usually too long
-to be included in one line.
-\subsubsection{RQ3} As discussed before, our approach may report a failure during the
-backward transformation. This is usually because the changes
-accidentally introduce a new macro invocation in the preprocessed code, where there is no way
-to satisfy PUTGET. 
-However, we do not
-observe any such cases in our experiment. The reason is that
-macros usually have special names and it is not easy to collide with a
-macro name by copying or mutation. Note the other two
-approaches never report a failure, so the corresponding fields in Table~\ref{tbl:results} are left blank. 
+\subsubsection{研究问题1} 我们从表中可以看出，我们的方法尽可能地保存了宏调用。 
+Per-line方法保留了一些宏调用，而per-file方法，不出所料的，完全不
+保留宏调用。我们进一步考察了为什么per-line方法保存了这么少的宏调用。
+其中一个主要原因是我们发现在Linux内核代码中，时常出现一行中有多个宏调用
+的情况。而一旦修改发生在该行，
+per-line方法会破坏该行中的所有宏调用。
+\subsubsection{研究问题2} 从表中看出，我们的方法和per-file方法都不会产生错误。
+但per-line方法产生了一些错误。我们认为这是因为存在一些宏调用形式是多行
+宏调用。这些宏调用的参数一般是一个表达式，甚至一个句子，以至于一行中
+无法写完而需要换行。
+\subsubsection{研究问题3} 正如之前讨论过的，我们的方法会在反向变换时对
+不合适的修改操作进行报错。这是因为有时一个修改会意外地在预处理后的代码中引入一个新的宏调用。
+这样就无法满足正确性性质的PUTGET性质。
+但是，在我们的实验中没有看到类似的情况。
+这是因为宏定义的名字之间差别比较大，而宏调用的位置在整个代码中很零散，通过调换字符位置或者拷贝
+并不能引入不合适的修改操作。
+同时我们知道另外两种方法并不能检测这种不合适的修改操作，
+所以在表~\ref{tbl:results}关于报错的部分都留空了。
 
-Although probably being rare in practice, theoretically our approach
-may report false alarms: our approach reports a failure but
-a correct change on the source program exists. {For example, let consider the
-  following code piece,
-\begin{lstlisting}
-#define p (x)
-plus p
-\end{lstlisting}
-where $plus$ is the macro defined in code
-piece~\eqref{eqn:expansion}. After preprocessing, this code piece becomes
-$plus\ (x)$. If we change the last parenthesis into $)\ hello$, our
-approach reports a failure because first $p$ will be expanded and then
-the expanded content forms a new macro invocation with $plus$.
-However, there exists a feasible change: replacing $p$ with $hello\ p$.}
+尽管出现不合适的修改操作而导致报错的情况在实际工作中也不常见，
+但理论上我们的方式是可以对这种情况作出报错的。
+
+%另外理论上我们的方式可以能会出现误报情况：
+%我们的算法报错但是存在一种映射修改的方式。
+%比方说我们考虑以下代码：
+%\begin{lstlisting}
+%#define p (x)
+%plus p
+%\end{lstlisting}
+%$plus$是在之前的代码段~\eqref{eqn:expansion}中定义的宏。
+%在预处理后这段代码会展开成$plus\ (x)$。
+%如果我们把最后的括号拆分成$)\ hello$，那么这个修改会使得我们的方法报错
+
+%Although probably being rare in practice, theoretically our approach
+%may report false alarms: our approach reports a failure but
+%a correct change on the source program exists. {For example, let consider the
+%  following code piece,
+%\begin{lstlisting}
+%#define p (x)
+%plus p
+%\end{lstlisting}
+%where $plus$ is the macro defined in code
+%piece~\eqref{eqn:expansion}. After preprocessing, this code piece becomes
+%$plus\ (x)$. If we change the last parenthesis into $)\ hello$, our
+%approach reports a failure because first $p$ will be expanded and then
+%the expanded content forms a new macro invocation with $plus$.
+%However, there exists a feasible change: replacing $p$ with $hello\ p$.}
+%\end{comment}
 
 %%% Local Variables:
 %%% mode: latex

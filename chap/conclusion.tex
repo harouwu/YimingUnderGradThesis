@@ -1,22 +1,21 @@
+\chapter{总结}
 \section{Conclusion}
 \label{sec:conclusion}
 
-Handling the C preprocessor in program-editing tools is difficult, as a result
-many tools either produce unsound results or give up on handling CPP
-entirely. In this paper we show that we can separate the concerns by using bidirectional transformations to deal with the 
-preprocessor, so that 
-program-editing tools may focus only on the preprocessed code, achieving a
-more modular design.
+为程序编辑工具处理C预处理器是十分困难的事情。
+因此，所以许多工具不是只能给出不可靠的结果或者完全放弃处理预处理器。
+在这篇文章我们可以使用双向变换的方法把预处理器带来的麻烦从
+程序编辑工具中分离出来单独解决。
+这样程序编辑工具就能专注于预处理之后的代码，达到更模块化的设计效果。
 
-CPP also represents a family of transformation systems where the
-transformation program and the source data are bound together, for example bidirectional
-PHP~\cite{wang2012automating}. 
-Existing approaches~\cite{wang2012automating} often resort to ad-hoc treatment of the
-bidirectionalizing algorithm and correctness reasoning. The algorithm
-in this paper indicates a plausible systematic way of
-bidirectionalizing such systems: treating programs as data and
-bidirectionalize on the high-level operational semantics. We would like to see a
-general theory to be developed and applied to many different systems.
+C预处理器涉及到的问题也可以看作是转换系统问题中特殊的一类。
+在这类问题中，转换程序和数据可能同时被转换。
+这类问题还有类似双向变换的PHP~\parencite{wang2012automating}。
+现有的方法~\parencite{wang2012automating}往往使用十分复杂且专门的方法并陷入双向变换
+性质的定义和正确性的讨论中去。
+本文所提出的方法对这一类的问题都有适用价值：该方法把转换程序当作数据，
+并在更高一层的操作语义上双向变换。
+我们也希望未来能看到一个通用的理论能够完美解决这一类问题。
 
 
 
