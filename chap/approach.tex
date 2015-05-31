@@ -1,5 +1,4 @@
 \chapter{算法设计}
-\section{Approach}
 \label{sec:approach}
 正如之前提到的，我们算法的基本思想是把C预处理器当作一组重写规则，
 而反向变换就是这些规则相应的逆向规则。
@@ -38,7 +37,7 @@
 \newcommand{\dend}{\ensuremath{\rangle}\xspace}
 % \newcommand{\env}{\ensuremath{CTX}\xspace}
 
-\subsection{模拟正向变换：预处理}\label{sec:forward}
+\section{模拟正向变换：预处理}\label{sec:forward}
 我们把C预处理程序需要处理的程序看作词（\emph{token}）的一个序列。
 为了从词序列中识别出预处理指令，我们依赖于两个特征词：
 行首的\#符号和该行最后的换行符。
@@ -164,7 +163,7 @@ hello x
 % we know that $r.guard(src, c)=true$ and $(f, h, restIndex, c') = r.guard(src', c)$. In other
 % words, if we change the 
 
-\subsection{模拟修改}\label{sec:changes}
+\section{模拟修改}\label{sec:changes}
 程序编辑工具可以通过各种各样的方式对一段程序进行修改。
 本文中我们考虑三种基本的修改：替换、插入和复制。
 这三种基本的修改是我们在分析了现有的主流代码修复工具
@@ -190,7 +189,7 @@ $l_e$（不包含）的词序列将会被拷贝插入到位置$l$的词之后。
 % mapping each index into a token sequence, where unchanged indexes
 % are mapped to the original tokens at the indexes.
 
-\subsection{重写步骤}\label{sec:steps}
+\section{重写步骤}\label{sec:steps}
 正如在序言中介绍过的，我们的反向变换操作会逆向实施之前提到的重写规则。
 为了生成好的反向变换，我们设计了一个数据结构来记录下正向展开时
 使用了哪些规则，分别应用在代码的哪个部分。
@@ -226,7 +225,7 @@ $(hello\ 100, 1, \{x\}, R4)$。
 % A body expansion 
 
 
-\subsection{考虑替换操作的反向变换}\label{sec:backward}
+\section{考虑替换操作的反向变换}\label{sec:backward}
 反向操作的基本思想是把预编译后代码上的修改通过重写规则序列
 一步步映射到预处理前的代码上。这样当我们再跑一次正向变换时，
 只会有两种情况：1. 程序会按照相同的重写规则再次正向展开
@@ -435,7 +434,7 @@ id(plus p)
 但是当宏调用被展开时，一个参数只会被扫描一次。
 我们需要确认这之间的区别不会影响变换的正确性。
 
-\subsubsection{正确性}\label{sec:correctness}
+\subsection{正确性}\label{sec:correctness}
 根据之前一节对反向变换的描述，我们可以简单推导出我们的反向变换满足
 性质1、3、4和5。性质2将会在实验部分证明。
 该反向变换满足性质1因为我们从不把修改操作映射到宏定义重。
@@ -453,7 +452,7 @@ id(plus p)
 我们可以指出，由于这些重写步骤序列作用位置不同且是覆盖性的，调换重写
 步骤序列的位置并不会对结果产生影响。
 
-\subsubsection{优化算法}\label{sec:optimization}
+\subsection{优化算法}\label{sec:optimization}
 在现有的算法中，我们需要在每一步重写步骤后把整个程序的状态都记录下来，
 即使只是很小的一部分发生了改变。
 在反向变换中，每一步我们都需要调整所有修改操作的位移。
@@ -478,7 +477,7 @@ id(plus p)
 形成了一个新的宏调用。我们应该报错。
 
 
-\subsection{扩展到完整的C预处理器}\label{sec:fullC}
+\section{扩展到完整的C预处理器}\label{sec:fullC}
 本节中我们讨论如何把我们的算法扩展到支持完整的C预处理。
 由于篇幅限制，我们只讨论核心思想而非细节。
 
@@ -505,7 +504,7 @@ id(plus p)
 当我们在不断重写由宏 $m$ 展开的词时，我们需要检查是否有再次使用这个宏展开的情况。
 如果出现，应该报错。
 
-\subsection{扩展到其他修改操作上}\label{sec:extend-other-changes}
+\section{扩展到其他修改操作上}\label{sec:extend-other-changes}
 在上文中我们详细地讨论了如何处理修改操作。
 现在让我们来讨论如何处理插入和拷贝操作。
 我们可以注意到，插入操作可以直接被转换为修改操作。
@@ -542,7 +541,7 @@ id(plus p)
 % a backward transformation will give us 
 
 
-% \subsection{Approach Overview}
+% \section{Approach Overview}
 
 % There are three key issues.
 % \begin{itemize}
@@ -567,7 +566,7 @@ id(plus p)
 % \newcommand{\replace}[2]{\ensuremath{[{#1}]\backslash {#2}}}
 % \newcommand{\copyOpr}[3]{\ensuremath{[{#1},{#2}]\rightarrow [{#3}]}}
 % \newcommand{\del}[2]{\ensuremath{\cancel{[{#1},{#2}]}}}
-% \subsection{Modeling the Changes}
+% \section{Modeling the Changes}
 
 % A location or offset of a character in the source code file is 
 % A location in the source code file is a pair $(f, o)$, where $f$ is
@@ -625,7 +624,7 @@ id(plus p)
   
 % % \end{definition}
 
-% \subsection{Modeling Macro Expansion}
+% \section{Modeling Macro Expansion}
 % % confluence in backward transformation? -- a sub case of correctness
 
 % A text segment is a sequence of text units. A text unit is one of the
@@ -634,9 +633,9 @@ id(plus p)
 
 
 
-% \subsection{Forward Transformation}
+% \section{Forward Transformation}
 
-% \subsection{Backward Transformation}
+% \section{Backward Transformation}
 
 % We need to perform a check of the name collision
 

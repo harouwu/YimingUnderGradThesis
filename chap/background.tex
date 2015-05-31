@@ -1,5 +1,5 @@
 \chapter{背景介绍}
-\section{Problem}\label{sec:problem}
+\label{sec:problem}
 
 
 
@@ -48,7 +48,7 @@
 %   \end{itemize}
 % \end{itemize}
 
-\subsection{C预处理器}
+\section{C预处理器}
 
 \begin{table*}[htbp]
   \small
@@ -166,7 +166,7 @@ g_array2 = malloc(sizeof(int)*(100));
 换句话说，\code{RESIZE}~实际上是一个高阶宏（\emph{high-order macro}），
 因为他的第三个参数也是宏。
 
-\subsection{反向变换的设计}
+\section{反向变换的设计}
 现在让我们来考虑一下输入为预处理后代码的程序编辑工具们。
 比方在下面的例子中，程序编辑工具会发现~\code{vfree}~可能存在内存泄漏的可能，
 所以工具会在这句代码前加入一个保护语句，如下：
@@ -269,7 +269,7 @@ $c_s$是完全的反向变换所提供的作用在$s$上的变化。
 修改宏调用参数、修改普通代码、展开宏调用并且展开尽可能少的宏调用
 的方法来把预处理后的修改映射到源代码上。 
 
-\subsection{简单的方法}\label{sec:naive}
+\section{简单的方法}\label{sec:naive}
 我们将在本节中讨论为什么简单的方法并不能满足我们提出的五条性质。\\
 
 \noindent\emph{简单的方法 I (per-file).}

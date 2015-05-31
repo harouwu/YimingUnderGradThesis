@@ -1,7 +1,6 @@
 \chapter{实验与分析}
-\section{Evaluation}
 \label{sec:evaluation}
-\subsection{研究问题}
+\section{研究问题}
 本章中，我们将围绕以下几个研究问题来展开讨论。
 \begin{itemize}
 \item {\bf 研究问题1: 宏调用保留。} 针对我们提出的双向预编译器性质2，
@@ -23,9 +22,9 @@
 进行比较。
 本章的余下部分，我们会介绍实现与实验的细节。
 
-\subsection{环境搭建}
+\section{环境搭建}
 
-\subsubsection{JCPP}
+\subsection{JCPP}
 我们基于一个开源的C预处理器，JCPP\footnote{\url{http://www.anarres.org/projects/jcpp/}}
 实现了我们的双向预处理器，BXCPP。
 JCPP是一个完整的，兼容性的，独立的，纯Java实现的C预处理器。
@@ -36,7 +35,7 @@ JCPP项目中内置了基本的依照GCC规则的C处理器，
 以及识别预处理指令并序列化代码词的预处理器类~\code{Preprocessor}。
 开发中学习了JCPP预处理器的思想，在此感谢作者之前的工作。
 
-\subsubsection{数据结构}\label{sec:datastruct}
+\subsection{数据结构}\label{sec:datastruct}
 实现系统时，采用的是前文（\ref{sec:optimization}）优化过的算法思想。优化过的算法
 会依据切分点，把代码切分成许多小段，并独立进行预处理和反向预处理。
 本小节中我们重点介绍一下实现过程中的数据结构，并通过数据结构简单介绍算法。
@@ -71,7 +70,7 @@ $[a, b]$表示参数列表， $pos$表示展开在源代码中的位置。
 应用我们的反向算法，实现双向预处理器。
 
 
-\subsubsection{BXCPP框架}
+\subsection{BXCPP框架}
 我们基于JCPP实现了自己的双向预处理器BXCPP。所有的项目代码和实验数据都可以
 在我们的项目网站\footnote{\url{https://github.com/harouwu/BXCPP}}上找到。
 在此我们简介一下BXCPP框架中主要的几个类。
@@ -108,7 +107,7 @@ $MySegment$ 中含有 $Unit$ 代码段单元的序列，
 至此，实现部分基本搭建完成。
 
 
-\subsubsection{实验基准}
+\subsection{实验基准}
 我们的实验在Linux内核版本3.19上执行。我们选择Linux内核源代码因为
 Linux是现在最广泛的C语言项目。这之中有许多程序员贡献的代码，包含了不同风格的代码，
 也含有大量的预处理指令和宏调用。
@@ -177,13 +176,13 @@ RSRepair\parencite{QiMLDW14}会直接食用语句级别的修改。
 \end{tabular}
 \end{table}
 
-\subsubsection{自变量}
+\subsection{自变量}
 实验中我们认为以下变量是自变量：
 （1）\emph{Techniques}，我们认为我们的算法和另外两种简单的算法，
 per-file和per-line不同。
 （2）\emph{修改密度}，不同组之间，修改出现的密度不同。我们的实验中同时出现高密度和低密度。
 
-\subsubsection{因变量}
+\subsection{因变量}
 实验中我们认为有两个因变量。
 （1）\emph{剩余宏调用的数量}。我们在反向预处理后再次调用正向预处理，
   依次纪录有多少宏调用被展开。因为实验的方法中没有一种会引入新的宏调用，
@@ -198,7 +197,7 @@ per-file和per-line不同。
 我们对于生成的修改操作集合，我们也会记录报错的数量。
 
 
-\subsection{影响实验可信度的因素}
+\section{影响实验可信度的因素}
 一个影响实验外部可信度的因素是我们生成的这些修改操作能不能被一般化为
 真实项目中产生的程序修改。
 为了减轻该因素的影响，我们使用了从现有工具分析得来的不同类型的修改，
@@ -208,7 +207,7 @@ per-file和per-line不同。
 为了减轻该因素的影响，我们通过在Linux内核，自写测试集上不断修改错误来
 保证我们的实现是可信可靠的，不会对实验产生负面影响。
 
-\subsection{实验结果}
+\section{实验结果}
 \begin{table}[htbp]
   \caption{实验结果}\label{tbl:results}
 \centering
@@ -271,17 +270,17 @@ per-file和per-line不同。
 我们实验的结果在表~\ref{tbl:results}中。
 接着我们将会讨论本章开始时提到的三个研究问题的解答。 
 
-\subsubsection{研究问题1} 我们从表中可以看出，我们的方法尽可能地保存了宏调用。 
+\subsection{研究问题1} 我们从表中可以看出，我们的方法尽可能地保存了宏调用。 
 Per-line方法保留了一些宏调用，而per-file方法，不出所料的，完全不
 保留宏调用。我们进一步考察了为什么per-line方法保存了这么少的宏调用。
 其中一个主要原因是我们发现在Linux内核代码中，时常出现一行中有多个宏调用
 的情况。而一旦修改发生在该行，
 per-line方法会破坏该行中的所有宏调用。
-\subsubsection{研究问题2} 从表中看出，我们的方法和per-file方法都不会产生错误。
+\subsection{研究问题2} 从表中看出，我们的方法和per-file方法都不会产生错误。
 但per-line方法产生了一些错误。我们认为这是因为存在一些宏调用形式是多行
 宏调用。这些宏调用的参数一般是一个表达式，甚至一个句子，以至于一行中
 无法写完而需要换行。
-\subsubsection{研究问题3} 正如之前讨论过的，我们的方法会在反向变换时对
+\subsection{研究问题3} 正如之前讨论过的，我们的方法会在反向变换时对
 不合适的修改操作进行报错。这是因为有时一个修改会意外地在预处理后的代码中引入一个新的宏调用。
 这样就无法满足正确性性质的PUTGET性质。
 但是，在我们的实验中没有看到类似的情况。

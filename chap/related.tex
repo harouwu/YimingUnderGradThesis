@@ -1,8 +1,7 @@
 \chapter{相关工作}
-\section{Related Work}
 \label{sec:related}
 
-\subsection{双向变换领域}
+\section{双向变换领域}
 我们工作的灵感来自于双向变换领域的研究。
 双向变换领域中一个经典的使用情况就是数据库设计中的
 \emph{view-update problem}~\parencite{BaSp81,DaBe82,Hegner90,Cui2000,Fegaras2010}：
@@ -24,7 +23,7 @@
 因此，我们也为这类数据和转换程序都会变化的双向变换模型，提出了自己见解。
 
 
-\subsection{分析和修改未预处理的C代码}
+\section{分析和修改未预处理的C代码}
 C的预处理器给静态程序分析带来了巨大的挑战。
 由于C的预处理器支持预处理变量，导致分析时，场景数量组合型快速增长。
 这使得传统的每次只处理一个变量的程序分析方法变得不可行。
@@ -70,7 +69,7 @@ analyses}~\parencite{Kastner2011,Gazzillo2012,Liebig2013}
 %
 %SuperC: parsing all of C by taming the preprocessor, PLDI'12
 
-\subsection{C预处理器上的实例调查}
+\section{C预处理器上的实例调查}
 许多年来，学术界不乏各类对C预处理器十分有见解的学术实例调查工作
 ~\parencite{Spencer92,ernst2002empirical,Liebig2011}。
 同时也有一些C预处理的替代品被提出，比如语法预处理器~\parencite{Weise1993,McCloskey:2005}
