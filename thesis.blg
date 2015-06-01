@@ -1,21 +1,22 @@
-[1] Config.pm:320> INFO - This is Biber 1.9
+[0] Config.pm:320> INFO - This is Biber 1.9
 [1] Config.pm:323> INFO - Logfile is 'thesis.blg'
-[66] biber-darwin:277> INFO - === ä¸  6  1, 2015, 17:00:24
-[67] Biber.pm:333> INFO - Reading 'thesis.bcf'
-[173] Biber.pm:635> INFO - Found 67 citekeys in bib section 0
-[216] Biber.pm:3051> INFO - Processing section 0
-[250] Biber.pm:3189> INFO - Looking for bibtex format file 'ASE15/main.bib' for section 0
-[276] bibtex.pm:990> INFO - Decoding LaTeX character macros into UTF-8
-[297] bibtex.pm:864> INFO - Found BibTeX data source 'ASE15/main.bib'
-[319] Utils.pm:144> WARN - Duplicate entry key: 'AhUl69' in file 'ASE15/main.bib', skipping ...
-[320] Utils.pm:144> WARN - Duplicate entry key: 'BrMS08' in file 'ASE15/main.bib', skipping ...
-[391] Biber.pm:3189> INFO - Looking for bibtex format file 'ASE15/reference.bib' for section 0
-[400] bibtex.pm:990> INFO - Decoding LaTeX character macros into UTF-8
-[405] bibtex.pm:864> INFO - Found BibTeX data source 'ASE15/reference.bib'
-[406] Utils.pm:144> WARN - Duplicate entry key: 'Medeiros2015' in file 'ASE15/reference.bib', skipping ...
-[2411] UCollate.pm:66> INFO - Overriding locale 'zh__pinyin' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[2411] UCollate.pm:66> INFO - Overriding locale 'zh__pinyin' defaults 'variable = shifted' with 'variable = non-ignorable'
-[2412] Biber.pm:2928> INFO - Sorting list 'none' of type 'entry' with scheme 'none' and locale 'zh__pinyin'
-[2608] bbl.pm:517> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
-[2622] bbl.pm:606> INFO - Output to thesis.bbl
-[2622] Biber.pm:106> INFO - WARNINGS: 3
+[80] biber-darwin:277> INFO - === Mon Jun  1, 2015, 18:57:54
+[80] Biber.pm:333> INFO - Reading 'thesis.bcf'
+[189] Biber.pm:635> INFO - Found 67 citekeys in bib section 0
+[248] Biber.pm:3051> INFO - Processing section 0
+[296] Biber.pm:3189> INFO - Looking for bibtex format file 'ASE15/main.bib' for section 0
+[321] bibtex.pm:990> INFO - Decoding LaTeX character macros into UTF-8
+[347] bibtex.pm:864> INFO - Found BibTeX data source 'ASE15/main.bib'
+[361] Utils.pm:144> WARN - Duplicate entry key: 'AhUl69' in file 'ASE15/main.bib', skipping ...
+[361] Utils.pm:144> WARN - Duplicate entry key: 'BrMS08' in file 'ASE15/main.bib', skipping ...
+[427] Biber.pm:3189> INFO - Looking for bibtex format file 'ASE15/reference.bib' for section 0
+[435] bibtex.pm:990> INFO - Decoding LaTeX character macros into UTF-8
+[442] bibtex.pm:864> INFO - Found BibTeX data source 'ASE15/reference.bib'
+[442] Utils.pm:144> WARN - Duplicate entry key: 'Medeiros2015' in file 'ASE15/reference.bib', skipping ...
+[1314] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1314] UCollate.pm:66> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1314] Biber.pm:2928> INFO - Sorting list 'none' of type 'entry' with scheme 'none' and locale 'en-US'
+[1314] Biber.pm:2932> INFO - No sort tailoring available for locale 'en-US'
+[1505] bbl.pm:517> INFO - Writing 'thesis.bbl' with encoding 'UTF-8'
+[1518] bbl.pm:606> INFO - Output to thesis.bbl
+[1518] Biber.pm:106> INFO - WARNINGS: 3

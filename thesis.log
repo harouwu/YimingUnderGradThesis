@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  1 JUN 2015 17:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  1 JUN 2015 19:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2302,10 +2302,10 @@ Package logreq Info: Writing requests to 'thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34316 strings out of 493109
- 556110 string characters out of 6135004
- 918571 words of memory out of 5000000
- 36374 multiletter control sequences out of 15000+600000
+ 34312 strings out of 493109
+ 556060 string characters out of 6135004
+ 917570 words of memory out of 5000000
+ 36370 multiletter control sequences out of 15000+600000
  200289 words of font info for 506 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  50i,17n,77p,10426b,2731s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2413,7 +2413,7 @@ xlive/2014/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/local/texlive/
 2014/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2014/t
 exmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/local/texlive/2014/texmf-di
 st/fonts/type1/public/txfonts/txsya.pfb>
-Output written on thesis.pdf (51 pages, 882602 bytes).
+Output written on thesis.pdf (51 pages, 882199 bytes).
 PDF statistics:
  1697 PDF objects out of 1728 (max. 8388607)
  1348 compressed objects within 14 object streams
