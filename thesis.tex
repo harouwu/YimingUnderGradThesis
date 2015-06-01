@@ -51,11 +51,12 @@
 
 \input{ASE15/macros}
 
-
+\newenvironment{proof}[1][证明]{\begin{trivlist}
+\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 
 %\theoremstyle{definition}
 \newtheorem{definition}{Definition}
-\newtheorem{decision}{Requirement}
+\newtheorem{decision}{性质}
 \newtheorem{law}{Requirement}
 \lstset{
   basicstyle = \footnotesize\tt,
