@@ -25,20 +25,19 @@
 % \item outline of the paper
 % \end{itemize}
 
-现在，许多程序分析工具都涉及代码修改功能。
-在这些工具中，有许多都是代码修复工具~\parencite{le2012genprog,le2012systematic,QiMLDW14,nguyen2013semfix}。
-通常来说，修复工具的输入是一段代码和一组测试，并不断修改代码直至代码能通过测试。
+很多现代软件开发工具都涉及对代码的修改。
+在这些工具中，有许多都是缺陷修复工具~\parencite{le2012genprog,le2012systematic,QiMLDW14,nguyen2013semfix}。
+通常来说，修复工具的输入是一段代码和一组测试。工具不断修改代码直至代码能通过测试。
 另一些程序分析工具是API升级工具~\parencite{li2015swin,Padioleau06,Meng:2011}。
 当API升级时出现了不兼容情况时，这些工具可以自动更新相应的API调用让程序与API契合。
 我们把这类直接修改代码的工具称作\emph{程序编辑工具}。
 
-另一方面，许多程序语言的实现都带有预处理器~\parencite{ernst2002empirical,kohlbecker1986hygienic,lee2012marco}。
-最常见的预处理器是C预处理器。
-许多程序语言也接受C预处理器，包括C，C++和Objective-C。
-同时，程序员也时常使用C++来写一些零散的小工具。这时就会使用到预处理器。
-例如Korpela~\parencite{Korpela2000}曾在文章中描述过用C++写一个HTML编辑工具：
-这个工具会把页面间相同的HTML代码转换成C的宏，而不是直接生成HTML页面。
-然后页面再利用这些宏最终生成HTML文件。
+另一方面，许多程序语言都采用预处理器~\parencite{ernst2002empirical,kohlbecker1986hygienic,lee2012marco}。
+最常见的预处理器是C预处理器，包括C，C++和Objective-C都接受C预处理器。
+甚至有时程序员会使用C预处理器来处理一些不相干的语言。
+例如Korpela~\parencite{Korpela2000}曾在文章中描述过用C预处理器作为HTML编辑工具：
+程序员把页面间相同的HTML代码转换成C的宏，并在相应位置调用。
+这样C预处理器就可以展开宏生成最终HTML文件。
 
 尽管程序编辑工具通常不会修改程序的预处理指令，
 但是这并不代表他们能够处理有预处理器的程序。
@@ -49,7 +48,7 @@
 事实上，现有的程序编辑工具往往无法正确处理预处理指令、或是直接不处理预处理指令，例如现有的C语言工具：GenProg~\parencite{le2012genprog,le2012systematic}，RSRepair~\parencite{QiMLDW14}，和
 SemFix~\parencite{nguyen2013semfix}。
 这三个工具都只在预处理后的代码上工作。
-用户需要手动检查预处理后的代码变化，并自行修改源代码——而这又增加了新bug的可能。
+用户需要手动检查预处理后的代码变化，并自行修改源代码——而这又增加了新缺陷的可能。
 
 代码重构是一个密切相关的领域~\parencite{McCloskey:2005,Garrido2013}。
 在代码重构中，程序编辑工具有时需要直接修改预处理指令。

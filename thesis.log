@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  1 JUN 2015 19:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.5.18)  2 JUN 2015 13:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2011,22 +2011,22 @@ LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
 
 ]
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 9.03pt on input line 70.
+(Font)              scaled to size 9.03pt on input line 69.
 LaTeX Font Info:    Font shape `T1/ntxtlf/m/n' will be
-(Font)              scaled to size 5.0pt on input line 70.
+(Font)              scaled to size 5.0pt on input line 69.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 9.03pt on input line 70.
+(Font)              scaled to size 9.03pt on input line 69.
 LaTeX Font Info:    Font shape `T1/ntxtt/m/n' will be
-(Font)              scaled to size 5.0pt on input line 70.
+(Font)              scaled to size 5.0pt on input line 69.
  [2]
 LaTeX Font Info:    Try loading font information for TS1+ntxtlf on input line 1
-35.
+34.
 
 (/usr/local/texlive/2014/texmf-dist/tex/latex/newtx/ts1ntxtlf.fd
 File: ts1ntxtlf.fd 2015/01/18 v1.0 fd file for TS1/ntxtlf
 )
 LaTeX Font Info:    Font shape `TS1/ntxtlf/m/n' will be
-(Font)              scaled to size 12.05pt on input line 135.
+(Font)              scaled to size 12.05pt on input line 134.
 ) [3]
 \openout2 = `chap/background.aux'.
 
@@ -2302,13 +2302,13 @@ Package logreq Info: Writing requests to 'thesis.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 34312 strings out of 493109
- 556060 string characters out of 6135004
- 917570 words of memory out of 5000000
- 36370 multiletter control sequences out of 15000+600000
- 200289 words of font info for 506 fonts, out of 8000000 for 9000
+ 34315 strings out of 493109
+ 556076 string characters out of 6135004
+ 917588 words of memory out of 5000000
+ 36374 multiletter control sequences out of 15000+600000
+ 200019 words of font info for 505 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 50i,17n,77p,10426b,2731s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 50i,17n,77p,10426b,2952s stack positions out of 5000i,500n,10000p,200000b,80000s
 </Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.t
 tc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.
 ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simhei
@@ -2333,8 +2333,8 @@ rary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Li
 brary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/L
 ibrary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/
 Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming
-/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yimin
-g/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yimi
+/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yimin
+g/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yimi
 ng/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yim
 ing/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yi
 ming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Y
@@ -2342,19 +2342,19 @@ iming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf>{/usr/lo
 cal/texlive/2014/texmf-dist/fonts/enc/dvips/tex-gyre/q-ts1.enc}</Users/Yiming/L
 ibrary/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/
 Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming
-/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yimin
+/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yimin
 g/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yimi
 ng/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yim
 ing/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yi
 ming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Y
-iming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/
-Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users
+iming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/
+Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users
 /Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></User
 s/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Use
-rs/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf>{/us
-r/local/texlive/2014/texmf-dist/fonts/enc/dvips/newtx/ntx-ec-tlf.enc}</Users/Yi
-ming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/Y
-iming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/
+rs/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Us
+ers/Yiming/Library/Fonts/simhei.ttf>{/usr/local/texlive/2014/texmf-dist/fonts/e
+nc/dvips/newtx/ntx-ec-tlf.enc}</Users/Yiming/Library/Fonts/simhei.ttf></Users/Y
+iming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Users/
 Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users
 /Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></User
 s/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Use
@@ -2363,14 +2363,14 @@ ers/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></U
 sers/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></
 Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc><
 /Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc>
-</Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf
+</Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc
 ></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.tt
-f></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.t
-tc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.
+f></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.t
+tf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.
 ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun
-.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhe
-i.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/sims
-un.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/sim
+.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsu
+n.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simh
+ei.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/sim
 sun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/si
 msun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/s
 imsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/
@@ -2380,23 +2380,23 @@ s/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fon
 ts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fo
 nts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/F
 onts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/
-Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library
-/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Librar
-y/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Libra
-ry/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Libr
-ary/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Lib
-rary/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Li
-brary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/L
-ibrary/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/
-Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming
+Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library
+/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Librar
+y/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Libra
+ry/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Libr
+ary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Lib
+rary/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Li
+brary/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/L
+ibrary/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming/
+Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yiming
 /Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yimin
 g/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yimi
-ng/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yim
+ng/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Yim
 ing/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Yi
-ming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/Y
-iming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users/
-Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></Users
-/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></User
+ming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simsun.ttc></Users/Y
+iming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simkai.ttf></Users/
+Yiming/Library/Fonts/simkai.ttf></Users/Yiming/Library/Fonts/simsun.ttc></Users
+/Yiming/Library/Fonts/simsun.ttc></Users/Yiming/Library/Fonts/simhei.ttf></User
 s/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Use
 rs/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></Us
 ers/Yiming/Library/Fonts/simhei.ttf></Users/Yiming/Library/Fonts/simhei.ttf></U
@@ -2413,7 +2413,7 @@ xlive/2014/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/local/texlive/
 2014/texmf-dist/fonts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2014/t
 exmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/local/texlive/2014/texmf-di
 st/fonts/type1/public/txfonts/txsya.pfb>
-Output written on thesis.pdf (51 pages, 882199 bytes).
+Output written on thesis.pdf (51 pages, 882539 bytes).
 PDF statistics:
  1697 PDF objects out of 1728 (max. 8388607)
  1348 compressed objects within 14 object streams
